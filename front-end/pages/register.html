@@ -6,9 +6,18 @@
         </a>
     </div>
 <div ng-controller='RegisterController'>
-    <form name='registerForm' novalidate>
-        <input placeholder='Email' name="email" ng-model="email" type="text"></p>
-        <input placeholder='Password' name="password" ng-model="password" type="text"></p>
-        <button ng-click="submit()">Submit</button>
-    </form>
+    <section id='swipe'>
+        <div class="w3-row-padding">
+            <div class="w3-col m12 spacer">
+                <form id='registerForm' novalidate>
+                    <h1 id='register'>Register</h1>
+                    <input class='textbox' placeholder='Full Name' name="fullname" ng-model="fullname" type="text">
+                    <input class='textbox' placeholder='Username' name="username" ng-model="username" type="text">
+                    <input class='textbox' placeholder='Email' name="email" ng-model="email" type="text">
+                    <input class='textbox' placeholder='Password' name="password" ng-model="password" type="password">
+                    <button class='login-btn' id='btn-shadow' ng-click="submit()">Submit</button>
+                </form>
+            </div>
+        </div>
+    </section>
 </div>

@@ -42,6 +42,7 @@ section{
     background-image: linear-gradient(to top right, #ef7f17e0,#f26e6edd );
     color: #fefefe;
     cursor:pointer;
+    border:none;
 }
 
 .login-nav{
@@ -204,3 +205,48 @@ section{
     background-size:cover;
     height:100vh;
   }
+
+  /* REGISTER FORM */
+  #registerForm{
+    width: 450px;
+    margin: auto;
+    margin-top: 15%;
+    text-align: center;
+    border-radius: 5px;
+    background: #fefefe;
+    height: 475px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  }
+
+  #register{
+    font-family:'CraveFont';
+    color:#393d40;
+    text-transform: uppercase;
+    font-size:4vw;
+    margin:10px;
+  }
+
+  .textbox{
+    border-radius: 5px;
+    background: #ebebeb;
+    border: none;
+    width: 55%;
+    height: 40px;
+    padding: 5px 10px;
+    margin:10px;
+    font-family: 'K2D', sans-serif;
+    font-weight: 300;
+    color:#393d40;
+  }
+
+  #btn-shadow{
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    margin:auto;
+    display:block;
+    margin-top:20px;
+  }
+
+  input::placeholder {
+    color: #989898;
+    opacity: 1;
+}

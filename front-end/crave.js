@@ -19,7 +19,7 @@ app.config(function($routeProvider){
 app.controller('HomeController', function ($scope, $anchorScroll, $location, $window) {
     $scope.load = function() {
         console.log($location.path())
-        checkHttps();
+        // checkHttps();
         if($location.path() == '/'){
             $location.hash('welcome');
             $anchorScroll();
