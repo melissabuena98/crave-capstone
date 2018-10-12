@@ -2,7 +2,6 @@ var app = angular.module('craveApp', ['ngRoute', 'ngScrollSpy']);
 var registerUserData;
 var $scope, $location;
 
-
 app.config(function($routeProvider){
     $routeProvider
         .when('/', {
@@ -15,13 +14,12 @@ app.config(function($routeProvider){
 });
 
 
-window.onbeforeunload = function () {
-    window.scrollTo(0, 0);
-}
+
 
 app.controller('HomeController', function ($scope, $anchorScroll, $location, $window) {
     $scope.load = function() {
         console.log($location.path())
+        checkHttps();
         if($location.path() == '/'){
             $location.hash('welcome');
             $anchorScroll();
@@ -132,4 +130,12 @@ function navHamburger() {
 function directToRegister(){
     console.log("REGISTER");
     window.location.replace("#/register");
+}
+
+function checkHttps(){
+    console.log("CHECKING");
+    if (window.location.protocol == "http:") {
+        var restOfUrl = window.location.href.substr(5);
+        window.location = "https:" + restOfUrl;
+    }
 }
