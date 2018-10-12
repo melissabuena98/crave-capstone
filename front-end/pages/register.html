@@ -1,0 +1,14 @@
+<div class="topnav" id="myTopnav">
+        <a ng-href="#/"><img id='nav-icon' src='front-end/resources/images/crave-full.png'/></a>
+        <div class='login-nav'><div class='login-btn' >LOGIN</div></div>
+        <a href="javascript:void(0);" class="icon" onclick="navHamburger()">
+            <i class="fa fa-bars"></i>
+        </a>
+    </div>
+<div ng-controller='RegisterController'>
+    <form name='registerForm' novalidate>
+        <input placeholder='Email' name="email" ng-model="email" type="text"></p>
+        <input placeholder='Password' name="password" ng-model="password" type="text"></p>
+        <button ng-click="submit()">Submit</button>
+    </form>
+</div>
