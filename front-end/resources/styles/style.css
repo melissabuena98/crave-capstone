@@ -264,4 +264,75 @@ section{
   .pointer{
     cursor:pointer;
   }
+
+  /* DASHBOARD */
+  .sidebar {
+    margin: 0;
+    padding: 0;
+    padding-top:5%;
+    width: 300px;
+    background-color: #393d40;
+    /* position: fixed; */
+    height: 100vh;
+    overflow: auto;
+    float:left;
+    position: relative;
+  }
+
+  #sidebar-hr{
+    width: 80%;
+    margin: 40px auto;
+    opacity: 0.2;
+  }
+  .sidebar-icon{
+    margin-right:15px;
+  }
+
+  #sidebar-logout{
+    position:absolute;
+    bottom:10px;
+    width:100%;
+  }
+
+  .sidebar-btn:hover{
+    color:#ef8117;
+    transition:.2s ease-in;
+    cursor:pointer;
+  }
+  
+  #profile-pic{
+    border-radius: 50%;
+    width: 120px;
+    height:120px;
+  }
+
+  .profile-stat, .sidebar-btn{
+    color:#ebebeb;
+    font-family: 'K2D', sans-serif;
+    font-weight:200;
+  }
+
+  #profile-name{
+    font-weight:700;
+  }
+
+  .dash-area{
+    width:100%;
+    height:100vh;
+    background-image: linear-gradient(to top right, #ef7f17e0,#f26e6edd );
+    padding:20px;
+  }
+
+  .dash-header{
+    font-size:2vw;
+    font-family: 'K2D', sans-serif;
+    font-weight: 700;
+    color:#fefefe;
+    margin-top:5%;
+    line-height:85%;
+  }
+
+
+
+
   
