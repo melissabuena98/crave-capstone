@@ -208,6 +208,11 @@ section{
   }
 
   /* REGISTER FORM */
+  .loginForm{
+    height: 400px !important;
+    padding-top: 10px;
+  }
+
   #registerForm{
     width: 450px;
     margin: auto;

@@ -1,5 +1,6 @@
 var app = angular.module('craveApp', ['ngRoute', 'ngScrollSpy']);
 var registerUserData;
+var loginUserData;
 var $scope, $location;
 
 app.config(function($routeProvider){
@@ -10,6 +11,21 @@ app.config(function($routeProvider){
         .when('/register', {
             templateUrl: 'front-end/pages/register.html',
             controller: 'RegisterController'
+        })
+        .when('/login', {
+            templateUrl: 'front-end/pages/login.html',
+            controller: 'LoginController'
+        })
+        .when('/dashboard', {
+            resolve:{
+                "check": function($location){
+                    if(!localStorage.getItem("token")){
+                        $location.path('/login');
+                    }
+                }
+            },
+            templateUrl: 'front-end/pages/dashboard.html',
+            // controller: 'LoginController'
         })
 });
 
@@ -39,14 +55,43 @@ app.service("RegisterService", function($http){
 app.controller('RegisterController', function ($scope, RegisterService) {
     console.log("HERE")
     registerUserData = {}
-    $scope.submit = function() {
+    $scope.register = function() {
         registerUserData = {
+            "fullname": $scope.fullname,
+            "username": $scope.username,
             "email": $scope.email,
             "password": $scope.password
         }
         console.log(registerUserData);
         RegisterService.registerUser().then(function(response){
             console.log("DATA", response.data);
+            directToLogin();
+        });
+    }
+});
+
+app.service("LoginService", function($http){
+    console.log("IN LOGIN SERVICE")
+    path='http://localhost:3000/api/login';
+    this.loginUser = function (){
+        console.log("LOGIN RUNNING")
+        return $http.post(path, loginUserData);
+    }
+});
+
+app.controller('LoginController', function ($scope, LoginService, $location) {
+    loginUserData = {}
+    $scope.login = function() {
+        loginUserData = {
+            "username": $scope.username,
+            "password": $scope.password
+        }
+        console.log(loginUserData);
+        LoginService.loginUser().then(function(response){
+            // console.log("DATA", response.data);
+            localStorage.setItem("token", response.data.token);
+            console.log("STORAGE", localStorage.getItem("token"));
+            $location.path('/dashboard')
         });
     }
 });
@@ -105,6 +150,7 @@ app.service('anchorSmoothScroll', function(){
     
 });
 
+///////////
 app.controller('ScrollCtrl', function($scope, $location, anchorSmoothScroll) {
     
     $scope.gotoElement = function (eID){
@@ -130,6 +176,11 @@ function navHamburger() {
 function directToRegister(){
     console.log("REGISTER");
     window.location.replace("#/register");
+}
+
+function directToLogin(){
+    console.log("LOGIN");
+    window.location.replace("#/login");
 }
 
 function checkHttps(){

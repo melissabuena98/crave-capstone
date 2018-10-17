@@ -1,6 +1,6 @@
 <div class="topnav" id="myTopnav">
         <a ng-href="#/"><img id='nav-icon' src='front-end/resources/images/crave-full.png'/></a>
-        <div class='login-nav'><div class='login-btn' >LOGIN</div></div>
+        <div class='login-nav'><div class='login-btn' onclick="directToLogin()" >LOGIN</div></div>
         <a href="javascript:void(0);" class="icon" onclick="navHamburger()">
             <i class="fa fa-bars"></i>
         </a>
@@ -9,14 +9,15 @@
     <section id='swipe'>
         <div class="w3-row-padding">
             <div class="w3-col m12 spacer">
-                <form id='registerForm' novalidate>
+                <form id='registerForm' ng-submit='register()'>
                     <h1 id='register'>Register</h1>
-                    <input class='textbox' placeholder='Full Name' name="fullname" ng-model="fullname" type="text">
-                    <input class='textbox' placeholder='Username' name="username" ng-model="username" type="text">
-                    <input class='textbox' placeholder='Email' name="email" ng-model="email" type="text">
-                    <input class='textbox' placeholder='Password' name="password" ng-model="password" type="password">
-                    <button class='login-btn' id='btn-shadow' ng-click="submit()">Submit</button>
-                    <p class="light-txt">Already have an account? <span class='pointer' id='accent'>Log in.</span></p>
+                    <input class='textbox' placeholder='Full Name' name="fullname" ng-model="fullname" type="text" min=1 maxlength=30 required>
+                    <input class='textbox' placeholder='Username' name="username" ng-model="username" type="text" min=1 maxlength=30 required>
+                    <input class='textbox' placeholder='Email' name="email" ng-model="email" type="email" min=1 maxlength=30 required>
+                    <input class='textbox' placeholder='Password' name="password" ng-model="password" type="password" min=1 maxlength=30 required>
+                    <!-- <button class='login-btn' id='btn-shadow' ng-click="register()">Register</button> -->
+                    <input type='submit' class='login-btn' id='btn-shadow' value='Register'>
+                    <p class="light-txt">Already have an account? <span class='pointer' id='accent' onclick='directToLogin()'>Log in.</span></p>
                 </form>
             </div>
         </div>

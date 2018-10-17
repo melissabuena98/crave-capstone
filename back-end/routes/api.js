@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt-nodejs');
 
 const User = require('../models/user');
 
@@ -22,34 +24,46 @@ router.get('/', (req, res) => {
 router.post('/register', (req, res) => {
     let userData = req.body;
     let user = new User(userData);
-    user.save((error, registeredUser) => {
-        if(error){
-            console.log(error);
-        }
-        else{
-            res.status(200).send(registeredUser);
-        }
-    })
+    //bcrypt 
+    bcrypt.hash(user.password, null, null, function(err, hash){
+        user.password = hash;
+        user.save((error, registeredUser) => {
+            if(error){
+                console.log(error);
+            }
+            else{
+                res.status(200).send(registeredUser);
+            }
+        })
+    });
+
 })
 
 router.post('/login', (req, res) => {
     let userData = req.body;
 
-    User.findOne({email: userData.email}, (error, user) => {
+    User.findOne({username: userData.username}, (error, user) => {
         if(error){
             console.log(error);
         }
         else{
             if(!user){
-                res.status(401).send("Invalid email");
+                res.status(401).send("Invalid username");
             }
             else{
-                if(user.password !== userData.password){
-                    res.status(401).send("Invalid Password");
-                }
-                else{
-                    res.status(200).send(user);
-                }
+                //unhash
+                bcrypt.compare(userData.password, user.password, function(err, check){
+                    console.log("RES", res);
+                    console.log("ERR", err);
+                    if(check){
+                        let payload = {subject: userData._id}
+                        let token = jwt.sign(payload, 'craveSecretKey')
+                        res.status(200).send({token});
+                    }
+                    else{
+                        res.status(401).send("Invalid Password");
+                    }
+                });
             }
         }
     })
