@@ -25,7 +25,49 @@ app.config(function($routeProvider){
                 }
             },
             templateUrl: 'front-end/pages/dashboard.html',
-            // controller: 'LoginController'
+        })
+        .when('/feed', {
+            resolve:{
+                "check": function($location){
+                    if(!localStorage.getItem("token")){
+                        $location.path('/login');
+                    }
+                }
+            },
+            templateUrl: 'front-end/pages/feed.html',
+        })
+
+        .when('/discover', {
+            resolve:{
+                "check": function($location){
+                    if(!localStorage.getItem("token")){
+                        $location.path('/login');
+                    }
+                }
+            },
+            templateUrl: 'front-end/pages/discover.html',
+        })
+
+        .when('/favorites', {
+            resolve:{
+                "check": function($location){
+                    if(!localStorage.getItem("token")){
+                        $location.path('/login');
+                    }
+                }
+            },
+            templateUrl: 'front-end/pages/favorites.html',
+        })
+
+        .when('/profile', {
+            resolve:{
+                "check": function($location){
+                    if(!localStorage.getItem("token")){
+                        $location.path('/login');
+                    }
+                }
+            },
+            templateUrl: 'front-end/pages/profile.html',
         })
 });
 
@@ -182,6 +224,52 @@ function directToLogin(){
     console.log("LOGIN");
     window.location.replace("#/login");
 }
+
+function directToDashboard(){
+    console.log("DASH")
+    window.location.replace("#/dashboard");
+}
+
+function directToFeed(){
+    console.log("FEED")
+    window.location.replace("#/feed");
+}
+
+function directToDiscover(){
+    console.log("DISCOVER")
+    window.location.replace("#/discover");
+}
+
+function directToFavorites(){
+    console.log("FAVS")
+    window.location.replace("#/favorites");
+}
+
+function directToProfile(){
+    console.log("PROFILE")
+    window.location.replace("#/profile");
+}
+
+function directToLogout(){
+    console.log("LOGOUT");
+    localStorage.clear();
+    window.location.replace("#/login");
+}
+
+function getLocation(){
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        console.log("Geolocation is not supported by this browser.");
+    }
+}
+
+function showPosition(position) {
+    console.log("LAT",position.coords.latitude)
+    console.log("LONG",position.coords.longitude); 
+}
+
+
 
 function checkHttps(){
     console.log("CHECKING");

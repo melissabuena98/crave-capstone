@@ -12,6 +12,11 @@ body{
     color:#ef8117;
 }
 
+.crave{
+  font-family:'CraveFont';
+  font-size:6vw;
+}
+
 section{
   height:100vh;
   background-color:#ebebeb;
@@ -89,6 +94,8 @@ section{
     color:#ef8117 !important;
     transition:0.2s ease-in-out;
   }
+
+
   
   .topnav .icon {
     display: none;
@@ -299,6 +306,10 @@ section{
     transition:.2s ease-in;
     cursor:pointer;
   }
+
+  .sidebar-active{
+    color:#ef8117 !important;
+  }
   
   #profile-pic{
     border-radius: 50%;
@@ -317,10 +328,11 @@ section{
   }
 
   .dash-area{
-    width:100%;
+    /* width:100%; */
     height:100vh;
     background-image: linear-gradient(to top right, #ef7f17e0,#f26e6edd );
     padding:20px;
+    overflow: hidden;
   }
 
   .dash-header{
@@ -328,10 +340,105 @@ section{
     font-family: 'K2D', sans-serif;
     font-weight: 700;
     color:#fefefe;
-    margin-top:5%;
+    margin-top:3%;
     line-height:85%;
   }
 
+  .dash-header2{
+    font-size:5vw;
+    font-family: 'K2D', sans-serif;
+    font-weight: 700;
+    color:#fefefe;
+    margin-top:3%;
+    margin-bottom:5%;
+    line-height:85%;
+  }
+
+  #search-container{
+    position: relative;
+    margin:40px auto;
+    text-align:center;
+
+  }
+
+  #search-box{
+    width: 350px;
+    height: 40px;
+    background: #fefefe;
+    border: none;
+    color: #393d40;
+    outline: none;
+    font-size: 21px;
+    font-family: 'K2D', sans-serif;
+    transition: 0.3s ease-in-out;
+    padding: 0 10px;
+    /* border-radius: 5px; */
+    /* box-shadow: 0 5px 5px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.24); */
+  }
+
+#search-container button{
+  background:#636363;
+  color:#fefefe;
+  width:40px;
+  height:40px;
+  border:none;
+  vertical-align: bottom;
+  margin-left: -5px;
+  cursor:pointer;
+}
+
+/* DISCOVER */
+.discover{
+  /* background-image: linear-gradient(to top right, #ffffff,#ebebeb ); */
+}
+
+#discoverForm{
+  width: 450px;
+  margin: auto;
+  text-align: center;
+  border-radius: 5px;
+  background: #fefefe;
+  height: 500px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+.price-slider{
+  -webkit-appearance: none;
+  width:250px;
+  margin:20px;
+  height: 10px;
+  border-radius: 5px;
+  background: lightsalmon;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.price-slider:hover{
+  opacity:1;
+  cursor:pointer;
+}
+
+.price-slider::-webkit-slider-thumb{
+  -webkit-appearance: none;
+  border: none;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  /* background: goldenrod; */
+  background:url("/front-end/resources/images/crave-logo.png");
+  background-size:contain;
+  background-repeat: no-repeat
+}
+#location{
+  margin-bottom:2px;
+}
+.use-location{
+  margin:0;
+  font-size:1vw;
+  cursor:pointer;
+}
 
 
 

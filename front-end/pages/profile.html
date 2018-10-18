@@ -1,0 +1,31 @@
+<div class='w3-row w3-center'>
+        <div class="sidebar">
+            <div class='w3-row w3-center'>
+                <img id='profile-pic' src='/front-end/resources/images/profile.jpg'>
+                <h3 class='profile-stat' id='profile-name'>username_101</h3>
+                <h6 class='profile-stat'>Posts: <span id='profile-posts'>1,234</span></h6>
+                <h6 class='profile-stat'>Followers: <span id='profile-followers'>21,958</span></h6>
+                <hr id='sidebar-hr'>
+            </div>
+            <div class='w3-row w3-center'>
+                <h2 class='sidebar-btn' onclick="directToDashboard()"><i class="fa fa-home sidebar-icon" aria-hidden="true"></i>HOME</h2>
+                <h2 class='sidebar-btn' onclick="directToFeed()"><i class="fa fa-rss sidebar-icon" aria-hidden="true"></i>FEED</h2>
+                <h2 class='sidebar-btn' onclick="directToDiscover()"><i class="fa fa-compass sidebar-icon" aria-hidden="true"></i>DISCOVER</h2>
+                <h2 class='sidebar-btn' onclick="directToFavorites()"><i class="fa fa-star sidebar-icon" aria-hidden="true"></i>FAVORITES</h2>
+                <h2 class='sidebar-btn sidebar-active' onclick="directToProfile()"><i class="fa fa-user sidebar-icon" aria-hidden="true"></i>PROFILE</h2>
+                <br>
+                <h6 class='sidebar-btn' id='sidebar-logout' onclick='directToLogout()'><i class="fa fa-sign-out sidebar-icon" aria-hidden="true"></i>LOGOUT</h6>
+            </div>
+        </div>
+    
+        <div class='dash-area'>
+            <h1 class='dash-header'>Hello, username_101! Welcome to your PROFILE.</h1>
+            <div id='search-container'>
+                <input id='search-box' type='text' placeholder="Search Users">
+                <button type="submit"><i class="fa fa-search"></i></button>
+            </div>
+        </div>
+    
+    </div>
+    
+    
