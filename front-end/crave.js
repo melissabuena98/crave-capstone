@@ -1,6 +1,7 @@
-var app = angular.module('craveApp', ['ngRoute', 'ngScrollSpy']);
+var app = angular.module('craveApp', ['ngRoute', 'ngScrollSpy', 'ngSanitize']);
 var registerUserData;
 var loginUserData;
+var allCards;
 var $scope, $location;
 
 app.config(function($routeProvider){
@@ -68,6 +69,17 @@ app.config(function($routeProvider){
                 }
             },
             templateUrl: 'front-end/pages/profile.html',
+        })
+
+        .when('/crave-search', {
+            // resolve:{
+            //     "check": function($location){
+            //         if(!localStorage.getItem("token")){
+            //             $location.path('/login');
+            //         }
+            //     }
+            // },
+            templateUrl: 'front-end/pages/crave-search.html',
         })
 });
 
@@ -205,6 +217,64 @@ app.controller('ScrollCtrl', function($scope, $location, anchorSmoothScroll) {
       
     };
   });
+
+app.controller('CardController', function($scope){
+    var cardObject = [
+        {"name": "Panda Express",
+        'img':'/front-end/resources/images/panda.jpg'
+        },
+    ]
+    $scope.cards = cardObject;
+    angular.element(document).ready(function(){
+        // console.log("READY");        
+        allCards = document.getElementsByClassName('card');
+        var overlay = document.getElementById('overlay');
+        // console.log(allCards)
+        console.log(allCards.length);
+        
+        initCards()
+    });
+        
+    function initCards(){
+        // console.log("OUTSIDE");
+        for(var i = 0; i < allCards.length; i++){
+            allCards[i].style.zIndex = allCards.length-i;
+            // console.log(allCards[i]);
+            var hammer = new Hammer(allCards[i]);
+            hammer.on('panleft panright', function(event){
+                // console.log(event);
+                if(event.type == 'panleft'){
+                    event.target.style.transform = `translate(${event.deltaX}px, ${event.deltaY}px) rotate(-20deg)`;
+                    event.target.style.background = '#DF6857';
+                }
+                else{
+                    event.target.style.transform = `translate(${event.deltaX}px, ${event.deltaY}px) rotate(20deg)`;
+                    event.target.style.background = '#77D9B5';
+                }
+            });
+        
+            hammer.on('panend', function(event){
+                if(event.distance < 230){
+                    event.target.style.transform = '';
+                    event.target.style.background = '#989898';
+                }
+                else{
+                    event.target.style.opacity = '0';
+                    event.target.style.transition = '1s ease-out';
+                    setTimeout(function(){event.target.style.display = 'none'}, 1000);
+                }
+            });
+        }
+
+    }
+    
+
+        
+    
+
+});
+
+
 
 function navHamburger() {
     var x = document.getElementById("myTopnav");
