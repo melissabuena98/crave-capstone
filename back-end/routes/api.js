@@ -53,10 +53,8 @@ router.post('/login', (req, res) => {
             else{
                 //unhash
                 bcrypt.compare(userData.password, user.password, function(err, check){
-                    console.log("RES", res);
-                    console.log("ERR", err);
                     if(check){
-                        let payload = {subject: userData._id}
+                        let payload = {subject: user._id}
                         let token = jwt.sign(payload, 'craveSecretKey')
                         res.status(200).send({token});
                     }
@@ -67,7 +65,26 @@ router.post('/login', (req, res) => {
             }
         }
     })
-})
+});
+
+router.post('/getUser', (req, res) => {
+    let userToken = req.body;
+    var decoded = jwt.verify(userToken.token, 'craveSecretKey');
+    User.findOne({_id: decoded.subject}, (error, user) => {
+        if(error){
+            console.error(error);
+        }
+        else{
+            if(!user){
+                res.status(401).send("Invalid user token");
+            }
+            else{
+                res.status(200).send(user);
+            }
+        }
+    });
+});
+
 
 
 

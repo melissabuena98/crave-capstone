@@ -4,6 +4,7 @@ const cors = require('cors')
 
 const PORT = 3000;
 const api = require('./routes/api');
+const yelp = require('./routes/yelp');
 
 const app = express();
 app.use(cors())
@@ -11,6 +12,8 @@ app.use(cors())
 app.use(bodyParser.json())
 
 app.use('/api', api);
+
+app.use('/yelp', yelp);
 
 app.get('/', function(req, res) {
     res.send("hello from server")

@@ -1,12 +1,22 @@
 var app = angular.module('craveApp', ['ngRoute', 'ngScrollSpy', 'ngSanitize']);
 var registerUserData;
 var loginUserData;
+var tokenData;
+var yelpQuery;
 var allCards;
 var $scope, $location;
+var cardObject;
 
 app.config(function($routeProvider){
     $routeProvider
         .when('/', {
+            resolve:{
+                "check": function($location){
+                    if(localStorage.getItem("token")){
+                        $location.path('/dashboard');
+                    }
+                }
+            },
             templateUrl: 'front-end/pages/crave.html'
         })
         .when('/register', {
@@ -114,7 +124,9 @@ app.controller('RegisterController', function ($scope, RegisterService) {
             "fullname": $scope.fullname,
             "username": $scope.username,
             "email": $scope.email,
-            "password": $scope.password
+            "password": $scope.password,
+            "post_count":0,
+            "follower_count":0
         }
         console.log(registerUserData);
         RegisterService.registerUser().then(function(response){
@@ -142,12 +154,136 @@ app.controller('LoginController', function ($scope, LoginService, $location) {
         }
         console.log(loginUserData);
         LoginService.loginUser().then(function(response){
-            // console.log("DATA", response.data);
+            console.log("RES",response.data);
             localStorage.setItem("token", response.data.token);
-            console.log("STORAGE", localStorage.getItem("token"));
             $location.path('/dashboard')
         });
     }
+});
+
+app.service("DashboardService", function($http){
+    console.log("IN DASH SERVICE")
+    tokenData = {};
+    tokenData = {
+        "token": localStorage.getItem('token')
+    }
+    path='http://localhost:3000/api/getUser';
+    this.getUser = function (){
+        return $http.post(path, tokenData);
+    }
+});
+
+app.controller('DashboardController', function($scope, DashboardService) {
+    // tokenData = {};
+    // tokenData = {
+    //     "token": localStorage.getItem('token')
+    // }
+    DashboardService.getUser().then(function(response){
+        console.log(response.data);
+        $scope.username = response.data.username;
+        $scope.post_count = response.data.post_count;
+        $scope.follower_count = response.data.follower_count;
+    });
+});
+
+
+app.service('DiscoverService', function($http){
+    path='http://localhost:3000/yelp/discover';
+    this.sendYelpData = function (){
+        return $http.post(path, yelpQuery);
+    }
+});
+
+
+app.controller('DiscoverController', function($scope, DiscoverService, DashboardService){
+
+    DashboardService.getUser().then(function(response){
+        console.log(response.data);
+        $scope.username = response.data.username;
+        $scope.post_count = response.data.post_count;
+        $scope.follower_count = response.data.follower_count;
+    });
+
+    yelpQuery = {};
+    $scope.price = 1;
+
+    $scope.$watch('price', function (numberVal) {
+        if (typeof numberVal !== 'undefined') {
+            if(numberVal == 1){
+                $scope.priceVal = "$";
+            }
+            else if(numberVal == 2){
+                $scope.priceVal = "$$";
+            }
+            else if(numberVal == 3){
+                $scope.priceVal = "$$$";
+            }
+            else{
+                $scope.priceVal = "$$$$";
+            }
+        }
+    });
+
+    $scope.discover = function(){
+        yelpQuery = {
+            "term": $scope.term,
+            "price": $scope.price,
+            "location": $scope.location,
+            "limit": 50
+        }
+        console.log("YELP QUERY", yelpQuery);
+        DiscoverService.sendYelpData().then(function(response){
+            console.log("RESPONSE", response.data);
+            cardObject = response.data;
+            directToSearch();
+        });
+    }
+})
+
+app.controller('CardController', function($scope){
+    $scope.cards = cardObject.businesses;
+    angular.element(document).ready(function(){
+        allCards = document.getElementsByClassName('card');
+        var overlay = document.getElementById('overlay');
+        console.log(allCards.length);
+        
+        initCards()
+    });
+        
+    function initCards(){
+        for(var i = 0; i < allCards.length; i++){
+            allCards[i].style.zIndex = allCards.length-i;
+            var hammer = new Hammer(allCards[i]);
+            hammer.on('panleft panright', function(event){
+                if(event.type == 'panleft'){
+                    event.target.style.transform = `translate(${event.deltaX}px, ${event.deltaY}px) rotate(-20deg)`;
+                    event.target.style.background = '#DF6857';
+                }
+                else{
+                    event.target.style.transform = `translate(${event.deltaX}px, ${event.deltaY}px) rotate(20deg)`;
+                    event.target.style.background = '#77D9B5';
+                }
+            });
+        
+            hammer.on('panend', function(event){
+                if(event.distance < 230){
+                    event.target.style.transform = '';
+                    event.target.style.background = '#ebebeb';
+                }
+                else{
+                    event.target.style.opacity = '0';
+                    event.target.style.transition = '1s ease-out';
+                    setTimeout(function(){event.target.style.display = 'none'}, 1000);
+                }
+            });
+        }
+
+    }
+    
+
+        
+    
+
 });
 
 app.service('anchorSmoothScroll', function(){
@@ -218,64 +354,6 @@ app.controller('ScrollCtrl', function($scope, $location, anchorSmoothScroll) {
     };
   });
 
-app.controller('CardController', function($scope){
-    var cardObject = [
-        {"name": "Panda Express",
-        'img':'/front-end/resources/images/panda.jpg'
-        },
-    ]
-    $scope.cards = cardObject;
-    angular.element(document).ready(function(){
-        // console.log("READY");        
-        allCards = document.getElementsByClassName('card');
-        var overlay = document.getElementById('overlay');
-        // console.log(allCards)
-        console.log(allCards.length);
-        
-        initCards()
-    });
-        
-    function initCards(){
-        // console.log("OUTSIDE");
-        for(var i = 0; i < allCards.length; i++){
-            allCards[i].style.zIndex = allCards.length-i;
-            // console.log(allCards[i]);
-            var hammer = new Hammer(allCards[i]);
-            hammer.on('panleft panright', function(event){
-                // console.log(event);
-                if(event.type == 'panleft'){
-                    event.target.style.transform = `translate(${event.deltaX}px, ${event.deltaY}px) rotate(-20deg)`;
-                    event.target.style.background = '#DF6857';
-                }
-                else{
-                    event.target.style.transform = `translate(${event.deltaX}px, ${event.deltaY}px) rotate(20deg)`;
-                    event.target.style.background = '#77D9B5';
-                }
-            });
-        
-            hammer.on('panend', function(event){
-                if(event.distance < 230){
-                    event.target.style.transform = '';
-                    event.target.style.background = '#989898';
-                }
-                else{
-                    event.target.style.opacity = '0';
-                    event.target.style.transition = '1s ease-out';
-                    setTimeout(function(){event.target.style.display = 'none'}, 1000);
-                }
-            });
-        }
-
-    }
-    
-
-        
-    
-
-});
-
-
-
 function navHamburger() {
     var x = document.getElementById("myTopnav");
     if (x.className === "topnav") {
@@ -308,6 +386,10 @@ function directToFeed(){
 function directToDiscover(){
     console.log("DISCOVER")
     window.location.replace("#/discover");
+}
+
+function directToSearch(){
+    window.location.replace("#/crave-search");
 }
 
 function directToFavorites(){

@@ -1,10 +1,10 @@
-<div class='w3-row w3-center'>
+<div class='w3-row w3-center' ng-controller='DiscoverController'>
     <div class="sidebar">
         <div class='w3-row w3-center'>
             <img id='profile-pic' src='/front-end/resources/images/profile.jpg'>
-            <h3 class='profile-stat' id='profile-name'>username_101</h3>
-            <h6 class='profile-stat'>Posts: <span id='profile-posts'>1,234</span></h6>
-            <h6 class='profile-stat'>Followers: <span id='profile-followers'>21,958</span></h6>
+            <h3 class='profile-stat' id='profile-name'>{{ username }}</h3>
+            <h6 class='profile-stat'>Posts: <span id='profile-posts'>{{post_count}}</span></h6>
+            <h6 class='profile-stat'>Followers: <span id='profile-followers'>{{follower_count}}</span></h6>
             <hr id='sidebar-hr'>
         </div>
         <div class='w3-row w3-center'>
@@ -23,7 +23,8 @@
         <form id='discoverForm' ng-submit='discover()'>
             <h1 id='register'>Preferences</h1>
             <input class='textbox' placeholder='Term e.g. Asian' name="term" ng-model="term" type="text" min=1 maxlength=30>
-            <input type="range" min="1" max="4" value='1' class="price-slider">
+            <p class='price-slider-val w3-center'>{{ priceVal }}</p>
+            <input ng-model='price' type="range" min="1" max="4" value='1' class="price-slider">
             <input id='location' class='textbox' placeholder='Zip, State, City' name="location" ng-model="location" type="text" min=1 maxlength=30>
             <p id='accent' onclick='getLocation()' class='use-location'><span><i class="fa fa-map-marker" aria-hidden="true"></i></span> Use your location instead</p>
             <hr>

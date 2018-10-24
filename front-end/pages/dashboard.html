@@ -1,10 +1,10 @@
-<div class='w3-row w3-center'>
+<div class='w3-row w3-center' ng-controller='DashboardController'>
     <div class="sidebar">
         <div class='w3-row w3-center'>
             <img id='profile-pic' src='/front-end/resources/images/profile.jpg'>
-            <h3 class='profile-stat' id='profile-name'>username_101</h3>
-            <h6 class='profile-stat'>Posts: <span id='profile-posts'>1,234</span></h6>
-            <h6 class='profile-stat'>Followers: <span id='profile-followers'>21,958</span></h6>
+            <h3 class='profile-stat' id='profile-name'>{{ username }}</h3>
+            <h6 class='profile-stat'>Posts: <span id='profile-posts'>{{post_count}}</span></h6>
+            <h6 class='profile-stat'>Followers: <span id='profile-followers'>{{follower_count}}</span></h6>
             <hr id='sidebar-hr'>
         </div>
         <div class='w3-row w3-center'>
@@ -19,7 +19,7 @@
     </div>
 
     <div class='dash-area'>
-        <h1 class='dash-header'>Hello, username_101! Welcome to your dashboard.</h1>
+        <h1 class='dash-header'>Hello, {{username}}! Welcome to your dashboard.</h1>
         <div id='search-container'>
             <input id='search-box' type='text' placeholder="Search Users">
             <button type="submit"><i class="fa fa-search"></i></button>

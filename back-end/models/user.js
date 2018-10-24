@@ -7,6 +7,8 @@ const userSchema = new Schema({
     email: String,
     password: String,
     zipcode: Number,
+    post_count: Number,
+    follower_count: Number,
     saved_restaurants: Array,
     bio: String,
     location: String,
