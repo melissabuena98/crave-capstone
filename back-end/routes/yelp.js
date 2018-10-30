@@ -15,14 +15,20 @@ const apiKey = 'Mby6T0WZ0703xdfGwlMo6hxAK5UOQ3_UZLNLpNRNQGu7bgcvUA9LORyhrrNaz4MC
 
 const client = yelp.client(apiKey);
 
-router.post('/discover', (req, res) => {
+router.post('/crave-search', (req, res) => {
+    console.log("YO THIS POST IS HAPPNIN")
     let searchData = req.body;
+    // client.search(searchData).then(response => {
+    //     const result = response.jsonBody;
+    //     res.status(200).send(result);
+    // });
+
     client.search(searchData).then(response => {
         const result = response.jsonBody;
-        // const prettyJson = JSON.stringify(result, null, 4);
-        // console.log(prettyJson);
         res.status(200).send(result);
-    });
+      }).catch(e => {
+        console.log("ERROR!",e);
+      });
 });
 
 module.exports = router;

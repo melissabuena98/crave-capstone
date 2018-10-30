@@ -3,12 +3,18 @@ const router = express.Router();
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt-nodejs');
 
+const multer = require('multer');
+const upload = multer({dest: 'uploads/'})
+const fs = require('fs');
+
+
 const User = require('../models/user');
+const Post = require('../models/post');
 
 const mongoose = require('mongoose');
 const db = "mongodb://mbuena:cravepw1@ds125293.mlab.com:25293/cravedb";
 
-mongoose.connect(db, err => {
+mongoose.connect(db, { useNewUrlParser: true }, err => {
     if(err){
         console.error('Error: ' + err);
     }
@@ -22,6 +28,7 @@ router.get('/', (req, res) => {
 })
 
 router.post('/register', (req, res) => {
+    console.error("IM IN REGISTER POST")
     let userData = req.body;
     let user = new User(userData);
     //bcrypt 
@@ -32,7 +39,8 @@ router.post('/register', (req, res) => {
                 console.log(error);
             }
             else{
-                res.status(200).send(registeredUser);
+                // res.status(200).send(registeredUser);
+                res.status(200).send("HELLO");
             }
         })
     });
@@ -56,6 +64,7 @@ router.post('/login', (req, res) => {
                     if(check){
                         let payload = {subject: user._id}
                         let token = jwt.sign(payload, 'craveSecretKey')
+                        console.log("LOGIN TOK", token);
                         res.status(200).send({token});
                     }
                     else{
@@ -68,6 +77,7 @@ router.post('/login', (req, res) => {
 });
 
 router.post('/getUser', (req, res) => {
+    console.log("GETTING USER");
     let userToken = req.body;
     var decoded = jwt.verify(userToken.token, 'craveSecretKey');
     User.findOne({_id: decoded.subject}, (error, user) => {
@@ -83,6 +93,30 @@ router.post('/getUser', (req, res) => {
             }
         }
     });
+});
+
+router.post('/upload', upload.any(),(req,res) => {
+    if(req.files){
+        req.files.forEach(function (file){
+            console.log(file)
+
+            var filename = (new Date).valueOf()+"-"+file.originalname;
+            fs.rename(file.path, 'public/images/' + filename, function(err) {
+                if(err) throw err;
+                
+                var post = new Post({
+                    caption: req.body.caption,
+                    location: req.body.location,
+                    image: filename,
+                });
+                post.save(function (err, result){
+                    if(err){}
+                    res.json("RESULT",result);
+                })
+            });
+        });
+    }
+
 });
 
 

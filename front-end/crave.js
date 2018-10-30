@@ -3,9 +3,11 @@ var registerUserData;
 var loginUserData;
 var tokenData;
 var yelpQuery;
+var uploadData; 
 var allCards;
 var $scope, $location;
 var cardObject;
+var postData;
 
 app.config(function($routeProvider){
     $routeProvider
@@ -13,7 +15,7 @@ app.config(function($routeProvider){
             resolve:{
                 "check": function($location){
                     if(localStorage.getItem("token")){
-                        $location.path('/dashboard');
+                        $location.path('/search');
                     }
                 }
             },
@@ -27,7 +29,7 @@ app.config(function($routeProvider){
             templateUrl: 'front-end/pages/login.html',
             controller: 'LoginController'
         })
-        .when('/dashboard', {
+        .when('/search', {
             resolve:{
                 "check": function($location){
                     if(!localStorage.getItem("token")){
@@ -35,7 +37,7 @@ app.config(function($routeProvider){
                     }
                 }
             },
-            templateUrl: 'front-end/pages/dashboard.html',
+            templateUrl: 'front-end/pages/search.html',
         })
         .when('/feed', {
             resolve:{
@@ -91,6 +93,10 @@ app.config(function($routeProvider){
             // },
             templateUrl: 'front-end/pages/crave-search.html',
         })
+
+        .when('/upload', {
+            templateUrl: 'front-end/pages/upload.html',
+        })
 });
 
 
@@ -108,16 +114,16 @@ app.controller('HomeController', function ($scope, $anchorScroll, $location, $wi
 });
 
 app.service("RegisterService", function($http){
-    console.log("IN SERVICE")
-    path='http://localhost:3000/api/register';
+    console.log("IN REGISTER SERVICE")
+    this.path='http://localhost:3000/api/register';
     this.registerUser = function (){
         console.log("SERVICE RUNNING")
-        return $http.post(path, registerUserData);
+        return $http.post(this.path, registerUserData);
     }
 });
 
-app.controller('RegisterController', function ($scope, RegisterService) {
-    console.log("HERE")
+app.controller('RegisterController', function ($scope, RegisterService, $location) {
+    console.log("IN REGISTER CTRL")
     registerUserData = {}
     $scope.register = function() {
         registerUserData = {
@@ -131,21 +137,29 @@ app.controller('RegisterController', function ($scope, RegisterService) {
         console.log(registerUserData);
         RegisterService.registerUser().then(function(response){
             console.log("DATA", response.data);
-            directToLogin();
+            // directToLogin();
+            // $location.path('/login')
+            $scope.directToLogin();
         });
+    }
+
+    $scope.directToLogin = function(){
+        console.log("D2L");
+        $location.path('/login');
     }
 });
 
 app.service("LoginService", function($http){
     console.log("IN LOGIN SERVICE")
-    path='http://localhost:3000/api/login';
+    this.path='http://localhost:3000/api/login';
     this.loginUser = function (){
         console.log("LOGIN RUNNING")
-        return $http.post(path, loginUserData);
+        return $http.post(this.path, loginUserData);
     }
 });
 
 app.controller('LoginController', function ($scope, LoginService, $location) {
+    console.log("IN LOGIN CTRL")
     loginUserData = {}
     $scope.login = function() {
         loginUserData = {
@@ -155,9 +169,15 @@ app.controller('LoginController', function ($scope, LoginService, $location) {
         console.log(loginUserData);
         LoginService.loginUser().then(function(response){
             console.log("RES",response.data);
+            console.log("RESTOK",response.data.token);
             localStorage.setItem("token", response.data.token);
-            $location.path('/dashboard')
+            $location.path('/search')
         });
+    }
+
+    $scope.directToRegister = function(){
+        console.log("D2R");
+        $location.path('/register');
     }
 });
 
@@ -167,19 +187,21 @@ app.service("DashboardService", function($http){
     tokenData = {
         "token": localStorage.getItem('token')
     }
-    path='http://localhost:3000/api/getUser';
+    this.path='http://localhost:3000/api/getUser';
     this.getUser = function (){
-        return $http.post(path, tokenData);
+        return $http.post(this.path, tokenData);
     }
 });
 
 app.controller('DashboardController', function($scope, DashboardService) {
-    // tokenData = {};
-    // tokenData = {
-    //     "token": localStorage.getItem('token')
-    // }
     DashboardService.getUser().then(function(response){
         console.log(response.data);
+        // localStorage.setItem('username', response.data.username);
+        // localStorage.setItem('posts', response.data.post_count);
+        // localStorage.setItem('followers', response.data.follower_count);
+        // $scope.username = localStorage.getItem('username');
+        // $scope.post_count = localStorage.getItem('posts');
+        // $scope.follower_count = localStorage.getItem('followers');
         $scope.username = response.data.username;
         $scope.post_count = response.data.post_count;
         $scope.follower_count = response.data.follower_count;
@@ -188,17 +210,26 @@ app.controller('DashboardController', function($scope, DashboardService) {
 
 
 app.service('DiscoverService', function($http){
-    path='http://localhost:3000/yelp/discover';
+    this.path='http://localhost:3000/yelp/crave-search';
     this.sendYelpData = function (){
-        return $http.post(path, yelpQuery);
+        console.log('in sendyelp')
+        return $http.post(this.path, yelpQuery);
     }
 });
 
 
 app.controller('DiscoverController', function($scope, DiscoverService, DashboardService){
-
+    // $scope.username = localStorage.getItem('username');
+    // $scope.post_count = localStorage.getItem('posts');
+    // $scope.follower_count = localStorage.getItem('followers');
     DashboardService.getUser().then(function(response){
         console.log(response.data);
+        // localStorage.setItem('username', response.data.username);
+        // localStorage.setItem('posts', response.data.post_count);
+        // localStorage.setItem('followers', response.data.follower_count);
+        // $scope.username = localStorage.getItem('username');
+        // $scope.post_count = localStorage.getItem('posts');
+        // $scope.follower_count = localStorage.getItem('followers');
         $scope.username = response.data.username;
         $scope.post_count = response.data.post_count;
         $scope.follower_count = response.data.follower_count;
@@ -225,6 +256,7 @@ app.controller('DiscoverController', function($scope, DiscoverService, Dashboard
     });
 
     $scope.discover = function(){
+        console.log("DISCOVER TRIGGERED");
         yelpQuery = {
             "term": $scope.term,
             "price": $scope.price,
@@ -237,23 +269,53 @@ app.controller('DiscoverController', function($scope, DiscoverService, Dashboard
             cardObject = response.data;
             directToSearch();
         });
+        // directToSearch();
+
     }
 })
 
 app.controller('CardController', function($scope){
     $scope.cards = cardObject.businesses;
+    // $scope.cards = [
+    //     {
+    //         "image_url":"/front-end/resources/images/panda.jpg",
+    //         "name":"Restaurant 0",
+    //         "categories":[
+    //             {"title": "title0"}
+    //         ],
+    //         "is_closed":true,
+    //         "rating":"5",
+    //         "price":"$$$$",
+    //         "phone":"1234567890",
+    //         "location":{
+    //             "display_address":[
+    //                 "143 S Main St",
+    //                 "Salt Lake City, UT 84111"
+    //             ]
+    //         }
+    //     }
+    // ]
+
+    var cardIndex = 0;
     angular.element(document).ready(function(){
         allCards = document.getElementsByClassName('card');
-        var overlay = document.getElementById('overlay');
         console.log(allCards.length);
         
         initCards()
     });
         
     function initCards(){
+        console.log("CARD INDEX", cardIndex);
         for(var i = 0; i < allCards.length; i++){
             allCards[i].style.zIndex = allCards.length-i;
+            // var hammer = new Hammer.Manager(allCards[i]);
             var hammer = new Hammer(allCards[i]);
+            // var DoubleTap = new Hammer.Tap({
+            //     event: 'doubletap',
+            //     taps: 2
+            // });
+            
+            // hammer.add(DoubleTap);
             hammer.on('panleft panright', function(event){
                 if(event.type == 'panleft'){
                     event.target.style.transform = `translate(${event.deltaX}px, ${event.deltaY}px) rotate(-20deg)`;
@@ -271,19 +333,103 @@ app.controller('CardController', function($scope){
                     event.target.style.background = '#ebebeb';
                 }
                 else{
+                    cardIndex++;
                     event.target.style.opacity = '0';
-                    event.target.style.transition = '1s ease-out';
-                    setTimeout(function(){event.target.style.display = 'none'}, 1000);
+                    event.target.style.transition = '0.75s ease-out';
+                    setTimeout(function(){event.target.style.display = 'none'}, 750);
+                    console.log("CARD INDEX", cardIndex);
                 }
             });
+
+            // hammer.on('doubletap', function(event){
+            //     console.log($scope.cards[cardIndex].location);
+            //     window.open(`http://maps.google.com/?q=${$scope.cards[cardIndex].location}`);
+            // });
+
+
         }
 
     }
-    
 
+    $scope.yes = function(){
+        // console.log("YES");
+        // console.log("ALLCARDS", allCards)
+        console.log("CARD", allCards[cardIndex]);
+        allCards[cardIndex].style.transform = `translate(250px) rotate(20deg)`;
+        allCards[cardIndex].style.background = '#77D9B5';
+        allCards[cardIndex].style.opacity = '0';
+        allCards[cardIndex].style.transition = '0.75s ease-out';
+        $scope.addToFavorites(cardIndex);
+        setTimeout(function(){
+            allCards[cardIndex].style.display = 'none'
+            cardIndex++;
+        }, 750);
+    }
+
+    $scope.no = function(){
+        console.log("CARD", allCards[cardIndex]);
+        allCards[cardIndex].style.transform = `translate(-250px) rotate(-20deg)`;
+        allCards[cardIndex].style.background = '#DF6857';
+        allCards[cardIndex].style.opacity = '0';
+        allCards[cardIndex].style.transition = '0.75s ease-out';
+        setTimeout(function(){
+            allCards[cardIndex].style.display = 'none'
+            cardIndex++;
+            console.log("NEW INDEX", cardIndex);
+        }, 750);
+    }
+    
+    $scope.addToFavorites = function(cardIndex){
+        console.log("ADD TO FAVE", $scope.cards[cardIndex]);
+    }
         
     
 
+});
+
+app.service('UploadService', function($http){
+    this.path='http://localhost:3000/api/upload';
+    this.uploadPost = function(){
+        return $http.post(this.path, postData, {
+            transformRequest: angular.identity,
+            headers:{
+                'Content-Type': undefined
+            }
+        });
+    }
+});
+
+app.controller('UploadController', function($scope, UploadService){
+    console.log("IN UPLOAD CTRL")
+    $scope.onImagePicked = function(imgFile){
+        console.log("IMAGE PICKED!", imgFile.files[0]);
+        $scope.postImage = imgFile.files[0];
+        const reader = new FileReader();
+        reader.onload = () => {
+            console.log("On load")
+            $scope.$apply(function() {
+              $scope.imagePreviewUrl = reader.result;
+            });
+        }
+        reader.readAsDataURL(imgFile.files[0]);
+    }
+
+
+    $scope.upload = function(){
+        console.log("UPLOAD CLICKED")
+        console.log("CAPTION",$scope.postCaption);
+        console.log("LOCATION",$scope.postLocation);
+        console.log("IMAGE",$scope.postImage);
+        postData = new FormData();
+        postData.append('caption', $scope.postCaption);
+        postData.append('location', $scope.postLocation);
+        postData.append('image', $scope.postImage);
+
+        console.log("PD", postData);
+        UploadService.uploadPost().then(function(response){
+            console.log("RESPONSE", response.data);
+        });
+    }
 });
 
 app.service('anchorSmoothScroll', function(){
@@ -342,7 +488,15 @@ app.service('anchorSmoothScroll', function(){
 
 ///////////
 app.controller('ScrollCtrl', function($scope, $location, anchorSmoothScroll) {
-    
+    $scope.directToLogin = function(){
+        console.log("D2L");
+        $location.path('/login');
+    }
+    $scope.directToRegister = function(){
+        console.log("D2R");
+        $location.path('/register');
+    }
+
     $scope.gotoElement = function (eID){
       // set the location.hash to the id of
       // the element you wish to scroll to.
@@ -363,19 +517,10 @@ function navHamburger() {
     }
 }
 
-function directToRegister(){
-    console.log("REGISTER");
-    window.location.replace("#/register");
-}
-
-function directToLogin(){
-    console.log("LOGIN");
-    window.location.replace("#/login");
-}
-
 function directToDashboard(){
     console.log("DASH")
-    window.location.replace("#/dashboard");
+    window.location.replace("#/search");
+    // window.location.reload();
 }
 
 function directToFeed(){
@@ -386,6 +531,7 @@ function directToFeed(){
 function directToDiscover(){
     console.log("DISCOVER")
     window.location.replace("#/discover");
+    // window.location.reload();
 }
 
 function directToSearch(){

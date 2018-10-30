@@ -1,6 +1,6 @@
 <div class="topnav" id="myTopnav">
         <a ng-href="#/"><img id='nav-icon' src='front-end/resources/images/crave-full.png'/></a>
-        <div class='login-nav'><div class='login-btn' onclick="directToLogin()" >LOGIN</div></div>
+        <div class='login-nav'><div class='login-btn' ng-click="directToLogin()" >LOGIN</div></div>
         <a href="javascript:void(0);" class="icon" onclick="navHamburger()">
             <i class="fa fa-bars"></i>
         </a>
@@ -17,7 +17,7 @@
                     <input class='textbox' placeholder='Password' name="password" ng-model="password" type="password" min=1 maxlength=30 required>
                     <!-- <button class='login-btn' id='btn-shadow' ng-click="register()">Register</button> -->
                     <input type='submit' class='login-btn' id='btn-shadow' value='Register'>
-                    <p class="light-txt">Already have an account? <span class='pointer' id='accent' onclick='directToLogin()'>Log in.</span></p>
+                    <p class="light-txt">Already have an account? <span class='pointer' id='accent' ng-click='directToLogin()'>Log in.</span></p>
                 </form>
             </div>
         </div>

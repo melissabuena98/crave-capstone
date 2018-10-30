@@ -8,8 +8,8 @@
             <hr id='sidebar-hr'>
         </div>
         <div class='w3-row w3-center'>
-            <h2 class='sidebar-btn' onclick="directToDashboard()"><i class="fa fa-home sidebar-icon" aria-hidden="true"></i>HOME</h2>
             <h2 class='sidebar-btn' onclick="directToFeed()"><i class="fa fa-rss sidebar-icon" aria-hidden="true"></i>FEED</h2>
+            <h2 class='sidebar-btn' onclick="directToDashboard()"><i class="fa fa-search sidebar-icon" aria-hidden="true"></i>SEARCH</h2>
             <h2 class='sidebar-btn  sidebar-active' onclick="directToDiscover()"><i class="fa fa-compass sidebar-icon" aria-hidden="true"></i>DISCOVER</h2>
             <h2 class='sidebar-btn' onclick="directToFavorites()"><i class="fa fa-star sidebar-icon" aria-hidden="true"></i>FAVORITES</h2>
             <h2 class='sidebar-btn' onclick="directToProfile()"><i class="fa fa-user sidebar-icon" aria-hidden="true"></i>PROFILE</h2>
@@ -23,10 +23,14 @@
         
         <div class='card-viewport' ng-controller='CardController'>
             <div class="card-container">
+                <div class="no-cards-box">
+                    <h1 id='no-cards'>No Cards Left!</h1>
+                    <input type='button' onclick='directToDiscover()' class='login-btn new-search' id='btn-shadow' value='New Search'>
+                </div>
                 <div ng-repeat="card in cards" class="card" id='card-box' ng-model='cardBox'>
                     <div class="card-img" style="background-image:url('{{card.image_url}}')"></div>
                     <h2 class='card-name' ng-bind-html='card.name'>{{card.name}}</h2>
-                    <p class='card-distance'>1.1 miles away</p>
+                    <p class='card-hours' ng-bind-html='card.is_closed'>{{card.is_closed}}</p>
                     <h4 class='card-detail'>Category: <span class='card-value' ng-bind-html='card.categories[0].title'>{{card.categories[0].title}}</span></h4>
                     <h4 class='card-detail'>Rating: <span class='card-value' ng-bind-html='card.rating'>{{card.rating}}</span> <i id='card-star' class="fa fa-star" aria-hidden="true"></i></h4>
                     <h4 class='card-detail'>Price: <span class='card-value' ng-bind-html='card.price'>{{card.price}}</span></h4>
@@ -35,10 +39,10 @@
                 </div>
             </div>
             <div class="card-options">
-                <div class='card-btn' id='back'><i class="fa fa-arrow-left" aria-hidden="true"></i></div>
-                <div class='card-btn' id='no'><i class="fa fa-times" aria-hidden="true"></i></div>
-                <div class='card-btn' id='yes'><i class="fa fa-check" aria-hidden="true"></i></div>
-                <div class='card-btn' id='star'><i class="fa fa-star" aria-hidden="true"></i></div>
+                <div class='card-btn' id='back' onclick='directToDiscover()'><i class="fa fa-arrow-left" aria-hidden="true"></i></div>
+                <div class='card-btn' id='no' ng-click='no()'><i class="fa fa-times" aria-hidden="true"></i></div>
+                <div class='card-btn' id='yes' ng-click='yes()'><i class="fa fa-check" aria-hidden="true"></i></div>
+                <div class='card-btn' id='star' onclick="directToFavorites()"><i class="fa fa-star" aria-hidden="true"></i></div>
             </div>
         </div>
     </div>

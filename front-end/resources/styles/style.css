@@ -541,7 +541,7 @@ section{
   line-height:90%;
 }
 
-.card-distance{
+.card-hours{
   font-family:'K2D', sans-serif;
   font-size: 1.2vw;
   color: #636363;
@@ -576,3 +576,89 @@ section{
   line-height:100%;
 }
 
+.new-search{
+  font-size:inherit;
+}
+
+.no-cards-box{
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  margin-top: 40%;
+}
+
+#no-cards{
+  color: #fefefe;
+  text-transform: uppercase;
+  font-family: 'CraveFont';
+  font-size: 3em;
+}
+
+/* FAVES  */
+#fave-dash{
+  overflow-y:scroll;
+}
+
+.fave-container{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.fave{
+  background: #fefefe;
+  width: 275px;
+  height: 335px;
+  border-radius: 5px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  padding: 15px;
+  position:relative;
+  padding-top:25px;
+  overflow-y:scroll;
+  margin:20px;
+  cursor:pointer;
+}
+
+.fave-img{
+  height: 45%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  border-radius: 5px;
+}
+
+.delete-fave{
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  font-size: 18px;
+  color: #ebebeb;
+  cursor:pointer;
+  transition:0.2s all;
+}
+
+.delete-fave:hover{
+  color:#989898;
+}
+
+.fave-detail{
+  margin:0;
+  text-align:left;
+}
+
+.fave-name{
+  margin-bottom:0;
+  font-weight:700;
+}
+
+
+/* IMAGE UPLOAD */
+.image-preview-box{
+  border:4px solid orange;
+  height:300px;
+  width:500px;
+}
+
+.image-preview{
+  height:100%;
+  width:100%;
+}

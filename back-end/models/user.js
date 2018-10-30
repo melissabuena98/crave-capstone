@@ -12,18 +12,9 @@ const userSchema = new Schema({
     saved_restaurants: Array,
     bio: String,
     location: String,
-    posts: [
-        {
-            post_id: Number,
-            user: String,
-            date: Date,
-            img: { data: Buffer, contentType: String },
-            location: String,
-            price: String,
-            rating: Number,
-            likes: Number
-        }
-    ]
+    following: Array,
 })
 
-module.exports = mongoose.model('user', userSchema, 'users');
+// module.exports = mongoose.model('user', userSchema, 'users');
+module.exports = User = mongoose.model('user', userSchema);
+// module.exports = mongoose.model('user', userSchema, 'users');

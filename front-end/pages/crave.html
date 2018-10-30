@@ -3,7 +3,7 @@
     <a data-scrollspy-listen="swipe" ng-click="gotoElement('swipe')" class='nav-hvr'>SWIPE</a>
     <a data-scrollspy-listen="eat" ng-click="gotoElement('eat')" class='nav-hvr'>EAT</a>
     <a data-scrollspy-listen="share" ng-click="gotoElement('share')" class='nav-hvr'>SHARE</a>
-    <div class='login-nav'><div class='login-btn' onclick="directToLogin()">LOGIN</div></div>
+    <div class='login-nav'><div class='login-btn' ng-click="directToLogin()">LOGIN</div></div>
     <a href="javascript:void(0);" class="icon" onclick="navHamburger()">
         <i class="fa fa-bars"></i>
     </a>
@@ -14,7 +14,7 @@
       <div class="w3-col m12 spacer bg-white">
         <h1 class='header w3-center'>Meet <span id='accent'>Crave.</span></h1>
         <h3 class='sub-header w3-center'>Hungry? Stop wasting time and let your personal restaurant guru help you.</h3>
-        <div class='signup-btn' onclick="directToRegister()">SIGN UP NOW</div>
+        <div class='signup-btn' ng-click="directToRegister()">SIGN UP NOW</div>
       </div>
     </div>
   </section>

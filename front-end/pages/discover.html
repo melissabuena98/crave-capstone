@@ -8,8 +8,8 @@
             <hr id='sidebar-hr'>
         </div>
         <div class='w3-row w3-center'>
-            <h2 class='sidebar-btn' onclick="directToDashboard()"><i class="fa fa-home sidebar-icon" aria-hidden="true"></i>HOME</h2>
             <h2 class='sidebar-btn' onclick="directToFeed()"><i class="fa fa-rss sidebar-icon" aria-hidden="true"></i>FEED</h2>
+            <h2 class='sidebar-btn' onclick="directToDashboard()"><i class="fa fa-search sidebar-icon" aria-hidden="true"></i>SEARCH</h2>
             <h2 class='sidebar-btn sidebar-active' onclick="directToDiscover()"><i class="fa fa-compass sidebar-icon" aria-hidden="true"></i>DISCOVER</h2>
             <h2 class='sidebar-btn' onclick="directToFavorites()"><i class="fa fa-star sidebar-icon" aria-hidden="true"></i>FAVORITES</h2>
             <h2 class='sidebar-btn' onclick="directToProfile()"><i class="fa fa-user sidebar-icon" aria-hidden="true"></i>PROFILE</h2>
@@ -25,7 +25,7 @@
             <input class='textbox' placeholder='Term e.g. Asian' name="term" ng-model="term" type="text" min=1 maxlength=30>
             <p class='price-slider-val w3-center'>{{ priceVal }}</p>
             <input ng-model='price' type="range" min="1" max="4" value='1' class="price-slider">
-            <input id='location' class='textbox' placeholder='Zip, State, City' name="location" ng-model="location" type="text" min=1 maxlength=30>
+            <input id='location' class='textbox' placeholder='Zip, State, City' name="location" ng-model="location" type="text" min=1 maxlength=30 required>
             <p id='accent' onclick='getLocation()' class='use-location'><span><i class="fa fa-map-marker" aria-hidden="true"></i></span> Use your location instead</p>
             <hr>
             <input type='submit' class='login-btn' id='btn-shadow' value='Start'>
