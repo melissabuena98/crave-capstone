@@ -157,8 +157,33 @@ router.post('/get-favorites', (req, res) => {
             }
             else{
                 var favorites = user.saved_restaurants;
-                console.log("FAVS", favorites)
                 res.status(200).send(favorites);
+            }
+        }
+    });
+});
+
+router.post('/remove-favorite', (req, res) => {
+    let fave = req.body;
+    User.findOne({_id: fave.userID}, (error, user) => {
+        if(error){
+            console.error(error);
+        }
+        else{
+            if(!user){
+                res.status(401).send("Invalid user token");
+            }
+            else{
+                user.saved_restaurants.splice(fave.index, 1);
+                user.save((error, updatedUser) => {
+                    if(error){
+                        console.log(error);
+                    }
+                    else{
+                        console.log("FAVORITE REMOVED FROM DB!!!")
+                        res.status(200).send(updatedUser);
+                    }
+                });
             }
         }
     });

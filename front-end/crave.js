@@ -286,9 +286,16 @@ app.service('FavoriteService', function ($http){
         console.log("GETTING FAVES...")
         return $http.post(this.getPath, userID);
     }
+
+    this.removePath='http://localhost:3000/api/remove-favorite';
+    this.removeFavorite = function(faveID){
+        console.log("REMOVING FAVORITE...", faveID);
+        return $http.post(this.removePath, faveID);
+    }
+
 });
 
-app.controller('FaveController', function($scope, DashboardService, FavoriteService){
+app.controller('FaveController', function($scope, DashboardService, FavoriteService, $route){
     DashboardService.getUser().then(function(response){
         $scope.username = response.data.username;
         $scope.post_count = response.data.post_count;
@@ -301,6 +308,15 @@ app.controller('FaveController', function($scope, DashboardService, FavoriteServ
             $scope.faves = response.data;
         });
     });
+
+    $scope.removeFavorite = function(cardID){
+        console.log("REMOVE CARD:" , $scope.faves[cardID].id);
+        $scope.faves[cardID].index = cardID;
+        FavoriteService.removeFavorite($scope.faves[cardID]).then(function(response){
+            console.log("REMOVERES", response.data);
+            $route.reload();
+        });
+    };
     
 });
 
