@@ -1,10 +1,10 @@
-<div class='w3-row w3-center'>
+<div class='w3-row w3-center' ng-controller='FaveController'>
         <div class="sidebar">
             <div class='w3-row w3-center'>
                 <img id='profile-pic' src='/front-end/resources/images/profile.jpg'>
-                <h3 class='profile-stat' id='profile-name'>username_101</h3>
-                <h6 class='profile-stat'>Posts: <span id='profile-posts'>1,234</span></h6>
-                <h6 class='profile-stat'>Followers: <span id='profile-followers'>21,958</span></h6>
+                <h3 class='profile-stat' id='profile-name'>{{ username }}</h3>
+                <h6 class='profile-stat'>Posts: <span id='profile-posts'>{{post_count}}</span></h6>
+                <h6 class='profile-stat'>Followers: <span id='profile-followers'>{{follower_count}}</span></h6>
                 <hr id='sidebar-hr'>
             </div>
             <div class='w3-row w3-center'>
@@ -21,13 +21,23 @@
         <div class='dash-area' id='fave-dash'>
             <h1 class='dash-header'>View your favorite restaurants!</h1>
             <div id='search-container'>
-                <input id='search-box' type='text' placeholder="Search your restaurants">
+                <input id='search-box' ng-model='query.name' type='text' placeholder="Search your restaurants">
                 <button type="submit"><i class="fa fa-search"></i></button>
             </div>
-            <div class="fave-viewport" ng-controller='FaveController'>
+            <div class="fave-viewport">
                 <div class="fave-container">
-                    <!-- <div ng-repeat="fave in faves" class="fave" id='fave-box' ng-model='faveBox'></div> -->
-                    <div class='fave'>
+                    <div ng-repeat="fave in faves | filter:query" class="fave" id='fave-box' ng-model='faveBox'>
+                        <i class="fa fa-times delete-fave" aria-hidden="true"></i>
+                        <div class="fave-img" style="background-image:url('{{fave.image_url}}')"></div>
+                        <h4 class='fave-name' ng-bind-html='fave.name'>{{fave.name}}</h4>
+                        <p class='fave-detail'>Category: <span class='fave-value' ng-bind-html='fave.categories[0].title'>{{fave.categories[0].title}}</span></p>
+                        <p class='fave-detail'>Price: <span class='fave-value' ng-bind-html='fave.price'>{{fave.price}}</span></p>
+                        <p class='fave-detail'>Rating: <span class='fave-value' ng-bind-html='fave.rating'>{{fave.rating}}</span></p>
+                        <!-- <p class='fave-detail' ng-bind-html='fave.location.display_address[0]'>Address: {{fave.location.display_address[0]}} &nbsp; <span ng-bind-html='fave.location.display_address[1]'>{{fave.location.display_address[1]}}</span></p> -->
+                        <p class='fave-detail'>Location: <span class='fave-value' ng-bind-html='fave.location.display_address[0]'>{{fave.location.display_address[0]}}</span> &nbsp;<span class='fave-value' ng-bind-html='fave.location.display_address[1]'>{{fave.location.display_address[1]}}</span></h4>
+                        <p class='fave-detail'>Phone: <span class='fave-value' ng-bind-html='fave.phone'>{{fave.phone}}</span></p>
+                    </div>
+                    <!-- <div class='fave'>
                         <i class="fa fa-times delete-fave" aria-hidden="true"></i>
                         <div class="fave-img" style="background-image:url('/front-end/resources/images/panda.jpg')"></div>
                         <h4 class='fave-name'>Panda Express</h4>
@@ -36,67 +46,8 @@
                         <p class='fave-detail'>Rating: 5</p>
                         <p class='fave-detail'>Address: 143 S Main St Salt Lake City, UT 84111</p>
                         <p class='fave-detail'>Phone: 123456789</p>
-                    </div>
-                    <div class='fave'>
-                        <i class="fa fa-times delete-fave" aria-hidden="true"></i>
-                        <div class="fave-img" style="background-image:url('/front-end/resources/images/panda.jpg')"></div>
-                        <h4 class='fave-name'>Panda Express</h4>
-                        <p class='fave-detail'>Cuisine: Chinese</p>
-                        <p class='fave-detail'>Price: $$$$</p>
-                        <p class='fave-detail'>Rating: 5</p>
-                        <p class='fave-detail'>Address: 143 S Main St Salt Lake City, UT 84111</p>
-                        <p class='fave-detail'>Phone: 123456789</p>
-                    </div>
-                    <div class='fave'>
-                        <i class="fa fa-times delete-fave" aria-hidden="true"></i>
-                        <div class="fave-img" style="background-image:url('/front-end/resources/images/panda.jpg')"></div>
-                        <h4 class='fave-name'>Panda Express</h4>
-                        <p class='fave-detail'>Cuisine: Chinese</p>
-                        <p class='fave-detail'>Price: $$$$</p>
-                        <p class='fave-detail'>Rating: 5</p>
-                        <p class='fave-detail'>Address: 143 S Main St Salt Lake City, UT 84111</p>
-                        <p class='fave-detail'>Phone: 123456789</p>
-                    </div>
-                    <div class='fave'>
-                            <i class="fa fa-times delete-fave" aria-hidden="true"></i>
-                            <div class="fave-img" style="background-image:url('/front-end/resources/images/panda.jpg')"></div>
-                            <h4 class='fave-name'>Panda Express</h4>
-                            <p class='fave-detail'>Cuisine: Chinese</p>
-                            <p class='fave-detail'>Price: $$$$</p>
-                            <p class='fave-detail'>Rating: 5</p>
-                            <p class='fave-detail'>Address: 143 S Main St Salt Lake City, UT 84111</p>
-                            <p class='fave-detail'>Phone: 123456789</p>
-                        </div>
-                        <div class='fave'>
-                                <i class="fa fa-times delete-fave" aria-hidden="true"></i>
-                                <div class="fave-img" style="background-image:url('/front-end/resources/images/panda.jpg')"></div>
-                                <h4 class='fave-name'>Panda Express</h4>
-                                <p class='fave-detail'>Cuisine: Chinese</p>
-                                <p class='fave-detail'>Price: $$$$</p>
-                                <p class='fave-detail'>Rating: 5</p>
-                                <p class='fave-detail'>Address: 143 S Main St Salt Lake City, UT 84111</p>
-                                <p class='fave-detail'>Phone: 123456789</p>
-                            </div>
-                            <div class='fave'>
-                                    <i class="fa fa-times delete-fave" aria-hidden="true"></i>
-                                    <div class="fave-img" style="background-image:url('/front-end/resources/images/panda.jpg')"></div>
-                                    <h4 class='fave-name'>Panda Express</h4>
-                                    <p class='fave-detail'>Cuisine: Chinese</p>
-                                    <p class='fave-detail'>Price: $$$$</p>
-                                    <p class='fave-detail'>Rating: 5</p>
-                                    <p class='fave-detail'>Address: 143 S Main St Salt Lake City, UT 84111</p>
-                                    <p class='fave-detail'>Phone: 123456789</p>
-                                </div>
-                                <div class='fave'>
-                                        <i class="fa fa-times delete-fave" aria-hidden="true"></i>
-                                        <div class="fave-img" style="background-image:url('/front-end/resources/images/panda.jpg')"></div>
-                                        <h4 class='fave-name'>Panda Express</h4>
-                                        <p class='fave-detail'>Cuisine: Chinese</p>
-                                        <p class='fave-detail'>Price: $$$$</p>
-                                        <p class='fave-detail'>Rating: 5</p>
-                                        <p class='fave-detail'>Address: 143 S Main St Salt Lake City, UT 84111</p>
-                                        <p class='fave-detail'>Phone: 123456789</p>
-                                    </div>
+                    </div> -->
+                   
                 </div>
             </div>
         </div>

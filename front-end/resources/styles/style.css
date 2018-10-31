@@ -622,8 +622,9 @@ section{
 .fave-img{
   height: 45%;
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: contain;
   border-radius: 5px;
+  background-position: center;
 }
 
 .delete-fave{
@@ -643,6 +644,12 @@ section{
 .fave-detail{
   margin:0;
   text-align:left;
+  font-family: 'K2D', sans-serif;
+  font-weight: 600;
+}
+
+.fave-value{
+  font-weight:300;
 }
 
 .fave-name{

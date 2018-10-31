@@ -39,8 +39,8 @@ router.post('/register', (req, res) => {
                 console.log(error);
             }
             else{
-                // res.status(200).send(registeredUser);
-                res.status(200).send("HELLO");
+                res.status(200).send(registeredUser);
+                // res.status(200).send("HELLO");
             }
         })
     });
@@ -77,7 +77,6 @@ router.post('/login', (req, res) => {
 });
 
 router.post('/getUser', (req, res) => {
-    console.log("GETTING USER");
     let userToken = req.body;
     var decoded = jwt.verify(userToken.token, 'craveSecretKey');
     User.findOne({_id: decoded.subject}, (error, user) => {
@@ -116,9 +115,54 @@ router.post('/upload', upload.any(),(req,res) => {
             });
         });
     }
-
 });
 
+router.post('/add-favorite', (req,res) => {
+    let favorite = req.body;
+    console.log("FAVORITE: ", favorite);
+    User.findOne({_id: favorite.userID}, (error, user) => {
+        if(error){
+            console.error(error);
+        }
+        else{
+            if(!user){
+                res.status(401).send("Invalid user token");
+            }
+            else{
+                user.saved_restaurants.push(favorite);
+                user.save((error, updatedUser) => {
+                    if(error){
+                        console.log(error);
+                    }
+                    else{
+                        console.log("FAVORITE SAVED TO DB!!!")
+                        res.status(200).send(updatedUser);
+                    }
+                });
+            }
+        }
+    });
+});
+
+router.post('/get-favorites', (req, res) => {
+    let user = req.body;
+    console.log("USER:", user);
+    User.findOne({_id: user.id}, (error, user) => {
+        if(error){
+            console.error(error);
+        }
+        else{
+            if(!user){
+                res.status(401).send("Invalid user token");
+            }
+            else{
+                var favorites = user.saved_restaurants;
+                console.log("FAVS", favorites)
+                res.status(200).send(favorites);
+            }
+        }
+    });
+});
 
 
 

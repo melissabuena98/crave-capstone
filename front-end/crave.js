@@ -8,6 +8,8 @@ var allCards;
 var $scope, $location;
 var cardObject;
 var postData;
+var faveObject;
+var userID;
 
 app.config(function($routeProvider){
     $routeProvider
@@ -269,13 +271,55 @@ app.controller('DiscoverController', function($scope, DiscoverService, Dashboard
             cardObject = response.data;
             directToSearch();
         });
-        // directToSearch();
-
     }
 })
 
-app.controller('CardController', function($scope){
-    $scope.cards = cardObject.businesses;
+app.service('FavoriteService', function ($http){
+    this.postPath='http://localhost:3000/api/add-favorite';
+    this.addFavorite = function(){
+        console.log("ADDING FAVE...")
+        return $http.post(this.postPath, faveObject);
+    }
+
+    this.getPath='http://localhost:3000/api/get-favorites';
+    this.getFavorites = function(){
+        console.log("GETTING FAVES...")
+        return $http.post(this.getPath, userID);
+    }
+});
+
+app.controller('FaveController', function($scope, DashboardService, FavoriteService){
+    DashboardService.getUser().then(function(response){
+        $scope.username = response.data.username;
+        $scope.post_count = response.data.post_count;
+        $scope.follower_count = response.data.follower_count;
+        userID = {
+            "id":response.data._id
+        }
+        FavoriteService.getFavorites().then(function(response){
+            console.log("GETFAVESRESPONSE", response.data);
+            $scope.faves = response.data;
+        });
+    });
+    
+});
+
+app.controller('CardController', function($scope, DashboardService, FavoriteService){
+    if(cardObject == undefined){
+        directToDiscover();
+        $scope.empty = true;
+    }
+    else{
+        $scope.cards = cardObject.businesses;
+    }
+    console.log("CARD CTRL")
+    DashboardService.getUser().then(function(response){
+        $scope.username = response.data.username;
+        $scope.post_count = response.data.post_count;
+        $scope.follower_count = response.data.follower_count;
+        $scope.userID = response.data._id;
+    });
+
     // $scope.cards = [
     //     {
     //         "image_url":"/front-end/resources/images/panda.jpg",
@@ -298,30 +342,30 @@ app.controller('CardController', function($scope){
 
     var cardIndex = 0;
     angular.element(document).ready(function(){
-        allCards = document.getElementsByClassName('card');
-        console.log(allCards.length);
-        
-        initCards()
+        if(!$scope.empty){
+            console.log("NOT EMPTY")
+            allCards = document.getElementsByClassName('card');
+            console.log(allCards.length);
+            initCards()
+        }
+
     });
         
     function initCards(){
         console.log("CARD INDEX", cardIndex);
+        var direction;
         for(var i = 0; i < allCards.length; i++){
             allCards[i].style.zIndex = allCards.length-i;
-            // var hammer = new Hammer.Manager(allCards[i]);
             var hammer = new Hammer(allCards[i]);
-            // var DoubleTap = new Hammer.Tap({
-            //     event: 'doubletap',
-            //     taps: 2
-            // });
-            
-            // hammer.add(DoubleTap);
+
             hammer.on('panleft panright', function(event){
                 if(event.type == 'panleft'){
+                    direction = 'left';
                     event.target.style.transform = `translate(${event.deltaX}px, ${event.deltaY}px) rotate(-20deg)`;
                     event.target.style.background = '#DF6857';
                 }
                 else{
+                    direction = 'right'
                     event.target.style.transform = `translate(${event.deltaX}px, ${event.deltaY}px) rotate(20deg)`;
                     event.target.style.background = '#77D9B5';
                 }
@@ -333,6 +377,9 @@ app.controller('CardController', function($scope){
                     event.target.style.background = '#ebebeb';
                 }
                 else{
+                    if(direction == 'right'){
+                        $scope.addToFavorites(cardIndex);
+                    }
                     cardIndex++;
                     event.target.style.opacity = '0';
                     event.target.style.transition = '0.75s ease-out';
@@ -340,12 +387,6 @@ app.controller('CardController', function($scope){
                     console.log("CARD INDEX", cardIndex);
                 }
             });
-
-            // hammer.on('doubletap', function(event){
-            //     console.log($scope.cards[cardIndex].location);
-            //     window.open(`http://maps.google.com/?q=${$scope.cards[cardIndex].location}`);
-            // });
-
 
         }
 
@@ -381,8 +422,10 @@ app.controller('CardController', function($scope){
     
     $scope.addToFavorites = function(cardIndex){
         console.log("ADD TO FAVE", $scope.cards[cardIndex]);
+        faveObject = $scope.cards[cardIndex];
+        faveObject.userID = $scope.userID;
+        FavoriteService.addFavorite();
     }
-        
     
 
 });
@@ -531,7 +574,6 @@ function directToFeed(){
 function directToDiscover(){
     console.log("DISCOVER")
     window.location.replace("#/discover");
-    // window.location.reload();
 }
 
 function directToSearch(){
