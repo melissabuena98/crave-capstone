@@ -17,7 +17,7 @@ app.config(function($routeProvider){
             resolve:{
                 "check": function($location){
                     if(localStorage.getItem("token")){
-                        $location.path('/search');
+                        $location.path('/feed');
                     }
                 }
             },
@@ -544,6 +544,25 @@ app.service('anchorSmoothScroll', function(){
     };
     
 });
+
+app.controller('FeedController', function ($scope, DashboardService){
+    DashboardService.getUser().then(function(response){
+        console.log(response.data);
+        $scope.username = response.data.username;
+        $scope.post_count = response.data.post_count;
+        $scope.follower_count = response.data.follower_count;
+        $scope.name = response.data.fullname.split(' ').slice(0, -1).join(' ');
+    });
+    var today = new Date()
+    var curHr = today.getHours()
+    if (curHr < 12) {
+        $scope.greeting = "Good morning"
+    } else if (curHr < 18) {
+        $scope.greeting = "Good afternoon"
+    } else {
+        $scope.greeting = "Good evening"
+    }
+})
 
 ///////////
 app.controller('ScrollCtrl', function($scope, $location, anchorSmoothScroll) {

@@ -1,10 +1,10 @@
-<div class='w3-row w3-center'>
+<div class='w3-row w3-center' ng-controller='FeedController'>
         <div class="sidebar">
             <div class='w3-row w3-center'>
                 <img id='profile-pic' src='/front-end/resources/images/profile.jpg'>
-                <h3 class='profile-stat' id='profile-name'>username_101</h3>
-                <h6 class='profile-stat'>Posts: <span id='profile-posts'>1,234</span></h6>
-                <h6 class='profile-stat'>Followers: <span id='profile-followers'>21,958</span></h6>
+                <h3 class='profile-stat' id='profile-name'>{{ username }}</h3>
+                <h6 class='profile-stat'>Posts: <span id='profile-posts'>{{post_count}}</span></h6>
+                <h6 class='profile-stat'>Followers: <span id='profile-followers'>{{follower_count}}</span></h6>
                 <hr id='sidebar-hr'>
             </div>
             <div class='w3-row w3-center'>
@@ -18,8 +18,63 @@
             </div>
         </div>
     
-        <div class='dash-area'>
-            <h1 class='dash-header'>Hello, username_101! Welcome to your FEED.</h1>
+        <div class='dash-area feed-dash'>
+            <h1 class='dash-header'>{{greeting}}, {{name}}! Welcome to your feed.</h1>
+
+            <div class="feed-viewport">
+                <div class="feed-container">
+                    <div class="feed-post-box">
+                        <div class="feed-user-info">
+                            <img class='feed-user-pic' src='/front-end/resources/images/me.png'>
+                            <h3 class='feed-user-name'>melissabuena</h3>
+                        </div>
+                        <div class='feed-photo' style="background-image:url('/front-end/resources/images/food1.png')"></div>
+                        <div class="feed-caption-box">
+                            <h4 class='feed-dish'>Mushroom Steak with Creamy Roasted Potatoes</h4>
+                            <h6 class='feed-restaurant'><i class='fa fa-map-marker feed-map'></i><span>The Cheesecake Factory</span></h6>
+                            <p class='feed-caption'>The steak was so tender and all the flavors were so great! Try it!</p>
+                        </div>
+                        <div class='feed-interaction'>
+                            <i class='fa fa-heart feed-heart'></i>
+                            <h6 class='feed-likes'>1,372 likes</h6>
+                        </div>
+                    </div>
+
+                    <div class="feed-post-box">
+                        <div class="feed-user-info">
+                            <img class='feed-user-pic' src='/front-end/resources/images/me.png'>
+                            <h3 class='feed-user-name'>melissabuena</h3>
+                        </div>
+                        <div class='feed-photo' style="background-image:url('/front-end/resources/images/food2.png')"></div>
+                        <div class="feed-caption-box">
+                            <h4 class='feed-dish'>Chicken Fajitas</h4>
+                            <h6 class='feed-restaurant'><i class='fa fa-map-marker feed-map'></i><span>Blue Iguana</span></h6>
+                            <p class='feed-caption'>The servings were huge and it came with a lot of sides!</p>
+                        </div>
+                        <div class='feed-interaction'>
+                            <i class='fa fa-heart feed-heart'></i>
+                            <h6 class='feed-likes'>844 likes</h6>
+                        </div>
+                    </div>
+
+                    <div class="feed-post-box">
+                        <div class="feed-user-info">
+                            <img class='feed-user-pic' src='/front-end/resources/images/me.png'>
+                            <h3 class='feed-user-name'>melissabuena</h3>
+                        </div>
+                        <div class='feed-photo' style="background-image:url('/front-end/resources/images/food3.png')"></div>
+                        <div class="feed-caption-box">
+                            <h4 class='feed-dish'>Streak Gyro</h4>
+                            <h6 class='feed-restaurant'><i class='fa fa-map-marker feed-map'></i><span>Spitz Downtown</span></h6>
+                            <p class='feed-caption'>Best gyros in town, a must try!</p>
+                        </div>
+                        <div class='feed-interaction'>
+                            <i class='fa fa-heart feed-heart'></i>
+                            <h6 class='feed-likes'>75 likes</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     
     </div>
