@@ -173,7 +173,7 @@ app.controller('LoginController', function ($scope, LoginService, $location) {
             console.log("RES",response.data);
             console.log("RESTOK",response.data.token);
             localStorage.setItem("token", response.data.token);
-            $location.path('/search')
+            $location.path('/feed')
         });
     }
 
