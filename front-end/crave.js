@@ -238,10 +238,14 @@ app.controller('DiscoverController', function($scope, DiscoverService, Dashboard
     });
 
     yelpQuery = {};
-    $scope.price = 1;
+    $scope.price = 0;
 
     $scope.$watch('price', function (numberVal) {
+        console.log("SLIDER", $scope.price);
         if (typeof numberVal !== 'undefined') {
+            if(numberVal == 0){
+                $scope.priceVal = "Any Price"
+            }
             if(numberVal == 1){
                 $scope.priceVal = "$";
             }
@@ -251,7 +255,7 @@ app.controller('DiscoverController', function($scope, DiscoverService, Dashboard
             else if(numberVal == 3){
                 $scope.priceVal = "$$$";
             }
-            else{
+            else if(numberVal == 4){
                 $scope.priceVal = "$$$$";
             }
         }
@@ -259,11 +263,20 @@ app.controller('DiscoverController', function($scope, DiscoverService, Dashboard
 
     $scope.discover = function(){
         console.log("DISCOVER TRIGGERED");
-        yelpQuery = {
-            "term": $scope.term,
-            "price": $scope.price,
-            "location": $scope.location,
-            "limit": 50
+        if($scope.price == 0){
+            yelpQuery = {
+                "term": $scope.term,
+                "location": $scope.location,
+                "limit": 50
+            }
+        }
+        else{
+            yelpQuery = {
+                "term": $scope.term,
+                "price": $scope.price,
+                "location": $scope.location,
+                "limit": 50
+            }
         }
         console.log("YELP QUERY", yelpQuery);
         DiscoverService.sendYelpData().then(function(response){
@@ -460,6 +473,7 @@ app.service('UploadService', function($http){
 
 app.controller('UploadController', function($scope, UploadService){
     console.log("IN UPLOAD CTRL")
+    $scope.imagePreviewUrl = '/front-end/resources/images/no-image.jpg';
     $scope.onImagePicked = function(imgFile){
         console.log("IMAGE PICKED!", imgFile.files[0]);
         $scope.postImage = imgFile.files[0];
@@ -618,6 +632,11 @@ function directToSearch(){
 function directToFavorites(){
     console.log("FAVS")
     window.location.replace("#/favorites");
+}
+
+function directToUpload(){
+    console.log("UPLOAD")
+    window.location.replace("#/upload");
 }
 
 function directToProfile(){

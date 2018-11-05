@@ -110,7 +110,8 @@ router.post('/upload', upload.any(),(req,res) => {
                 });
                 post.save(function (err, result){
                     if(err){}
-                    res.json("RESULT",result);
+                    // res.json("RESULT",result);
+                    res.status(200).json(result)
                 })
             });
         });

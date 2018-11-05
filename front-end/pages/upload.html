@@ -1,4 +1,48 @@
-<div ng-controller='UploadController'>
+<div class='w3-row w3-center' ng-controller='UploadController'>
+    <div class="sidebar">
+        <div class='w3-row w3-center'>
+            <img id='profile-pic' src='/front-end/resources/images/profile.jpg'>
+            <h3 class='profile-stat' id='profile-name'>username_101</h3>
+            <h6 class='profile-stat'>Posts: <span id='profile-posts'>1,234</span></h6>
+            <h6 class='profile-stat'>Followers: <span id='profile-followers'>21,958</span></h6>
+            <hr id='sidebar-hr'>
+        </div>
+        <div class='w3-row w3-center'>
+            <h2 class='sidebar-btn' onclick="directToFeed()"><i class="fa fa-rss sidebar-icon" aria-hidden="true"></i>FEED</h2>
+            <h2 class='sidebar-btn' onclick="directToDashboard()"><i class="fa fa-search sidebar-icon" aria-hidden="true"></i>SEARCH</h2>
+            <h2 class='sidebar-btn' onclick="directToDiscover()"><i class="fa fa-compass sidebar-icon" aria-hidden="true"></i>DISCOVER</h2>
+            <h2 class='sidebar-btn' onclick="directToFavorites()"><i class="fa fa-star sidebar-icon" aria-hidden="true"></i>FAVORITES</h2>
+            <h2 class='sidebar-btn' onclick="directToProfile()"><i class="fa fa-user sidebar-icon" aria-hidden="true"></i>PROFILE</h2>
+            <h2 class='sidebar-btn sidebar-active' onclick="directToUpload()"><i class="fa fa-upload sidebar-icon" aria-hidden="true"></i>UPLOAD</h2>
+            <br>
+            <h6 class='sidebar-btn' id='sidebar-logout' onclick='directToLogout()'><i class="fa fa-sign-out sidebar-icon" aria-hidden="true"></i>LOGOUT</h6>
+        </div>
+    </div>
+
+    <div class='dash-area'>
+        <h1 class='dash-header2'>CREATE A POST</h1>
+            <div class="upload-viewport">
+                <form ng-submit='upload()'>
+                    <input type='file' accept="image/*" onchange="angular.element(this).scope().onImagePicked(this)">
+                    <div class="image-preview-box">
+                        <img class='image-preview' src='{{imagePreviewUrl}}'/>
+                    </div>
+                    <input placeholder='Caption' ng-model="postCaption" type="text" min=1 maxlength=30>
+                    <input placeholder='Location' ng-model="postLocation" type="text" min=1 maxlength=30>
+                    <!-- <input ng-model='postRating' type="range" min="1" max="5" value='1' class="price-slider"> -->
+                    <input type='submit' class='login-btn' id='btn-shadow' value='Upload'>
+                </form>
+            </div>
+    </div>
+
+</div>
+
+
+
+
+
+
+<!-- <div ng-controller='UploadController'>
     <h1>UPLOAD IMAGE HERE</h1>
     <form ng-submit='upload()'>
         <input type='file' accept="image/*" onchange="angular.element(this).scope().onImagePicked(this)">
@@ -7,7 +51,7 @@
         </div>
         <input placeholder='Caption' ng-model="postCaption" type="text" min=1 maxlength=30>
         <input placeholder='Location' ng-model="postLocation" type="text" min=1 maxlength=30>
-        <!-- <input ng-model='postRating' type="range" min="1" max="5" value='1' class="price-slider"> -->
-        <input type='submit' class='login-btn' id='btn-shadow' value='Upload'>
+         <input ng-model='postRating' type="range" min="1" max="5" value='1' class="price-slider">
+         <input type='submit' class='login-btn' id='btn-shadow' value='Upload'>
     </form>
-</div>
+</div>  -->
