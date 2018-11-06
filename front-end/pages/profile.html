@@ -1,10 +1,10 @@
-<div class='w3-row w3-center'>
+<div class='w3-row w3-center' ng-controller='ProfileController'>
         <div class="sidebar">
             <div class='w3-row w3-center'>
                 <img id='profile-pic' src='/front-end/resources/images/profile.jpg'>
-                <h3 class='profile-stat' id='profile-name'>username_101</h3>
-                <h6 class='profile-stat'>Posts: <span id='profile-posts'>1,234</span></h6>
-                <h6 class='profile-stat'>Followers: <span id='profile-followers'>21,958</span></h6>
+                <h3 class='profile-stat' id='profile-name'>{{ username }}</h3>
+            <h6 class='profile-stat'>Posts: <span id='profile-posts'>{{post_count}}</span></h6>
+            <h6 class='profile-stat'>Followers: <span id='profile-followers'>{{follower_count}}</span></h6>
                 <hr id='sidebar-hr'>
             </div>
             <div class='w3-row w3-center'>
@@ -19,12 +19,67 @@
             </div>
         </div>
     
-        <div class='dash-area'>
-            <h1 class='dash-header'>Hello, username_101! Welcome to your PROFILE.</h1>
-            <div id='search-container'>
-                <input id='search-box' type='text' placeholder="Search Users">
-                <button type="submit"><i class="fa fa-search"></i></button>
+        <div class='dash-area profile-viewport'>
+            <div class="profile-header w3-row">
+                <div class="w3-col m4 profile-pic-box">
+                    <img class='profile-pic' src='/front-end/resources/images/me.png'>
+                </div>
+                <div class="w3-col m8">
+                    <h1 class='profile-name'>{{name}}</h1>
+                    <h4 class='profile-uname'>@{{username}}</h4>
+                    <div class="w3-row" style="width:13vw">
+                        <div class="w3-col m6"><p class='profile-count'>{{post_count}} Posts</p></div>
+                        <div class="w3-col m6"><p class='profile-count'>{{follower_count}} Followers</p></div>
+                    </div>
+                    <p class='profile-location'><i class='fa fa-map-marker profile-location-icon'></i> Add Your Location</p>
+                    <p class='profile-bio'>
+                        College student at Neumont who loves to try out new restaurants downtown. Korean BBQ, Hot Pot, Ramen, and Boba is my life (also capstone).
+                    </p>
+                </div>
             </div>
+            <div class="profile-gallery-box">
+                <div class="profile-grid">
+                    <div class='gallery-img' style="background-image:url('/front-end/resources/images/food2.png')">
+                        <div class="gallery-img-hvr">
+                            <p class="img-hvr-likes"><i class='fa fa-heart hvr-heart'></i> 123 likes</p>
+                        </div>
+                    </div>  
+                    <div class='gallery-img' style="background-image:url('/front-end/resources/images/food2.png')">
+                        <div class="gallery-img-hvr">
+                            <p class="img-hvr-likes"><i class='fa fa-heart hvr-heart'></i> 123 likes</p>
+                        </div>
+                    </div>  
+                    <div class='gallery-img' style="background-image:url('/front-end/resources/images/food2.png')">
+                        <div class="gallery-img-hvr">
+                            <p class="img-hvr-likes"><i class='fa fa-heart hvr-heart'></i> 123 likes</p>
+                        </div>
+                    </div>  
+                    <div class='gallery-img' style="background-image:url('/front-end/resources/images/food2.png')">
+                        <div class="gallery-img-hvr">
+                            <p class="img-hvr-likes"><i class='fa fa-heart hvr-heart'></i> 123 likes</p>
+                        </div>
+                    </div>  
+                    <div class='gallery-img' style="background-image:url('/front-end/resources/images/food2.png')">
+                        <div class="gallery-img-hvr">
+                            <p class="img-hvr-likes"><i class='fa fa-heart hvr-heart'></i> 123 likes</p>
+                        </div>
+                    </div>  
+                    <div class='gallery-img' style="background-image:url('/front-end/resources/images/food2.png')">
+                        <div class="gallery-img-hvr">
+                            <p class="img-hvr-likes"><i class='fa fa-heart hvr-heart'></i> 123 likes</p>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+            <!-- <div class="grid-box">
+                <div class="grid">
+                    <div class="box">1</div>
+                    <div class="box">2</div>
+                    <div class="box">3</div>
+                    <div class="box">4</div>
+                    <div class="box">5</div>
+                </div>
+            </div> -->
         </div>
     
     </div>

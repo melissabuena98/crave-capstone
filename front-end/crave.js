@@ -198,12 +198,6 @@ app.service("DashboardService", function($http){
 app.controller('DashboardController', function($scope, DashboardService) {
     DashboardService.getUser().then(function(response){
         console.log(response.data);
-        // localStorage.setItem('username', response.data.username);
-        // localStorage.setItem('posts', response.data.post_count);
-        // localStorage.setItem('followers', response.data.follower_count);
-        // $scope.username = localStorage.getItem('username');
-        // $scope.post_count = localStorage.getItem('posts');
-        // $scope.follower_count = localStorage.getItem('followers');
         $scope.username = response.data.username;
         $scope.post_count = response.data.post_count;
         $scope.follower_count = response.data.follower_count;
@@ -221,17 +215,8 @@ app.service('DiscoverService', function($http){
 
 
 app.controller('DiscoverController', function($scope, DiscoverService, DashboardService){
-    // $scope.username = localStorage.getItem('username');
-    // $scope.post_count = localStorage.getItem('posts');
-    // $scope.follower_count = localStorage.getItem('followers');
     DashboardService.getUser().then(function(response){
         console.log(response.data);
-        // localStorage.setItem('username', response.data.username);
-        // localStorage.setItem('posts', response.data.post_count);
-        // localStorage.setItem('followers', response.data.follower_count);
-        // $scope.username = localStorage.getItem('username');
-        // $scope.post_count = localStorage.getItem('posts');
-        // $scope.follower_count = localStorage.getItem('followers');
         $scope.username = response.data.username;
         $scope.post_count = response.data.post_count;
         $scope.follower_count = response.data.follower_count;
@@ -505,6 +490,36 @@ app.controller('UploadController', function($scope, UploadService){
     }
 });
 
+app.controller('FeedController', function ($scope, DashboardService){
+    DashboardService.getUser().then(function(response){
+        console.log(response.data);
+        $scope.username = response.data.username;
+        $scope.post_count = response.data.post_count;
+        $scope.follower_count = response.data.follower_count;
+        $scope.name = response.data.fullname.split(' ').slice(0, -1).join(' ');
+    });
+    var today = new Date()
+    var curHr = today.getHours()
+    if (curHr < 12) {
+        $scope.greeting = "Good morning"
+    } else if (curHr < 18) {
+        $scope.greeting = "Good afternoon"
+    } else {
+        $scope.greeting = "Good evening"
+    }
+});
+
+app.controller('ProfileController', function ($scope, DashboardService){
+    DashboardService.getUser().then(function(response){
+        console.log(response.data);
+        $scope.username = response.data.username;
+        $scope.post_count = response.data.post_count;
+        $scope.follower_count = response.data.follower_count;
+        $scope.name = response.data.fullname;
+    });
+});
+
+///////////
 app.service('anchorSmoothScroll', function(){
     
     this.scrollTo = function(eID) {
@@ -559,26 +574,6 @@ app.service('anchorSmoothScroll', function(){
     
 });
 
-app.controller('FeedController', function ($scope, DashboardService){
-    DashboardService.getUser().then(function(response){
-        console.log(response.data);
-        $scope.username = response.data.username;
-        $scope.post_count = response.data.post_count;
-        $scope.follower_count = response.data.follower_count;
-        $scope.name = response.data.fullname.split(' ').slice(0, -1).join(' ');
-    });
-    var today = new Date()
-    var curHr = today.getHours()
-    if (curHr < 12) {
-        $scope.greeting = "Good morning"
-    } else if (curHr < 18) {
-        $scope.greeting = "Good afternoon"
-    } else {
-        $scope.greeting = "Good evening"
-    }
-})
-
-///////////
 app.controller('ScrollCtrl', function($scope, $location, anchorSmoothScroll) {
     $scope.directToLogin = function(){
         console.log("D2L");
