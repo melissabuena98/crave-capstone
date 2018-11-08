@@ -1,7 +1,7 @@
 <div class='w3-row w3-center' ng-controller='ProfileController'>
         <div class="sidebar">
             <div class='w3-row w3-center'>
-                <img id='profile-pic' src='/front-end/resources/images/profile.jpg' onclick="directToProfile()">
+                <img id='profile-pic' src='http://localhost:3000/images/{{imagePreviewUrl}}' onclick="directToProfile()" onload='profilePicLoaded()'>
                 <h3 class='profile-stat' id='profile-name'>{{ username }}</h3>
                 <h6 class='profile-stat'>Posts: <span id='profile-posts'>{{post_count}}</span></h6>
                 <h6 class='profile-stat'>Followers: <span id='profile-followers'>{{follower_count}}</span></h6>
@@ -22,10 +22,11 @@
         <div class='dash-area profile-viewport'>
             <div class="profile-header w3-row" ng-click='cancelEdit($event)'>
                 <div class="w3-col m4 profile-pic-box">
-                    <img class='profile-pic' src='/front-end/resources/images/me.png'>
-                    <div id='edit-img'>
+                    <img id='avatar' class='profile-pic' src="http://localhost:3000/images/{{imagePreviewUrl}}" onload='avatarLoaded()'>
+                    <div id='edit-img' ng-click='editProfilePic()'>
                         <i id='edit-img-icon' class='fa fa-camera'></i>
                         <p class='edit-img-txt'>Change Picture</p>
+                        <input type='file' name="file" id="propic-file" accept="image/*" onchange="angular.element(this).scope().onImagePicked(this)">
                     </div>
                     <p id='edit-profile-btn' ng-click='editProfile()'><i class="fa fa-gear"></i> Edit Profile</p>
                 </div>
@@ -36,8 +37,8 @@
                         <div class="w3-col m6"><p class='profile-count'>{{post_count}} Posts</p></div>
                         <div class="w3-col m6"><p class='profile-count'>{{follower_count}} Followers</p></div>
                     </div>
-                    <i class='fa fa-map-marker profile-location-icon'></i><input maxlength="30" type='text' id='profile-location' class='profile-location' value={{location}} readonly>
-                    <textarea id='profile-bio' maxlength="130" spellcheck="false" readonly>{{bio}}</textarea>
+                    <i class='fa fa-map-marker profile-location-icon'></i><input placeholder="Add Your Location" maxlength="30" type='text' id='profile-location' class='profile-location' value={{location}} readonly>
+                    <textarea placeholder='Add a Bio' id='profile-bio' maxlength="130" spellcheck="false" readonly>{{bio}}</textarea>
                 </div>
             </div>
             <div class="profile-gallery-box">

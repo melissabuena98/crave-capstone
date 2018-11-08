@@ -11,6 +11,7 @@ var postData;
 var faveObject;
 var userID;
 var updatedProfile;
+var profilePicData;
 
 app.config(function($routeProvider){
     $routeProvider
@@ -135,7 +136,8 @@ app.controller('RegisterController', function ($scope, RegisterService, $locatio
             "email": $scope.email,
             "password": $scope.password,
             "post_count":0,
-            "follower_count":0
+            "follower_count":0,
+            "profile_pic": 'profile.jpg'
         }
         console.log(registerUserData);
         RegisterService.registerUser().then(function(response){
@@ -202,6 +204,7 @@ app.controller('DashboardController', function($scope, DashboardService) {
         $scope.username = response.data.username;
         $scope.post_count = response.data.post_count;
         $scope.follower_count = response.data.follower_count;
+        $scope.imagePreviewUrl = response.data.profile_pic;
     });
 });
 
@@ -221,6 +224,8 @@ app.controller('DiscoverController', function($scope, DiscoverService, Dashboard
         $scope.username = response.data.username;
         $scope.post_count = response.data.post_count;
         $scope.follower_count = response.data.follower_count;
+        $scope.imagePreviewUrl = response.data.profile_pic;
+
     });
 
     yelpQuery = {};
@@ -299,6 +304,8 @@ app.controller('FaveController', function($scope, DashboardService, FavoriteServ
         $scope.username = response.data.username;
         $scope.post_count = response.data.post_count;
         $scope.follower_count = response.data.follower_count;
+        $scope.imagePreviewUrl = response.data.profile_pic;
+
         userID = {
             "id":response.data._id
         }
@@ -333,6 +340,8 @@ app.controller('CardController', function($scope, DashboardService, FavoriteServ
         $scope.post_count = response.data.post_count;
         $scope.follower_count = response.data.follower_count;
         $scope.userID = response.data._id;
+        $scope.imagePreviewUrl = response.data.profile_pic;
+
     });
 
     // $scope.cards = [
@@ -469,6 +478,8 @@ app.controller('UploadController', function($scope, UploadService, DashboardServ
         $scope.post_count = response.data.post_count;
         $scope.follower_count = response.data.follower_count;
         $scope.name = response.data.fullname.split(' ').slice(0, -1).join(' ');
+        $scope.profilePicUrl = response.data.profile_pic;
+
     });
     console.log("IN UPLOAD CTRL")
     $scope.imagePreviewUrl = '/front-end/resources/images/no-image.jpg';
@@ -546,8 +557,6 @@ app.controller('UploadController', function($scope, UploadService, DashboardServ
         });
     }
     
-
-
     function dataURLtoFile(dataurl, filename) {
         var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
             bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
@@ -581,6 +590,8 @@ app.controller('FeedController', function ($scope, DashboardService){
         $scope.post_count = response.data.post_count;
         $scope.follower_count = response.data.follower_count;
         $scope.name = response.data.fullname.split(' ').slice(0, -1).join(' ');
+        $scope.imagePreviewUrl = response.data.profile_pic;
+
     });
     var today = new Date()
     var curHr = today.getHours()
@@ -594,13 +605,25 @@ app.controller('FeedController', function ($scope, DashboardService){
 });
 
 app.service('ProfileService', function($http) {
-    this.path='http://localhost:3000/api/update-profile';
+    this.updateInfoPath='http://localhost:3000/api/update-profile';
     this.updateProfile = function(){
-        return $http.post(this.path, updatedProfile);
+        return $http.post(this.updateInfoPath, updatedProfile);
+    }
+
+    this.updatePicPath='http://localhost:3000/api/update-profile-pic';
+    this.updateProfilePic = function(){
+        console.log("IN PROFILE SERVICE")
+        // return $http.post(this.updatePicPath, profilePicData);
+        return $http.post(this.updatePicPath, profilePicData, {
+            transformRequest: angular.identity,
+            headers:{
+                'Content-Type': undefined
+            }
+        });
     }
 });
 
-app.controller('ProfileController', function ($scope, DashboardService, ProfileService){
+app.controller('ProfileController', function ($scope, DashboardService, ProfileService, $timeout){
     DashboardService.getUser().then(function(response){
         console.log(response.data);
         $scope.username = response.data.username;
@@ -610,12 +633,12 @@ app.controller('ProfileController', function ($scope, DashboardService, ProfileS
         $scope.id = response.data._id;
         $scope.location = response.data.location;
         $scope.bio = response.data.bio;
+        $scope.imagePreviewUrl = response.data.profile_pic;
     });
-
 
     var locationField;
     var bioField;
-    var profilePic;
+    // var profilePic;
     var isEditing = false;
 
     $scope.editProfile = function(){
@@ -652,6 +675,42 @@ app.controller('ProfileController', function ($scope, DashboardService, ProfileS
             bioField.classList.remove('bio-edit');
         }
     }
+    
+    $scope.editProfilePic = function(){
+        $timeout(function() {
+            document.getElementById('propic-file').click()
+        }, 0);  
+    }
+
+    $scope.onImagePicked = function(imgFile){
+        console.log("IMGFILE:" ,imgFile)
+        console.log("IMAGE PICKED!", imgFile.files[0]);
+        $scope.newProfilePic = imgFile.files[0];
+        const reader = new FileReader();
+        reader.onload = () => {
+            console.log("On load")
+            $scope.$apply(function() {
+                console.log($scope.imagePreviewUrl);
+            //   $scope.imagePreviewUrl = reader.result;
+              $scope.saveNewProfilePic();
+            });
+        }
+        reader.readAsDataURL(imgFile.files[0]);
+
+       
+    }
+
+    $scope.saveNewProfilePic = function(){
+        console.log("UPLOAD NEW PROFILE PIC")
+        profilePicData = new FormData();
+        profilePicData.append('image', $scope.newProfilePic)
+        profilePicData.append('id', $scope.id);
+        ProfileService.updateProfilePic().then(function(response){
+            console.log("PPIC UPLOADED", response.data);
+            $scope.imagePreviewUrl = response.data.profile_pic;
+        });
+    }
+
 
     $scope.saveProfile = function(){
         updatedProfile = {
@@ -813,3 +872,15 @@ function checkHttps(){
         window.location = "https:" + restOfUrl;
     }
 }
+
+function profilePicLoaded(){
+    console.log("PIC LOADED")
+    var sidebarAvatar = document.getElementById('profile-pic');
+    sidebarAvatar.style.visibility = 'visible';
+}
+
+function avatarLoaded(){
+    var avatar = document.getElementById('avatar');
+    avatar.style.visibility = 'visible';
+}
+

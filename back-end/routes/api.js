@@ -216,5 +216,41 @@ router.post('/update-profile', (req, res) => {
 });
 
 
+router.post('/update-profile-pic', upload.any(), (req, res) => {
+    console.log("IN POST UPDATE PIC");
+    if(req.files){
+        req.files.forEach(function (file){
+            console.log(file)
+
+            var filename = (new Date).valueOf()+"-"+file.originalname;
+            fs.rename(file.path, 'public/images/' + filename, function(err) {
+                if(err) throw err;
+                
+                User.findOne({_id: req.body.id}, (error, user) => {
+                    if(error){console.error(error)}
+                    else{
+                        if(!user){
+                            res.status(401).send("Invalid user token");
+                        }
+                        else{
+                            user.profile_pic = filename;
+                            user.save((error, updatedUser) => {
+                                if(error){
+                                    console.log(error);
+                                }
+                                else{
+                                    console.log("UPDATED USER'S PICTURE!")
+                                    res.status(200).send(updatedUser);
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    }
+});
+
+
 
 module.exports = router;

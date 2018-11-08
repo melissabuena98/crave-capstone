@@ -316,6 +316,7 @@ section{
     width: 120px;
     height:120px;
     cursor:pointer;
+    visibility: hidden;
   }
 
   .profile-stat, .sidebar-btn{
@@ -909,6 +910,7 @@ section{
   border: 2px solid white;
   display: block;
   margin: auto;
+  visibility: hidden;
 }
 
 .profile-pic-box{
@@ -936,6 +938,10 @@ section{
   cursor:pointer;
 }
 
+#propic-file{
+  display:none;
+}
+
 #edit-img-icon{
   color: white;
   font-size: 31px;
@@ -947,6 +953,8 @@ section{
   font-family: 'K2D', sans-serif;
   text-align: center;
   margin:0;
+
+  display:block;
 }
 
 #edit-profile-btn{
@@ -996,6 +1004,11 @@ section{
   background: none;
   border: none;
   margin-left:5px;
+}
+
+.profile-location::placeholder{
+  font-weight:300;
+  color:#eee;
 }
 
 .location-edit{
@@ -1077,3 +1090,4 @@ section{
   font-family: 'K2D', sans-serif;
   font-weight:600;
 }
+
