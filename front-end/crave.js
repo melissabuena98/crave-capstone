@@ -10,6 +10,7 @@ var cardObject;
 var postData;
 var faveObject;
 var userID;
+var updatedProfile;
 
 app.config(function($routeProvider){
     $routeProvider
@@ -456,10 +457,28 @@ app.service('UploadService', function($http){
     }
 });
 
-app.controller('UploadController', function($scope, UploadService){
+app.controller('UploadController', function($scope, UploadService, DashboardService){
+    $scope.filterBtns = document.getElementsByClassName('filter-btn');
+    for (var i = 0; i < $scope.filterBtns.length; i++) {
+        $scope.filterBtns[i].disabled=true;
+    }
+
+    DashboardService.getUser().then(function(response){
+        console.log(response.data);
+        $scope.username = response.data.username;
+        $scope.post_count = response.data.post_count;
+        $scope.follower_count = response.data.follower_count;
+        $scope.name = response.data.fullname.split(' ').slice(0, -1).join(' ');
+    });
     console.log("IN UPLOAD CTRL")
     $scope.imagePreviewUrl = '/front-end/resources/images/no-image.jpg';
     $scope.onImagePicked = function(imgFile){
+        for (var i = 0; i < $scope.filterBtns.length; i++) {
+            $scope.filterBtns[i].disabled=false;
+            $scope.filterBtns[i].style.opacity=1;
+            $scope.filterBtns[i].style.cursor = "pointer";
+        }
+        console.log("IMGFILE:" ,imgFile)
         console.log("IMAGE PICKED!", imgFile.files[0]);
         $scope.postImage = imgFile.files[0];
         const reader = new FileReader();
@@ -471,7 +490,72 @@ app.controller('UploadController', function($scope, UploadService){
         }
         reader.readAsDataURL(imgFile.files[0]);
     }
+    
+    $scope.filter1 = function(){
+        console.log("CLICK FILTER 1!")
+        Caman("#image-preview", function () {
+            console.log("in caman")        
+            this.revert();
+            this.render(function(){
+                $scope.editedImg = this.toBase64();
+                var file = dataURLtoFile($scope.editedImg, $scope.postImage.name);
+                console.log(file);
+                $scope.postImage = file;
+            });
+        });
+    }
+    $scope.filter2 = function(){
+        console.log("CLICK FILTER 2!")
+        Caman("#image-preview", function () {
+            console.log("in caman")        
+            this.revert();
+            this.herMajesty().render(function(){
+                $scope.editedImg = this.toBase64();
+                var file = dataURLtoFile($scope.editedImg, $scope.postImage.name);
+                console.log(file);
+                $scope.postImage = file;
+            });
+        });
+    }
 
+    $scope.filter3 = function(){
+        console.log("CLICK FILTER 3!")
+        Caman("#image-preview", function () {
+            console.log("in caman")        
+            this.revert();
+            this.jarques().render(function(){
+                $scope.editedImg = this.toBase64();
+                var file = dataURLtoFile($scope.editedImg, $scope.postImage.name);
+                console.log(file);
+                $scope.postImage = file;
+            });
+        });
+    }
+
+    $scope.filter4 = function(){
+        console.log("CLICK FILTER 3!")
+        Caman("#image-preview", function () {
+            console.log("in caman")        
+            this.revert();
+            this.pinhole().render(function(){
+                $scope.editedImg = this.toBase64();
+                var file = dataURLtoFile($scope.editedImg, $scope.postImage.name);
+                console.log(file);
+                $scope.postImage = file;
+            });
+        });
+    }
+    
+
+
+    function dataURLtoFile(dataurl, filename) {
+        var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+        while(n--){
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], filename, {type:mime});
+    }
 
     $scope.upload = function(){
         console.log("UPLOAD CLICKED")
@@ -509,14 +593,76 @@ app.controller('FeedController', function ($scope, DashboardService){
     }
 });
 
-app.controller('ProfileController', function ($scope, DashboardService){
+app.service('ProfileService', function($http) {
+    this.path='http://localhost:3000/api/update-profile';
+    this.updateProfile = function(){
+        return $http.post(this.path, updatedProfile);
+    }
+});
+
+app.controller('ProfileController', function ($scope, DashboardService, ProfileService){
     DashboardService.getUser().then(function(response){
         console.log(response.data);
         $scope.username = response.data.username;
         $scope.post_count = response.data.post_count;
         $scope.follower_count = response.data.follower_count;
         $scope.name = response.data.fullname;
+        $scope.id = response.data._id;
+        $scope.location = response.data.location;
+        $scope.bio = response.data.bio;
     });
+
+
+    var locationField;
+    var bioField;
+    var profilePic;
+    var isEditing = false;
+
+    $scope.editProfile = function(){
+        isEditing = true;
+        console.log("EDIT PROFILE CLICK!")
+        locationField = document.getElementById('profile-location');
+        bioField = document.getElementById('profile-bio');
+
+        locationField.removeAttribute('readonly')
+        bioField.removeAttribute('readonly')
+        locationField.classList.add('location-edit');
+        bioField.classList.add('bio-edit');
+        locationField.addEventListener('blur', function(){
+            isEditing = false;
+            locationField.setAttribute('readonly', "readonly");
+            locationField.classList.remove('location-edit');
+            $scope.newLocation = locationField.value;
+            $scope.saveProfile();
+        });
+        bioField.addEventListener('blur', function(){
+            isEditing = false;
+            bioField.setAttribute('readonly', "readonly");
+            bioField.classList.remove('bio-edit');
+            $scope.newBio = bioField.value;
+            $scope.saveProfile();
+        });
+    }
+
+    $scope.cancelEdit = function(event){
+        if(!event.target.id && isEditing){
+            locationField.setAttribute('readonly', "readonly");
+            locationField.classList.remove('location-edit');
+            bioField.setAttribute('readonly', "readonly");
+            bioField.classList.remove('bio-edit');
+        }
+    }
+
+    $scope.saveProfile = function(){
+        updatedProfile = {
+            "id": $scope.id,
+            "location": $scope.newLocation,
+            "bio": $scope.newBio
+        }
+        ProfileService.updateProfile().then(function(response){
+            console.log("PROFILE SERVICE RESPONSE", response.data)
+        });
+    }
 });
 
 ///////////

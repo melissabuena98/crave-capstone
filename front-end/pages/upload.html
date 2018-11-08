@@ -1,10 +1,10 @@
 <div class='w3-row w3-center' ng-controller='UploadController'>
     <div class="sidebar">
         <div class='w3-row w3-center'>
-            <img id='profile-pic' src='/front-end/resources/images/profile.jpg'>
-            <h3 class='profile-stat' id='profile-name'>username_101</h3>
-            <h6 class='profile-stat'>Posts: <span id='profile-posts'>1,234</span></h6>
-            <h6 class='profile-stat'>Followers: <span id='profile-followers'>21,958</span></h6>
+            <img id='profile-pic' src='/front-end/resources/images/profile.jpg' onclick="directToProfile()">
+            <h3 class='profile-stat' id='profile-name'>{{ username }}</h3>
+            <h6 class='profile-stat'>Posts: <span id='profile-posts'>{{post_count}}</span></h6>
+            <h6 class='profile-stat'>Followers: <span id='profile-followers'>{{follower_count}}</span></h6>
             <hr id='sidebar-hr'>
         </div>
         <div class='w3-row w3-center'>
@@ -19,16 +19,24 @@
         </div>
     </div>
 
-    <div class='dash-area'>
+    <div class='dash-area' style='overflow-y:scroll'>
         <h1 class='dash-header2'>CREATE A POST</h1>
             <div class="upload-viewport">
                 <form ng-submit='upload()'>
-                    <input type='file' accept="image/*" onchange="angular.element(this).scope().onImagePicked(this)">
+                    <input type='file' name="file" id="file" class="input-file" accept="image/*" onchange="angular.element(this).scope().onImagePicked(this)">
+                    <label for="file"><i class="fa fa-upload" aria-hidden="true"></i> Choose a file</label>
                     <div class="image-preview-box">
-                        <img class='image-preview' src='{{imagePreviewUrl}}'/>
+                        <img id='image-preview' class='image-preview' src='{{imagePreviewUrl}}'/>
                     </div>
-                    <input placeholder='Caption' ng-model="postCaption" type="text" min=1 maxlength=30>
-                    <input placeholder='Location' ng-model="postLocation" type="text" min=1 maxlength=30>
+                    <div class="w3-row filter-box">
+                        <button class='filter-btn' type="button" ng-click='filter1()'>Normal</button>
+                        <button class='filter-btn' type="button" ng-click='filter2()'>Love</button>
+                        <button class='filter-btn' type="button" ng-click='filter3()'>Chill</button>
+                        <button class='filter-btn' type="button" ng-click='filter4()'>Vintage</button>
+                    </div>
+                    <input class='upload-input' placeholder='Title' ng-model="postTitle" type="text" min=1 maxlength=30>
+                    <input class='upload-input' placeholder='Location' ng-model="postLocation" type="text" min=1 maxlength=30>
+                    <textarea class='upload-input' placeholder="Caption" ng-model='postCaption' maxlength="77"></textarea>
                     <input type='submit' class='login-btn' id='btn-shadow' value='Upload'>
                 </form>
             </div>

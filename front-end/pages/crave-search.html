@@ -1,7 +1,7 @@
 <div class='w3-row w3-center' ng-controller='CardController'>
     <div class="sidebar">
         <div class='w3-row w3-center'>
-            <img id='profile-pic' src='/front-end/resources/images/profile.jpg'>
+            <img id='profile-pic' src='/front-end/resources/images/profile.jpg' onclick="directToProfile()">
             <h3 class='profile-stat' id='profile-name'>{{ username }}</h3>
             <h6 class='profile-stat'>Posts: <span id='profile-posts'>{{post_count}}</span></h6>
             <h6 class='profile-stat'>Followers: <span id='profile-followers'>{{follower_count}}</span></h6>
