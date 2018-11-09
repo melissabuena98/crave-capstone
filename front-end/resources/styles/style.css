@@ -809,7 +809,7 @@ section{
   border-radius: 2px;
   width: 550px;
   margin: 60px auto;
-  height: 550px;
+  height: 520px;
   box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
 }
 
@@ -820,8 +820,10 @@ section{
 }
 
 .feed-user-pic{
-  width: 7%;
-  height: 7%;
+  /* width: 7%;
+  height: 7%; */
+  width:40px;
+  height:40px;
   border-radius: 50%;
   margin: 10px;
 }

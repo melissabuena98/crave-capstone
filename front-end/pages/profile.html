@@ -43,31 +43,18 @@
             </div>
             <div class="profile-gallery-box">
                 <div class="profile-grid">
-                    <div class='gallery-img' style="background-image:url('/front-end/resources/images/food2.png')">
+                    <!-- <div class='gallery-img' style="background-image:url('/front-end/resources/images/food2.png')">
                         <div class="gallery-img-hvr">
                             <p class="img-hvr-likes"><i class='fa fa-heart hvr-heart'></i> 123 likes</p>
                         </div>
-                    </div>  
-                    <div class='gallery-img' style="background-image:url('/front-end/resources/images/food1.png')">
+                    </div>   -->
+                    
+                    <div ng-repeat="post in posts" class='gallery-img' style="background-image:url(http://localhost:3000/images/{{post.image}})">
                         <div class="gallery-img-hvr">
-                            <p class="img-hvr-likes"><i class='fa fa-heart hvr-heart'></i> 123 likes</p>
+                            <p class="img-hvr-likes"><i class='fa fa-heart hvr-heart'></i> {{post.likes}} likes</p>
                         </div>
-                    </div>  
-                    <div class='gallery-img' style="background-image:url('/front-end/resources/images/food2.png')">
-                        <div class="gallery-img-hvr">
-                            <p class="img-hvr-likes"><i class='fa fa-heart hvr-heart'></i> 123 likes</p>
-                        </div>
-                    </div>  
-                    <div class='gallery-img' style="background-image:url('/front-end/resources/images/food3.png')">
-                        <div class="gallery-img-hvr">
-                            <p class="img-hvr-likes"><i class='fa fa-heart hvr-heart'></i> 123 likes</p>
-                        </div>
-                    </div>  
-                    <div class='gallery-img' style="background-image:url('/front-end/resources/images/eat.jpg')">
-                        <div class="gallery-img-hvr">
-                            <p class="img-hvr-likes"><i class='fa fa-heart hvr-heart'></i> 123 likes</p>
-                        </div>
-                    </div>  
+                    </div>
+
                 </div>
             </div>
         </div>

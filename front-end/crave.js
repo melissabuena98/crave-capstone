@@ -479,6 +479,7 @@ app.controller('UploadController', function($scope, UploadService, DashboardServ
         $scope.follower_count = response.data.follower_count;
         $scope.name = response.data.fullname.split(' ').slice(0, -1).join(' ');
         $scope.profilePicUrl = response.data.profile_pic;
+        $scope.id = response.data._id;
 
     });
     console.log("IN UPLOAD CTRL")
@@ -568,22 +569,34 @@ app.controller('UploadController', function($scope, UploadService, DashboardServ
 
     $scope.upload = function(){
         console.log("UPLOAD CLICKED")
-        console.log("CAPTION",$scope.postCaption);
-        console.log("LOCATION",$scope.postLocation);
-        console.log("IMAGE",$scope.postImage);
+        // console.log("CAPTION",$scope.postCaption);
+        // console.log("LOCATION",$scope.postLocation);
+        // console.log("IMAGE",$scope.postImage);
         postData = new FormData();
+        postData.append('userID', $scope.id)
+        postData.append('userImage', $scope.profilePicUrl);
+        postData.append('username', $scope.username);
         postData.append('caption', $scope.postCaption);
         postData.append('location', $scope.postLocation);
         postData.append('image', $scope.postImage);
+        postData.append('title', $scope.postTitle);
 
         console.log("PD", postData);
         UploadService.uploadPost().then(function(response){
             console.log("RESPONSE", response.data);
+            directToProfile();
         });
     }
 });
 
-app.controller('FeedController', function ($scope, DashboardService){
+app.service('FeedService', function($http){
+    this.getAllPostsPath='http://localhost:3000/api/get-all-posts';
+    this.getAllPosts = function(){
+        return $http.post(this.getAllPostsPath);
+    }
+});
+
+app.controller('FeedController', function ($scope, DashboardService, FeedService){
     DashboardService.getUser().then(function(response){
         console.log(response.data);
         $scope.username = response.data.username;
@@ -592,6 +605,14 @@ app.controller('FeedController', function ($scope, DashboardService){
         $scope.name = response.data.fullname.split(' ').slice(0, -1).join(' ');
         $scope.imagePreviewUrl = response.data.profile_pic;
 
+        userID = {
+            "id":response.data._id
+        }
+    
+        FeedService.getAllPosts().then(function(response){
+            $scope.posts = response.data.slice().reverse();
+            console.log("GET ALL POSTS", $scope.posts);
+        })
     });
     var today = new Date()
     var curHr = today.getHours()
@@ -621,6 +642,11 @@ app.service('ProfileService', function($http) {
             }
         });
     }
+
+    this.getUserPostsPath='http://localhost:3000/api/get-user-posts';
+    this.getUserPosts = function(){
+        return $http.post(this.getUserPostsPath, userID);
+    }
 });
 
 app.controller('ProfileController', function ($scope, DashboardService, ProfileService, $timeout){
@@ -634,6 +660,15 @@ app.controller('ProfileController', function ($scope, DashboardService, ProfileS
         $scope.location = response.data.location;
         $scope.bio = response.data.bio;
         $scope.imagePreviewUrl = response.data.profile_pic;
+
+        userID = {
+            "id":response.data._id
+        }
+    
+        ProfileService.getUserPosts().then(function(response){
+            console.log("GET USER POSTS", response.data);
+            $scope.posts = response.data.slice().reverse();
+        })
     });
 
     var locationField;
@@ -723,6 +758,27 @@ app.controller('ProfileController', function ($scope, DashboardService, ProfileS
         });
     }
 });
+
+app.service('SearchService', function($http){
+    this.getAllUsersPath='http://localhost:3000/api/get-all-users';
+    this.getAllUsers = function(){
+        return $http.post(this.getAllUsersPath);
+    }
+})
+
+app.controller('SearchController', function($scope, DashboardService, SearchService){
+    DashboardService.getUser().then(function(response){
+        $scope.username = response.data.username;
+        $scope.post_count = response.data.post_count;
+        $scope.follower_count = response.data.follower_count;
+        $scope.imagePreviewUrl = response.data.profile_pic;
+
+        SearchService.getAllUsers().then(function(response){
+            console.log("GETALLUSERS", response.data);
+            $scope.users = response.data;
+        });
+    });
+})
 
 ///////////
 app.service('anchorSmoothScroll', function(){
@@ -848,6 +904,7 @@ function directToLogout(){
     console.log("LOGOUT");
     localStorage.clear();
     window.location.replace("#/login");
+    window.location.reload();
 }
 
 function getLocation(){

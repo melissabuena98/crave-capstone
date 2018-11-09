@@ -24,56 +24,23 @@
 
             <div class="feed-viewport">
                 <div class="feed-container">
-                    <div class="feed-post-box">
+                    <div ng-repeat="post in posts" class="feed-post-box">
                         <div class="feed-user-info">
-                            <img class='feed-user-pic' src='/front-end/resources/images/me.png'>
-                            <h3 class='feed-user-name'>melissabuena</h3>
+                            <img class='feed-user-pic' src='http://localhost:3000/images/{{post.userImage}}'>
+                            <h3 class='feed-user-name'>{{post.username}}</h3>
                         </div>
-                        <div class='feed-photo' style="background-image:url('/front-end/resources/images/food1.png')"></div>
+                        <div class='feed-photo' style="background-image:url(http://localhost:3000/images/{{post.image}})"></div>
                         <div class="feed-caption-box">
-                            <h4 class='feed-dish'>Mushroom Steak with Creamy Roasted Potatoes</h4>
-                            <h6 class='feed-restaurant'><i class='fa fa-map-marker feed-map'></i><span>The Cheesecake Factory</span></h6>
-                            <p class='feed-caption'>The steak was so tender and all the flavors were so great! Try it!</p>
+                            <h4 class='feed-dish'>{{post.title}}</h4>
+                            <h6 class='feed-restaurant'><i class='fa fa-map-marker feed-map'></i><span>{{post.location}}</span></h6>
+                            <p class='feed-caption'>{{post.caption}}</p>
                         </div>
                         <div class='feed-interaction'>
                             <i class='fa fa-heart feed-heart'></i>
-                            <h6 class='feed-likes'>1,372 likes</h6>
+                            <h6 class='feed-likes'>{{post.likes}} likes</h6>
                         </div>
                     </div>
 
-                    <div class="feed-post-box">
-                        <div class="feed-user-info">
-                            <img class='feed-user-pic' src='/front-end/resources/images/me.png'>
-                            <h3 class='feed-user-name'>melissabuena</h3>
-                        </div>
-                        <div class='feed-photo' style="background-image:url('/front-end/resources/images/food2.png')"></div>
-                        <div class="feed-caption-box">
-                            <h4 class='feed-dish'>Chicken Fajitas</h4>
-                            <h6 class='feed-restaurant'><i class='fa fa-map-marker feed-map'></i><span>Blue Iguana</span></h6>
-                            <p class='feed-caption'>The servings were huge and it came with a lot of sides!</p>
-                        </div>
-                        <div class='feed-interaction'>
-                            <i class='fa fa-heart feed-heart'></i>
-                            <h6 class='feed-likes'>844 likes</h6>
-                        </div>
-                    </div>
-
-                    <div class="feed-post-box">
-                        <div class="feed-user-info">
-                            <img class='feed-user-pic' src='/front-end/resources/images/me.png'>
-                            <h3 class='feed-user-name'>melissabuena</h3>
-                        </div>
-                        <div class='feed-photo' style="background-image:url('/front-end/resources/images/food3.png')"></div>
-                        <div class="feed-caption-box">
-                            <h4 class='feed-dish'>Streak Gyro</h4>
-                            <h6 class='feed-restaurant'><i class='fa fa-map-marker feed-map'></i><span>Spitz Downtown</span></h6>
-                            <p class='feed-caption'>Best gyros in town, a must try!</p>
-                        </div>
-                        <div class='feed-interaction'>
-                            <i class='fa fa-heart feed-heart'></i>
-                            <h6 class='feed-likes'>75 likes</h6>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

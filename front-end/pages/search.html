@@ -1,4 +1,4 @@
-<div class='w3-row w3-center' ng-controller='DashboardController'>
+<div class='w3-row w3-center' ng-controller='SearchController'>
     <div class="sidebar">
         <div class='w3-row w3-center'>
             <img id='profile-pic' src='http://localhost:3000/images/{{imagePreviewUrl}}' onclick="directToProfile()" onload='profilePicLoaded()'>
@@ -23,55 +23,27 @@
         <h1 class='dash-header'>Search and Follow other Users!</h1>
         <div id='search-container'>
             <i id='search-icon' class="fa fa-search" aria-hidden="true"></i>
-            <input id='search-box' type='text' placeholder="Search Users">
+            <input id='search-box' type='text' placeholder="Search Users" ng-model='query.fullname'>
         </div>
         <div class="user-viewport">
             <div class="user-container">
-                <div class="user-card">
-                    <img class='user-img' src='/front-end/resources/images/me.png'>
-                    <h4 class='user-fname'>Melissa Buena</h4>
-                    <h6 class='user-uname'>@melissabuena</h6>
+                <div ng-repeat="user in users | filter:query" class="user-card">
+                    <img class='user-img' src='http://localhost:3000/images/{{user.profile_pic}}'>
+                    <h4 class='user-fname'>{{user.fullname}}</h4>
+                    <h6 class='user-uname'>@{{user.username}}</h6>
                     <hr id='user-hr'>
                     <div class="user-stats">
                         <div class="stat-box">
-                            <p class='user-stat'>123 POSTS</p>
+                            <p class='user-stat'>{{user.post_count}} POSTS</p>
                         </div>
                         <div class="stat-box" id='stat-box-alt'>
-                            <p class='user-stat'>312 FOLLOWERS</p>
+                            <p class='user-stat'>{{user.follower_count}} FOLLOWERS</p>
                         </div>
                     </div>
                     <input type='button' class='login-btn user-follow' id='btn-shadow' value='Follow'>
                 </div>
-                <div class="user-card">
-                    <img class='user-img' src='/front-end/resources/images/me.png'>
-                    <h4 class='user-fname'>Melissa Buena</h4>
-                    <h6 class='user-uname'>@melissabuena</h6>
-                    <hr id='user-hr'>
-                    <div class="user-stats">
-                        <div class="stat-box">
-                            <p class='user-stat'>123 POSTS</p>
-                        </div>
-                        <div class="stat-box" id='stat-box-alt'>
-                            <p class='user-stat'>312 FOLLOWERS</p>
-                        </div>
-                    </div>
-                    <input type='button' class='login-btn user-follow' id='btn-shadow' value='Follow'>
-                </div>
-                <div class="user-card">
-                    <img class='user-img' src='/front-end/resources/images/me.png'>
-                    <h4 class='user-fname'>Melissa Buena</h4>
-                    <h6 class='user-uname'>@melissabuena</h6>
-                    <hr id='user-hr'>
-                    <div class="user-stats">
-                        <div class="stat-box">
-                            <p class='user-stat'>123 POSTS</p>
-                        </div>
-                        <div class="stat-box" id='stat-box-alt'>
-                            <p class='user-stat'>312 FOLLOWERS</p>
-                        </div>
-                    </div>
-                    <input type='button' class='login-btn user-follow' id='btn-shadow' value='Follow'>
-                </div>                
+                
+                
             </div>
         </div>
     </div>

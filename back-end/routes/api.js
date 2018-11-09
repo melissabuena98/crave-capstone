@@ -104,14 +104,19 @@ router.post('/upload', upload.any(),(req,res) => {
                 if(err) throw err;
                 
                 var post = new Post({
+                    user: req.body.userID,
+                    username: req.body.username,
+                    userImage: req.body.userImage,
                     caption: req.body.caption,
                     location: req.body.location,
+                    title: req.body.title,
                     image: filename,
+                    likes: 0
                 });
                 post.save(function (err, result){
                     if(err){}
-                    // res.json("RESULT",result);
                     res.status(200).json(result)
+                    //PUT USER POST COUNT FIND HERE
                 })
             });
         });
@@ -251,6 +256,58 @@ router.post('/update-profile-pic', upload.any(), (req, res) => {
     }
 });
 
+router.post('/get-user-posts', (req, res) => {
+    let user = req.body;
+    console.log("USER:", user);
+    Post.find({user: user.id}, (error, posts) => {
+        console.log("POSTS", posts);
+        if(error){
+            console.error(error);
+        }
+        else{
+            if(!posts){
+                res.status(401).send("No posts");
+            }
+            else{
+                res.status(200).send(posts);
+            }
+        }
+    });
+});
+
+router.post('/get-all-posts', (req, res) => {
+    Post.find({}, (error, posts) => {
+        console.log("POSTS", posts);
+        if(error){
+            console.error(error);
+        }
+        else{
+            if(!posts){
+                res.status(401).send("No posts");
+            }
+            else{
+                res.status(200).send(posts);
+            }
+        }
+    });
+});
+
+router.post('/get-all-users', (req, res) => {
+    User.find({}, (error, users) => {
+        console.log("USERS", users);
+        if(error){
+            console.error(error);
+        }
+        else{
+            if(!users){
+                res.status(401).send("No users");
+            }
+            else{
+                res.status(200).send(users);
+            }
+        }
+    });
+});
 
 
 module.exports = router;
