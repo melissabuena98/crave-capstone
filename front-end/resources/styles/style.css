@@ -4,6 +4,12 @@ body{
     background:#ebebeb;
 }
 
+.textbox:focus{
+  outline: none !important;
+  box-shadow: 0 0 2px #ef8117;
+  border:1px solid #ef8117;
+}
+
 .spacer{
     padding:0px 50px !important;
 }
@@ -220,6 +226,25 @@ section{
     padding-top: 10px;
   }
 
+  .form-error{
+    display: block;
+    margin-top: -5px;
+    color: #ef8117;
+    font-family: 'K2D',sans-serif;
+    font-weight: 300;
+    font-style: italic;
+    font-size: 0.9em;
+  }
+
+  #invalid-search{
+    font-size:1em; 
+    display:none;
+  }
+
+  #username-taken{
+    display:none;
+  }
+
   #registerForm{
     width: 450px;
     margin: auto;
@@ -227,7 +252,8 @@ section{
     text-align: center;
     border-radius: 5px;
     background: #fefefe;
-    height: 475px;
+    /* height: 430px; */
+    padding-bottom:10px;
     box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
   }
 
@@ -252,12 +278,13 @@ section{
     color:#393d40;
   }
 
-  #btn-shadow{
+  #btn-shadow, .btn-shadow{
     box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
     margin:auto;
     display:block;
     margin:20px auto;
   }
+
 
   input::placeholder {
     color: #989898;
@@ -387,6 +414,11 @@ section{
     color:#989898;
   }
 
+  .no-follow{
+    cursor:not-allowed;
+    opacity:0.7;
+  }
+
 /* DISCOVER */
 .discover{
   /* background-image: linear-gradient(to top right, #ffffff,#ebebeb ); */
@@ -394,7 +426,7 @@ section{
 
 #discoverForm{
   width: 450px;
-  margin: auto;
+  margin: 50px auto;
   text-align: center;
   border-radius: 5px;
   background: #fefefe;
@@ -549,6 +581,15 @@ section{
   margin-top: 0;
   padding-left: 10px;
   pointer-events:none;
+}
+
+#address-link{
+  text-decoration:none;
+}
+
+.address{
+  color: #ef8117 !important;
+  font-weight: 400 !important;
 }
 
 .card-detail{
@@ -765,6 +806,10 @@ section{
   border-radius: 50%;
 }
 
+.user-link{
+  text-decoration: none;
+}
+
 .user-fname, .user-uname{
   margin:0;
   font-family:'K2D', sans-serif;
@@ -809,7 +854,7 @@ section{
   border-radius: 2px;
   width: 550px;
   margin: 60px auto;
-  height: 520px;
+  height: 550px;
   box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
 }
 
@@ -1093,3 +1138,142 @@ section{
   font-weight:600;
 }
 
+
+/* PROFILE MODAL */
+.modal {
+  display: none;
+  /* display: block; */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.6); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  width: 75%;
+
+  height:500px;
+  max-width:800px;
+  display:flex;
+  position:relative;
+}
+
+/* The Close Button */
+.close {
+  color: #ebebeb;
+  float: right;
+  font-size: 45px;
+  font-weight: bold;
+  position: absolute;
+  top: 0;
+  right: 15px;
+}
+
+.close:hover,
+.close:focus {
+  color: #b6b6b6;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-info{
+  width:40%;
+  position:relative;
+}
+
+#modal-hr{
+  border: 0;
+  border-top: 1px solid #ddd;
+  margin:0;
+}
+
+.modal-img{
+  background:red;
+  height: 100%;
+  width: 60%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.modal-user-info{
+  display:flex;
+  padding:10px;
+}
+
+.modal-user-img{
+  height:40px;
+  width:40px;
+  border-radius:50%;
+}
+
+.modal-username{
+  margin: 0;
+  font-size: 1.3em;
+  font-family: 'K2D', sans-serif;
+  padding-top: 3px;
+  margin-left: 10px;
+  font-weight: 400;
+}
+
+.modal-delete{
+  font-size: 20px;
+  position: absolute;
+  right: 10px;
+  top: 20px;
+  cursor: pointer;
+}
+
+.modal-notifs{
+  text-align: left;
+  padding: 10px;
+  font-size: 0.9em;
+  height:300px;
+  overflow-y: scroll;
+}
+
+.modal-post-details{
+  height:140px;
+  text-align:left;
+  padding:10px;
+  position:relative;
+}
+
+.modal-title{
+  margin: 0;
+  font-family: 'K2D', sans-serif;
+  font-weight: 700;
+  font-size: 1.1em;
+}
+
+.modal-location{
+  margin: 0;
+  font-family: 'K2D', sans-serif;
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+.modal-caption{
+  margin: 0;
+  font-family: 'K2D', sans-serif;
+  font-weight: 200;
+}
+
+.modal-heart{
+  color:#DF6857;
+}
+
+.modal-likes{
+  margin: 0;
+  position: absolute;
+  bottom: 3px;
+}

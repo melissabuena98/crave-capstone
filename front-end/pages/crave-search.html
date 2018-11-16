@@ -35,7 +35,9 @@
                     <h4 class='card-detail'>Category: <span class='card-value' ng-bind-html='card.categories[0].title'>{{card.categories[0].title}}</span></h4>
                     <h4 class='card-detail'>Rating: <span class='card-value' ng-bind-html='card.rating'>{{card.rating}}</span> <i id='card-star' class="fa fa-star" aria-hidden="true"></i></h4>
                     <h4 class='card-detail'>Price: <span class='card-value' ng-bind-html='card.price'>{{card.price}}</span></h4>
-                    <h4 class='card-detail' id='card-address'>Location: <span class='card-value' ng-bind-html='card.location.display_address[0]'>{{card.location.display_address[0]}}</span> &nbsp;<span class='card-value' ng-bind-html='card.location.display_address[1]'>{{card.location.display_address[1]}}</span></h4>
+                    <a id='address-link' target="_blank" href="http://maps.google.com/?q={{card.location.display_address[0]}} {{card.location.display_address[1]}}">
+                        <h4 class='card-detail locations' id='card-address'>Location: <span class='card-value address' ng-bind-html='card.location.display_address[0]'>{{card.location.display_address[0]}}</span> &nbsp;<span class='card-value address' ng-bind-html='card.location.display_address[1]'>{{card.location.display_address[1]}}</span></h4>
+                    </a>
                     <h4 class='card-detail'>Phone: <span class='card-value' ng-bind-html='card.phone'>{{card.phone}}</span></h4>
                 </div>
             </div>

@@ -49,14 +49,54 @@
                         </div>
                     </div>   -->
                     
-                    <div ng-repeat="post in posts" class='gallery-img' style="background-image:url(http://localhost:3000/images/{{post.image}})">
+                    <div ng-repeat="post in posts" ng-click='viewPost($index)' class='gallery-img' style="background-image:url(http://localhost:3000/images/{{post.image}})">
                         <div class="gallery-img-hvr">
-                            <p class="img-hvr-likes"><i class='fa fa-heart hvr-heart'></i> {{post.likes}} likes</p>
+                            <p class="img-hvr-likes"><i class='fa fa-heart hvr-heart'></i> {{post.likes.length}} likes</p>
                         </div>
                     </div>
 
+                    
                 </div>
             </div>
+            
+            <div id="myModal" class="modal">
+                <span class="close">&times;</span>
+                <div class="modal-content">
+                    <div class="modal-img" style="background-image:url(http://localhost:3000/images/{{viewImage}})"></div>
+                    <div class="modal-info">
+                        <div class='modal-user-info'>
+                            <img class='modal-user-img' src='http://localhost:3000/images/{{viewAvatar}}'>
+                            <p class='modal-username'>{{viewUsername}}</p>
+                            <i ng-click='deletePost(viewPostID)' class='fa fa-trash modal-delete'></i>
+                        </div>
+                        <hr id='modal-hr'>
+                        <div class="modal-notifs">
+                            <p>melissabuena liked this post</p>
+                            <p>melissabuena liked this post</p>
+                            <p>melissabuena liked this post</p>
+                            <p>melissabuena liked this post</p>
+                            <p>melissabuena liked this post</p>
+                            <p>melissabuena liked this post</p>
+                            <p>melissabuena liked this post</p>
+                            <p>melissabuena liked this post</p>
+                            <p>melissabuena liked this post</p>
+                            <p>melissabuena liked this post</p>
+                            <p>melissabuena liked this post</p>
+                            <p>melissabuena liked this post</p>
+                        </div>
+                        <hr id='modal-hr'>
+                        <div class="modal-post-details">
+                            <h4 class='modal-title'>{{viewTitle}}</h4>
+                            <h6 class='modal-location'><i class='fa fa-map-marker feed-map'></i><span>{{viewLocation}}</span></h6>
+                            <p class='modal-caption'>{{viewCaption}}</p>
+                            <h6 class='modal-likes'><i class='fa fa-heart modal-heart'></i> {{viewLikes}} likes</h6>
+                        </div>
+                    </div>
+                </div>
+                
+                
+            </div>
+
         </div>
     
     </div>

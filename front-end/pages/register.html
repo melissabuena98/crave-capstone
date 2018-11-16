@@ -9,14 +9,31 @@
     <section id='swipe'>
         <div class="w3-row-padding">
             <div class="w3-col m12 spacer">
-                <form id='registerForm' ng-submit='register()'>
+                <!-- <form id='registerForm' ng-submit='register()'>
                     <h1 id='register'>Register</h1>
                     <input class='textbox' placeholder='Full Name' name="fullname" ng-model="fullname" type="text" min=1 maxlength=30 required>
                     <input class='textbox' placeholder='Username' name="username" ng-model="username" type="text" min=1 maxlength=30 required>
                     <input class='textbox' placeholder='Email' name="email" ng-model="email" type="email" min=1 maxlength=30 required>
-                    <input class='textbox' placeholder='Password' name="password" ng-model="password" type="password" min=1 maxlength=30 required>
-                    <!-- <button class='login-btn' id='btn-shadow' ng-click="register()">Register</button> -->
+                    <input class='textbox' placeholder='Password' name="password" ng-model="password" type="password" ng-pattern=".{3,}" oninvalid="this.setCustomValidity('Password must be a minimum of 3 characters.')" maxlength=30 ng-required='true'>
                     <input type='submit' class='login-btn' id='btn-shadow' value='Register'>
+                    <p class="light-txt">Already have an account? <span class='pointer' id='accent' ng-click='directToLogin()'>Log in.</span></p>
+                </form> -->
+                <form id='registerForm' name='registerForm' ng-submit='register(registerForm)' novalidate>
+                    <h1 id='register'>Register</h1>
+                    <input class='textbox' placeholder='Full Name' name="fullname" ng-model="fullname" type="text" required>
+                    <span class='form-error reg-req' ng-show="registerForm.fullname.$touched && registerForm.fullname.$invalid">* Your name is required.</span>
+                    
+                    <input class='textbox' placeholder='Username' name="username" ng-model="username" type="text" ng-minlength="3" ng-pattern="/^\w+$/" required>
+                    <span class='form-error reg-req' ng-show="registerForm.username.$touched && registerForm.username.$error.required">* Username is required.</span>
+                    <span class='form-error' ng-show="registerForm.username.$touched && registerForm.username.$error.pattern">* Username can't contain special characters.</span>
+                    <span class='form-error' ng-show="registerForm.username.$touched && registerForm.username.$error.minlength">* Username must be at least 3 characters long.</span>
+                    <span class='form-error' id='username-taken'>* Username is already taken!</span>
+                    
+                    <input class='textbox' placeholder='Password' name="password" ng-model="password" type="password" ng-minlength="3" required>
+                    <span class='form-error reg-req' ng-show="registerForm.password.$touched && registerForm.password.$error.required">* Password is required.</span>
+                    <span class='form-error' ng-show="registerForm.password.$touched && registerForm.password.$error.minlength">* Password must be at least 3 characters long.</span>
+
+                    <input type='submit' class='login-btn' id='btn-shadow' value='Register'> 
                     <p class="light-txt">Already have an account? <span class='pointer' id='accent' ng-click='directToLogin()'>Log in.</span></p>
                 </form>
             </div>

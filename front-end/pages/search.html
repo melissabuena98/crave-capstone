@@ -28,19 +28,21 @@
         <div class="user-viewport">
             <div class="user-container">
                 <div ng-repeat="user in users | filter:query" class="user-card">
-                    <img class='user-img' src='http://localhost:3000/images/{{user.profile_pic}}'>
-                    <h4 class='user-fname'>{{user.fullname}}</h4>
-                    <h6 class='user-uname'>@{{user.username}}</h6>
-                    <hr id='user-hr'>
-                    <div class="user-stats">
-                        <div class="stat-box">
-                            <p class='user-stat'>{{user.post_count}} POSTS</p>
+                    <a class='user-link' href='#/profile/{{ user._id }}'>
+                        <img class='user-img' src='http://localhost:3000/images/{{user.profile_pic}}'>
+                        <h4 class='user-fname'>{{user.fullname}}</h4>
+                        <h6 class='user-uname'>@{{user.username}}</h6>
+                        <hr id='user-hr'>
+                    </a>
+                        <div class="user-stats">
+                            <div class="stat-box">
+                                <p class='user-stat'>{{user.post_count}} POSTS</p>
+                            </div>
+                            <div class="stat-box" id='stat-box-alt'>
+                                <p class='user-stat'>{{user.follower_count}} FOLLOWERS</p>
+                            </div>
                         </div>
-                        <div class="stat-box" id='stat-box-alt'>
-                            <p class='user-stat'>{{user.follower_count}} FOLLOWERS</p>
-                        </div>
-                    </div>
-                    <input type='button' class='login-btn user-follow' id='btn-shadow' value='Follow'>
+                        <input ng-click='followUser(user._id)' type='button' class='login-btn user-follow btn-shadow' id="{{$index}}" value={{user.status}}>
                 </div>
                 
                 

@@ -8,12 +8,18 @@
     <section id='swipe'>
         <div class="w3-row-padding">
             <div class="w3-col m12 spacer">
-                <form id='registerForm' class='loginForm' ng-submit="login()">
+                <form id='registerForm' name='loginForm' class='loginForm' ng-submit="login(loginForm)" novalidate>
                     <h1 id='register'>Login</h1>
                     <input class='textbox' placeholder='Username' name="username" ng-model="username" type="text" min=1 maxlength=30 required>
+                    <span class='form-error reg-req' ng-show="loginForm.username.$touched && loginForm.username.$error.required">* Username is required.</span>
+                    <span class='form-error' id='invalid-username' ng-show="loginForm.username.$touched && loginForm.username.$error.required">* Username not registered.</span>
+                    
                     <input class='textbox' placeholder='Password' name="password" ng-model="password" type="password" min=1 maxlength=30 required>
+                    <span class='form-error reg-req' ng-show="loginForm.password.$touched && loginForm.password.$error.required">* Password is required.</span>
+                    <span class='form-error' id='invalid-login' ng-show="loginForm.password.$touched && loginForm.password.$error.required">* Invalid username or password.</span>
+
+                    
                     <input type='submit' class='login-btn' id='btn-shadow' value='Login'>
-                    <!-- <button class='login-btn' id='btn-shadow' ng-click="login()">Login</button> -->
                     <p class="light-txt">Don't have an account? <span class='pointer' id='accent' ng-click='directToRegister()'>Register</span></p>
                 </form>
             </div>

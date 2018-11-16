@@ -5,6 +5,8 @@ var tokenData;
 var yelpQuery;
 var uploadData; 
 var allCards;
+var locations;
+
 var $scope, $location;
 var cardObject;
 var postData;
@@ -12,6 +14,11 @@ var faveObject;
 var userID;
 var updatedProfile;
 var profilePicData;
+var likePostObject;
+var checkingUsername;
+
+var followUserID;
+var deletePostObj;
 
 app.config(function($routeProvider){
     $routeProvider
@@ -101,6 +108,10 @@ app.config(function($routeProvider){
         .when('/upload', {
             templateUrl: 'front-end/pages/upload.html',
         })
+
+        .when('/profile/:profileid', {
+            templateUrl: 'front-end/pages/view-profile.html',
+        })
 });
 
 
@@ -121,30 +132,56 @@ app.service("RegisterService", function($http){
     console.log("IN REGISTER SERVICE")
     this.path='http://localhost:3000/api/register';
     this.registerUser = function (){
-        console.log("SERVICE RUNNING")
         return $http.post(this.path, registerUserData);
+    }
+
+    this.checkNamePath='http://localhost:3000/api/check-username';
+    this.checkUsername = function (){
+        // console.log(checkingUsername)
+        return $http.post(this.checkNamePath, checkingUsername);
     }
 });
 
 app.controller('RegisterController', function ($scope, RegisterService, $location) {
-    console.log("IN REGISTER CTRL")
     registerUserData = {}
-    $scope.register = function() {
-        registerUserData = {
-            "fullname": $scope.fullname,
-            "username": $scope.username,
-            "email": $scope.email,
-            "password": $scope.password,
-            "post_count":0,
-            "follower_count":0,
-            "profile_pic": 'profile.jpg'
+    $scope.register = function(form) {
+        checkingUsername = {
+            "username":$scope.username
         }
-        console.log(registerUserData);
-        RegisterService.registerUser().then(function(response){
-            console.log("DATA", response.data);
-            // directToLogin();
-            // $location.path('/login')
-            $scope.directToLogin();
+        RegisterService.checkUsername().then(function(response){
+            console.log(response.data);
+            if(response.data == false){
+                document.getElementById('username-taken').style.display='block';
+            }
+            else if(response.data == true){
+                if(form.$valid){
+                    console.log("REGISTER!!!")
+                    registerUserData = {
+                        "fullname": $scope.fullname,
+                        "username": $scope.username,
+                        // "email": $scope.email,
+                        "password": $scope.password,
+                        "post_count":0,
+                        "follower_count":0,
+                        "profile_pic": 'profile.jpg'
+                    }
+                    console.log(registerUserData);
+                    RegisterService.registerUser().then(function(response){
+                        console.log("DATA", response.data);
+                        $scope.directToLogin();
+                    });
+                }
+                else{
+                    console.log("NOT VALID");
+                    var errors = document.getElementsByClassName('reg-req');
+                    console.log(errors);
+                    for(i=0;i<errors.length;i++){
+                        errors[i].classList.remove('ng-hide');
+                        errors[i].classList.add('ng-show');
+                    }
+                }
+            }
+
         });
     }
 
@@ -163,20 +200,64 @@ app.service("LoginService", function($http){
     }
 });
 
-app.controller('LoginController', function ($scope, LoginService, $location) {
+app.controller('LoginController', function ($scope, LoginService, $location, RegisterService) {
     console.log("IN LOGIN CTRL")
     loginUserData = {}
-    $scope.login = function() {
-        loginUserData = {
-            "username": $scope.username,
-            "password": $scope.password
+    $scope.login = function(form) {
+        checkingUsername = {
+            "username":$scope.username
         }
-        console.log(loginUserData);
-        LoginService.loginUser().then(function(response){
-            console.log("RES",response.data);
-            console.log("RESTOK",response.data.token);
-            localStorage.setItem("token", response.data.token);
-            $location.path('/feed')
+        RegisterService.checkUsername().then(function(response){
+            console.log("RDATA",response.data);
+            if(response.data == false){
+                if(form.$valid){
+                    loginUserData = {
+                        "username": $scope.username,
+                        "password": $scope.password
+                    }
+                    console.log(loginUserData);
+                    LoginService.loginUser().then(function(response){
+                        console.log("RES",response.data);
+                        console.log("RESTOK",response.data.token);
+                        if(response.data == "invalid username" || response.data == 'invalid password'){
+                            console.log("INVALID LO")
+                            document.getElementById('invalid-login').classList.remove('ng-hide');
+                            document.getElementById('invalid-login').classList.add('ng-show');
+                        }
+                        else{
+                            localStorage.setItem("token", response.data.token);
+                            $location.path('/feed')
+                            console.log("OK LOG ME IN")
+                        }
+                    });
+                }
+                else{
+                    console.log("NOT VALID");
+                    var errors = document.getElementsByClassName('reg-req');
+                    console.log(errors);
+                    for(i=0;i<errors.length;i++){
+                        errors[i].classList.remove('ng-hide');
+                        errors[i].classList.add('ng-show');
+                    }
+                }
+            }
+            else if(response.data == true){
+                console.log($scope.username)
+                if($scope.username == undefined){
+                    var errors = document.getElementsByClassName('reg-req');
+                    console.log(errors);
+                    for(i=0;i<errors.length;i++){
+                        errors[i].classList.remove('ng-hide');
+                        errors[i].classList.add('ng-show');
+                    }
+                }
+                else{
+                    document.getElementById('invalid-username').classList.remove('ng-hide');
+                    document.getElementById('invalid-username').classList.add('ng-show');
+                }
+                
+            }
+
         });
     }
 
@@ -272,8 +353,14 @@ app.controller('DiscoverController', function($scope, DiscoverService, Dashboard
         console.log("YELP QUERY", yelpQuery);
         DiscoverService.sendYelpData().then(function(response){
             console.log("RESPONSE", response.data);
-            cardObject = response.data;
-            directToSearch();
+            if(response.data.total == 0){
+                console.log("NO RESULTS")
+                document.getElementById('invalid-search').style.display='block';
+            }
+            else{
+                cardObject = response.data;
+                directToSearch();
+            }
         });
     }
 })
@@ -297,6 +384,12 @@ app.service('FavoriteService', function ($http){
         return $http.post(this.removePath, faveID);
     }
 
+    this.checkFavePath='http://localhost:3000/api/check-favorite';
+    this.checkFavorite = function(){
+        console.log("CHECKING FAVORITE...", faveObject);
+        return $http.post(this.checkFavePath, faveObject);
+    }
+
 });
 
 app.controller('FaveController', function($scope, DashboardService, FavoriteService, $route){
@@ -311,7 +404,7 @@ app.controller('FaveController', function($scope, DashboardService, FavoriteServ
         }
         FavoriteService.getFavorites().then(function(response){
             console.log("GETFAVESRESPONSE", response.data);
-            $scope.faves = response.data;
+            $scope.faves = response.data.slice().reverse();
         });
     });
 
@@ -344,26 +437,6 @@ app.controller('CardController', function($scope, DashboardService, FavoriteServ
 
     });
 
-    // $scope.cards = [
-    //     {
-    //         "image_url":"/front-end/resources/images/panda.jpg",
-    //         "name":"Restaurant 0",
-    //         "categories":[
-    //             {"title": "title0"}
-    //         ],
-    //         "is_closed":true,
-    //         "rating":"5",
-    //         "price":"$$$$",
-    //         "phone":"1234567890",
-    //         "location":{
-    //             "display_address":[
-    //                 "143 S Main St",
-    //                 "Salt Lake City, UT 84111"
-    //             ]
-    //         }
-    //     }
-    // ]
-
     var cardIndex = 0;
     angular.element(document).ready(function(){
         if(!$scope.empty){
@@ -381,6 +454,12 @@ app.controller('CardController', function($scope, DashboardService, FavoriteServ
         for(var i = 0; i < allCards.length; i++){
             allCards[i].style.zIndex = allCards.length-i;
             var hammer = new Hammer(allCards[i]);
+            hammer.on('pressup', function(event){
+                if(event.type=='pressup'){
+                    var yelpURL = $scope.cards[cardIndex].url;
+                    window.open(yelpURL, '_blank').focus(); 
+                }
+            })
 
             hammer.on('panleft panright', function(event){
                 if(event.type == 'panleft'){
@@ -448,7 +527,14 @@ app.controller('CardController', function($scope, DashboardService, FavoriteServ
         console.log("ADD TO FAVE", $scope.cards[cardIndex]);
         faveObject = $scope.cards[cardIndex];
         faveObject.userID = $scope.userID;
-        FavoriteService.addFavorite();
+
+        FavoriteService.checkFavorite().then(function(response){
+            console.log("CHECK F", response.data)
+            if(!response.data == true){
+                FavoriteService.addFavorite();
+            }
+        });
+
     }
     
 
@@ -464,6 +550,8 @@ app.service('UploadService', function($http){
             }
         });
     }
+
+
 });
 
 app.controller('UploadController', function($scope, UploadService, DashboardService){
@@ -594,6 +682,17 @@ app.service('FeedService', function($http){
     this.getAllPosts = function(){
         return $http.post(this.getAllPostsPath);
     }
+
+    this.getMyPostsPath='http://localhost:3000/api/get-my-posts';
+    this.getMyPosts = function(){
+        return $http.post(this.getMyPostsPath, userID);
+    }
+
+    this.likePostPath='http://localhost:3000/api/like-post';
+    this.likePost = function(){
+        console.log("LIKEPOSTOBJECT", likePostObject);
+        return $http.post(this.likePostPath, likePostObject);
+    }
 });
 
 app.controller('FeedController', function ($scope, DashboardService, FeedService){
@@ -604,16 +703,23 @@ app.controller('FeedController', function ($scope, DashboardService, FeedService
         $scope.follower_count = response.data.follower_count;
         $scope.name = response.data.fullname.split(' ').slice(0, -1).join(' ');
         $scope.imagePreviewUrl = response.data.profile_pic;
+        $scope.id = response.data._id;
 
         userID = {
             "id":response.data._id
         }
     
-        FeedService.getAllPosts().then(function(response){
+        // FeedService.getAllPosts().then(function(response){
+        //     $scope.posts = response.data.slice().reverse();
+        //     console.log("GET ALL POSTS", $scope.posts);
+        // })
+
+        FeedService.getMyPosts().then(function(response){
             $scope.posts = response.data.slice().reverse();
             console.log("GET ALL POSTS", $scope.posts);
         })
     });
+
     var today = new Date()
     var curHr = today.getHours()
     if (curHr < 12) {
@@ -622,6 +728,21 @@ app.controller('FeedController', function ($scope, DashboardService, FeedService
         $scope.greeting = "Good afternoon"
     } else {
         $scope.greeting = "Good evening"
+    }
+
+    $scope.clickHeart = function(postID){
+        likePostObject = {
+            userID:$scope.id,
+            postID:postID,
+        }
+
+        FeedService.likePost().then(function(response){
+            console.log("LIKED/UNLIKE POST", response.data);
+            FeedService.getMyPosts().then(function(response){
+                $scope.posts = response.data.slice().reverse();
+                console.log("GET ALL POSTS", $scope.posts);
+            });
+        });
     }
 });
 
@@ -647,6 +768,12 @@ app.service('ProfileService', function($http) {
     this.getUserPosts = function(){
         return $http.post(this.getUserPostsPath, userID);
     }
+
+    this.deletePostPath='http://localhost:3000/api/delete-post';
+    this.deletePost = function(){
+        return $http.post(this.deletePostPath, deletePostObj);
+    }
+
 });
 
 app.controller('ProfileController', function ($scope, DashboardService, ProfileService, $timeout){
@@ -675,6 +802,7 @@ app.controller('ProfileController', function ($scope, DashboardService, ProfileS
     var bioField;
     // var profilePic;
     var isEditing = false;
+    var modal;
 
     $scope.editProfile = function(){
         isEditing = true;
@@ -757,12 +885,111 @@ app.controller('ProfileController', function ($scope, DashboardService, ProfileS
             console.log("PROFILE SERVICE RESPONSE", response.data)
         });
     }
+
+    $scope.viewPost = function(postIndex){
+        console.log("VIEW POST: ", postIndex);
+        $scope.viewPostID = $scope.posts[postIndex]._id;
+        $scope.viewImage = $scope.posts[postIndex].image;
+        $scope.viewAvatar = $scope.imagePreviewUrl;
+        $scope.viewUsername = $scope.posts[postIndex].username;
+        $scope.viewTitle = $scope.posts[postIndex].title;
+        $scope.viewLocation = $scope.posts[postIndex].location;
+        $scope.viewCaption = $scope.posts[postIndex].caption;
+        $scope.viewLikes = $scope.posts[postIndex].likes.length;
+        modal = document.getElementById('myModal');
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("myBtn");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        modal.style.display = "block";
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        
+    }
+
+    $scope.deletePost = function(postID){
+        console.log("DELETE POST #: ", postID);
+        deletePostObj = {
+            postID: postID,
+            userID: $scope.id
+        }
+        ProfileService.deletePost().then(function(response){
+            console.log("PROFILES", response.data);
+            DashboardService.getUser().then(function(response){
+                $scope.post_count = response.data.post_count;
+                ProfileService.getUserPosts().then(function(response){
+                    modal.style.display='none';
+                    console.log("GET USER POSTS", response.data);
+                    $scope.posts = response.data.slice().reverse();
+                });
+            });
+        });
+    }
 });
+
+app.service('ViewProfileService', function($http){
+
+    this.getProfilePath='http://localhost:3000/api/get-profile';
+    this.getProfile= function (){
+        console.log("PROFILEID", userID)
+        return $http.post(this.getProfilePath, userID);
+    }
+});
+
+app.controller("ViewProfileController", function($scope, DashboardService, ProfileService, ViewProfileService){
+    DashboardService.getUser().then(function(response){
+        var pathArr = window.location.href.split('/');
+        var profileID = pathArr[pathArr.length-1];
+        userID = {
+            "id":profileID
+        }
+
+        $scope.username = response.data.username;
+        $scope.post_count = response.data.post_count;
+        $scope.follower_count = response.data.follower_count;
+        $scope.imagePreviewUrl = response.data.profile_pic;
+
+        ViewProfileService.getProfile().then(function(response){
+            $scope.viewname = response.data.fullname;
+            $scope.viewusername = response.data.username;
+            $scope.viewpost_count = response.data.post_count;
+            $scope.viewfollower_count = response.data.follower_count;
+            $scope.viewlocation = response.data.location;
+            $scope.viewbio = response.data.bio;
+            $scope.viewimagePreviewUrl = response.data.profile_pic;
+        })
+    
+        ProfileService.getUserPosts().then(function(response){
+            console.log("GET USER POSTS", response.data);
+            $scope.posts = response.data.slice().reverse();
+        })
+    });
+})
 
 app.service('SearchService', function($http){
     this.getAllUsersPath='http://localhost:3000/api/get-all-users';
     this.getAllUsers = function(){
         return $http.post(this.getAllUsersPath);
+    }
+
+    this.followUserPath='http://localhost:3000/api/follow-user';
+    this.followUser = function(){
+        console.log(followUserID);
+        return $http.post(this.followUserPath, followUserID);
     }
 })
 
@@ -772,12 +999,50 @@ app.controller('SearchController', function($scope, DashboardService, SearchServ
         $scope.post_count = response.data.post_count;
         $scope.follower_count = response.data.follower_count;
         $scope.imagePreviewUrl = response.data.profile_pic;
+        $scope.id = response.data._id;
+        $scope.following = response.data.following;
 
+        $scope.refreshUsers();
+    });
+
+    $scope.refreshUsers = function(){
         SearchService.getAllUsers().then(function(response){
             console.log("GETALLUSERS", response.data);
             $scope.users = response.data;
+            for(i=0;i<$scope.users.length;i++){
+                if($scope.users[i]._id == $scope.id){
+                    console.log("MATCH ME", i);
+                    var myID = i;
+                    angular.element(document).ready(function(){
+                        var mybtn = document.getElementsByClassName('user-follow');
+                        mybtn[myID].disabled = true;
+                        mybtn[myID].classList.add("no-follow");
+                    });
+                }
+                if($scope.following.includes($scope.users[i]._id)){
+                    console.log("FOUND MATCH:", $scope.users[i].fullname);
+                    $scope.users[i].status = "Unfollow";
+                }
+                else{
+                    $scope.users[i].status = "Follow";
+                }
+            }
         });
-    });
+    }
+
+    $scope.followUser = function(followID){
+        console.log("FOLLOW: ", followID);
+        followUserID = {
+            userID: $scope.id,
+            followID: followID
+        }
+        SearchService.followUser().then(function(response){
+            DashboardService.getUser().then(function(response){
+                $scope.following = response.data.following;
+                $scope.refreshUsers();
+            })
+        });
+    }
 })
 
 ///////////

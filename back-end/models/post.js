@@ -10,10 +10,11 @@ const postSchema = new Schema({
     location: String,
     // rating: Number,
     caption: String,
-    likes: Number,
+    likes: Array,
     image: String,
     username: String,
-    userImage: String
+    userImage: String,
+    title: String,
 })
 
 // module.exports = mongoose.model('user', userSchema, 'users');

@@ -27,6 +27,7 @@ router.post('/crave-search', (req, res) => {
         res.status(200).send(result);
       }).catch(e => {
         console.log("ERROR!",e);
+        res.status(200).send(false);
       });
 });
 
