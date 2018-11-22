@@ -23,12 +23,7 @@
             <div class="profile-header w3-row" ng-click='cancelEdit($event)'>
                 <div class="w3-col m4 profile-pic-box">
                     <img id='avatar' class='profile-pic' src="http://localhost:3000/images/{{viewimagePreviewUrl}}" onload='avatarLoaded()'>
-                    <!-- <div id='edit-img' ng-click='editProfilePic()'>
-                        <i id='edit-img-icon' class='fa fa-camera'></i>
-                        <p class='edit-img-txt'>Change Picture</p>
-                        <input type='file' name="file" id="propic-file" accept="image/*" onchange="angular.element(this).scope().onImagePicked(this)">
-                    </div>
-                    <p id='edit-profile-btn' ng-click='editProfile()'><i class="fa fa-gear"></i> Edit Profile</p> -->
+                    <input ng-click='followUser()' type='button' class='login-btn user-follow-profile' id="{{$index}}" value={{followStatus}}>                    
                 </div>
                 <div class="w3-col m8 w3-left-align">
                     <h1 class='profile-name'>{{viewname}}</h1>

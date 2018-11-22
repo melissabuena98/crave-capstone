@@ -844,6 +844,12 @@ section{
   width: 100%;
 }
 
+.user-follow-profile{
+  font-size: 15px;
+  padding: 5px;
+  min-width: 46%;
+}
+
 /* FEED */
 .feed-container{
   margin-top:50px;
@@ -946,7 +952,8 @@ section{
 }
 
 .profile-header{
-  background-image: linear-gradient(to top right, #ef7f17e0,#f26e6edd );
+  /* background-image: linear-gradient(to top right, #ef7f17e0,#f26e6edd ); */
+  background:#636366;
   height:250px;
 }
 

@@ -102,21 +102,35 @@ app.config(function($routeProvider){
         })
 
         .when('/crave-search', {
-            // resolve:{
-            //     "check": function($location){
-            //         if(!localStorage.getItem("token")){
-            //             $location.path('/login');
-            //         }
-            //     }
-            // },
+            resolve:{
+                "check": function($location){
+                    if(!localStorage.getItem("token")){
+                        $location.path('/login');
+                    }
+                }
+            },
             templateUrl: 'front-end/pages/crave-search.html',
         })
 
         .when('/upload', {
+            resolve:{
+                "check": function($location){
+                    if(!localStorage.getItem("token")){
+                        $location.path('/login');
+                    }
+                }
+            },
             templateUrl: 'front-end/pages/upload.html',
         })
 
         .when('/profile/:profileid', {
+            resolve:{
+                "check": function($location){
+                    if(!localStorage.getItem("token")){
+                        $location.path('/login');
+                    }
+                }
+            },
             templateUrl: 'front-end/pages/view-profile.html',
         })
 });
@@ -1022,7 +1036,7 @@ app.service('ViewProfileService', function($http){
     }
 });
 
-app.controller("ViewProfileController", function($scope, DashboardService, ProfileService, ViewProfileService){
+app.controller("ViewProfileController", function($scope, DashboardService, ProfileService, ViewProfileService, SearchService){
     DashboardService.getUser().then(function(response){
         var pathArr = window.location.href.split('/');
         var profileID = pathArr[pathArr.length-1];
@@ -1030,26 +1044,63 @@ app.controller("ViewProfileController", function($scope, DashboardService, Profi
             "id":profileID
         }
 
-        $scope.username = response.data.username;
-        $scope.post_count = response.data.post_count;
-        $scope.follower_count = response.data.follower_count;
-        $scope.imagePreviewUrl = response.data.profile_pic;
-
-        ViewProfileService.getProfile().then(function(response){
-            $scope.viewname = response.data.fullname;
-            $scope.viewusername = response.data.username;
-            $scope.viewpost_count = response.data.post_count;
-            $scope.viewfollower_count = response.data.follower_count;
-            $scope.viewlocation = response.data.location;
-            $scope.viewbio = response.data.bio;
-            $scope.viewimagePreviewUrl = response.data.profile_pic;
-        })
+        if(response.data._id == profileID){
+            directToProfile();
+        }
+        else{
+            $scope.username = response.data.username;
+            $scope.id = response.data._id;
+            $scope.post_count = response.data.post_count;
+            $scope.follower_count = response.data.follower_count;
+            $scope.imagePreviewUrl = response.data.profile_pic;
+            $scope.following = response.data.following;
     
-        ProfileService.getUserPosts().then(function(response){
-            console.log("GET USER POSTS", response.data);
-            $scope.posts = response.data.slice().reverse();
-        })
+            $scope.showFollowStatus();
+
+            ViewProfileService.getProfile().then(function(response){
+                $scope.viewname = response.data.fullname;
+                $scope.viewusername = response.data.username;
+                $scope.viewpost_count = response.data.post_count;
+                $scope.viewfollower_count = response.data.follower_count;
+                $scope.viewlocation = response.data.location;
+                $scope.viewbio = response.data.bio;
+                $scope.viewimagePreviewUrl = response.data.profile_pic;
+            })
+        
+            ProfileService.getUserPosts().then(function(response){
+                console.log("GET USER POSTS", response.data);
+                $scope.posts = response.data.slice().reverse();
+            })
+        }
+
     });
+
+    $scope.followUser = function(){
+        console.log("FOLLOW: ", userID.id);
+        followUserID = {
+            userID: $scope.id,
+            followID: userID.id
+        }
+        console.log("OBJ", followUserID);
+        SearchService.followUser().then(function(response){
+            DashboardService.getUser().then(function(response){
+                $scope.following = response.data.following;
+                ViewProfileService.getProfile().then(function(response){
+                    $scope.viewfollower_count = response.data.follower_count;
+                    $scope.showFollowStatus();
+                });
+            });
+        });
+    }
+
+    $scope.showFollowStatus = function(){
+        if($scope.following.includes(userID.id)){
+            $scope.followStatus = "Unfollow";
+        }
+        else{
+            $scope.followStatus = "Follow";
+        }
+    }
 })
 
 app.service('SearchService', function($http){
