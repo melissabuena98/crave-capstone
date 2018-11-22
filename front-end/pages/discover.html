@@ -26,8 +26,10 @@
             <input class='textbox' placeholder='Term e.g. Asian' name="term" ng-model="term" type="text" min=1 maxlength=30>
             <p class='price-slider-val w3-center'>{{ priceVal }}</p>
             <input ng-model='price' type="range" min="0" max="4" value='1' class="price-slider">
-            <input id='location' class='textbox' placeholder='Zip, State, City' name="location" ng-model="location" type="text" min=1 maxlength=30 required>
-            <p id='accent' onclick='getLocation()' class='use-location'><span><i class="fa fa-map-marker" aria-hidden="true"></i></span> Use your location instead</p>
+            <input id='location' class='textbox' placeholder='Zip, State, City' name="location" ng-model="location" type="text" min=1 maxlength=60 required>
+            <p id='accent' ng-click='getGeoLocation()' class='use-location'><span><i class="fa fa-map-marker" aria-hidden="true"></i></span> Use your location instead</p>
+            <!-- <p id='accent' onclick='distance(40.7662269, -111.8908886, 40.758989, -111.874474)' class='use-location'><span><i class="fa fa-map-marker" aria-hidden="true"></i></span> Do Maths</p> -->
+            <!-- <p id='accent' onclick='callGoogle()' class='use-location'><span><i class="fa fa-map-marker" aria-hidden="true"></i></span> Distance Matrix</p> -->
             <hr>
             <input type='submit' class='login-btn' id='btn-shadow' value='Start'>
             <span class='form-error' id='invalid-search'>No Search Results! Try again.</span>

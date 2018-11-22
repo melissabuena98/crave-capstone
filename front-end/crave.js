@@ -9,6 +9,8 @@ var locations;
 
 var $scope, $location;
 var cardObject;
+var userLocation;
+
 var postData;
 var faveObject;
 var userID;
@@ -19,6 +21,11 @@ var checkingUsername;
 
 var followUserID;
 var deletePostObj;
+
+var lat;
+var long;
+var distances = [];
+
 
 app.config(function($routeProvider){
     $routeProvider
@@ -296,6 +303,18 @@ app.service('DiscoverService', function($http){
         console.log('in sendyelp')
         return $http.post(this.path, yelpQuery);
     }
+
+    this.getUserLocation = function(){
+        console.log("LAT", lat);
+        console.log("LONG", long);
+        return $http.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${long}&key=AIzaSyDnScNtIJXrverfSC7o51y1LXR2q0Dlz58`)
+    }
+
+
+    this.getLocationCoords = function(userLocation){
+        console.log("CONVERT: ", userLocation);
+        return $http.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${userLocation}&key=AIzaSyDnScNtIJXrverfSC7o51y1LXR2q0Dlz58`)
+    }
 });
 
 
@@ -359,9 +378,59 @@ app.controller('DiscoverController', function($scope, DiscoverService, Dashboard
             }
             else{
                 cardObject = response.data;
-                directToSearch();
+                userLocation = $scope.location;
+                DiscoverService.getLocationCoords(userLocation).then(function(response){
+                    console.log("RESP: ", response.data.results[0].geometry.location);
+                    lat = response.data.results[0].geometry.location.lat;
+                    lon = response.data.results[0].geometry.location.lng;
+                    for(i=0;i<cardObject.businesses.length; i++){
+                        var f = new google.maps.LatLng(lat, lon);
+                        var t = new google.maps.LatLng(cardObject.businesses[i].coordinates.latitude, cardObject.businesses[i].coordinates.longitude);
+                        var service = new google.maps.DistanceMatrixService();
+                        service.getDistanceMatrix(
+                            {
+                                origins: [f],
+                                destinations: [t],
+                                travelMode: 'DRIVING',
+                                unitSystem: google.maps.UnitSystem.IMPERIAL
+                            }, function(response, status){
+                                if (status == 'OK') {
+                                    console.log("RES:!", response.rows[0].elements[0].distance.text);
+                                    distances.push(response.rows[0].elements[0].distance.text);
+                                    if(distances.length == cardObject.businesses.length){
+                                        console.log("DONEZOSSSS")
+                                        directToSearch();
+                                    }
+                                    else{
+                                        // console.log("NOT DONE: ", distances.length)
+                                    }
+                                }
+                            });
+                    }
+                });
+
+
             }
         });
+    }
+
+    $scope.getGeoLocation = function(){
+        console.log("GET GEOLOCATION")
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position){
+                $scope.$apply(function(){
+                    $scope.position = position;
+                    console.log("POSITION: ", $scope.position);
+                    lat = $scope.position.coords.latitude;
+                    long = $scope.position.coords.longitude;
+
+                    DiscoverService.getUserLocation().then(function(response){
+                        console.log(response.data)
+                        $scope.location = response.data.results[0].formatted_address;
+                    });
+                });
+            });
+        }
     }
 })
 
@@ -420,13 +489,7 @@ app.controller('FaveController', function($scope, DashboardService, FavoriteServ
 });
 
 app.controller('CardController', function($scope, DashboardService, FavoriteService){
-    if(cardObject == undefined){
-        directToDiscover();
-        $scope.empty = true;
-    }
-    else{
-        $scope.cards = cardObject.businesses;
-    }
+    var cardIndex = 0;
     console.log("CARD CTRL")
     DashboardService.getUser().then(function(response){
         $scope.username = response.data.username;
@@ -437,7 +500,19 @@ app.controller('CardController', function($scope, DashboardService, FavoriteServ
 
     });
 
-    var cardIndex = 0;
+    if(cardObject == undefined){
+        directToDiscover();
+        $scope.empty = true;
+    }
+    else {
+        $scope.cards = cardObject.businesses;
+        $scope.distances = distances;
+        console.log("LOCATION: ", userLocation);
+        for(i=0;i<$scope.distances.length;i++){
+            $scope.cards[i].miles = $scope.distances[i];
+        }
+    }
+
     angular.element(document).ready(function(){
         if(!$scope.empty){
             console.log("NOT EMPTY")
@@ -445,9 +520,8 @@ app.controller('CardController', function($scope, DashboardService, FavoriteServ
             console.log(allCards.length);
             initCards()
         }
-
     });
-        
+     
     function initCards(){
         console.log("CARD INDEX", cardIndex);
         var direction;
@@ -536,8 +610,6 @@ app.controller('CardController', function($scope, DashboardService, FavoriteServ
         });
 
     }
-    
-
 });
 
 app.service('UploadService', function($http){
@@ -1173,10 +1245,13 @@ function directToLogout(){
 }
 
 function getLocation(){
+    console.log("IN GETLOCATION")
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
-    } else {
-        console.log("Geolocation is not supported by this browser.");
+        navigator.geolocation.getCurrentPosition(function(position){
+            console.log("LAT",position.coords.latitude)
+            console.log("LONG",position.coords.longitude); 
+            return position;
+        });
     }
 }
 
@@ -1205,4 +1280,50 @@ function avatarLoaded(){
     var avatar = document.getElementById('avatar');
     avatar.style.visibility = 'visible';
 }
+
+function distance(lat1,lon1,lat2,lon2) {
+    var R = 6371; // Radius of the earth in km
+    var dLat = deg2rad(lat2-lat1);  // deg2rad below
+    var dLon = deg2rad(lon2-lon1); 
+    var a = 
+      Math.sin(dLat/2) * Math.sin(dLat/2) +
+      Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+      Math.sin(dLon/2) * Math.sin(dLon/2)
+      ; 
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    var d = R * c; // Distance in km
+    console.log("DISTANCE: ", d);
+  }
+  
+function deg2rad(deg) {
+    return deg * (Math.PI/180)
+}
+
+// function callGoogle() {
+//     console.log("HELLO GOOGLE")
+//     var f = new google.maps.LatLng(40.7662269, -111.8908886);
+//     var t = new google.maps.LatLng(40.758989, -111.874474);
+//     var service = new google.maps.DistanceMatrixService();
+//     service.getDistanceMatrix(
+//         {
+//             origins: [f],
+//             destinations: [t],
+//             travelMode: 'DRIVING',
+//             unitSystem: google.maps.UnitSystem.IMPERIAL
+//         }, function(response, status){
+//             if (status == 'OK') {
+//                 console.log("RES:!", response.rows[0].elements[0].distance.text);
+//                 return response.rows[0].elements[0].distance.text;
+//             }
+//         });
+
+//     function callback(response, status) {
+//         if (status == 'OK') {
+//             console.log("RES:!", response.rows[0].elements[0].distance.text);
+//             return response.rows[0].elements[0].distance.text;
+//         }
+//     }
+// }
+
+  
 

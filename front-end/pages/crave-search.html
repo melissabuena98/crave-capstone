@@ -31,7 +31,7 @@
                 <div ng-repeat="card in cards" class="card" id='card-box' ng-model='cardBox'>
                     <div class="card-img" style="background-image:url('{{card.image_url}}')"></div>
                     <h2 class='card-name' ng-bind-html='card.name'>{{card.name}}</h2>
-                    <p class='card-hours' ng-bind-html='card.is_closed'>{{card.is_closed}}</p>
+                    <p class='card-hours' ng-bind-html='card.miles'>{{card.miles}}</p>
                     <h4 class='card-detail'>Category: <span class='card-value' ng-bind-html='card.categories[0].title'>{{card.categories[0].title}}</span></h4>
                     <h4 class='card-detail'>Rating: <span class='card-value' ng-bind-html='card.rating'>{{card.rating}}</span> <i id='card-star' class="fa fa-star" aria-hidden="true"></i></h4>
                     <h4 class='card-detail'>Price: <span class='card-value' ng-bind-html='card.price'>{{card.price}}</span></h4>

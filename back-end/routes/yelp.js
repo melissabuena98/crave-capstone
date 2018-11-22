@@ -17,10 +17,6 @@ const client = yelp.client(apiKey);
 
 router.post('/crave-search', (req, res) => {
     let searchData = req.body;
-    // client.search(searchData).then(response => {
-    //     const result = response.jsonBody;
-    //     res.status(200).send(result);
-    // });
 
     client.search(searchData).then(response => {
         const result = response.jsonBody;
