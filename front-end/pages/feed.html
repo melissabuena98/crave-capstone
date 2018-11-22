@@ -26,8 +26,12 @@
                 <div class="feed-container">
                     <div ng-repeat="post in posts" class="feed-post-box">
                         <div class="feed-user-info">
-                            <img class='feed-user-pic' src='http://localhost:3000/images/{{post.userImage}}'>
-                            <h3 class='feed-user-name'>{{post.username}}</h3>
+                            <a class='user-link' href='#/profile/{{ post.user }}'>
+                                <img class='feed-user-pic' src='http://localhost:3000/images/{{post.userImage}}'>
+                            </a>
+                            <a class='user-link' href='#/profile/{{ post.user }}'>
+                                <h3 class='feed-user-name'>{{post.username}}</h3>
+                            </a>
                         </div>
                         <div class='feed-photo' style="background-image:url(http://localhost:3000/images/{{post.image}})"></div>
                         <div class="feed-caption-box">
