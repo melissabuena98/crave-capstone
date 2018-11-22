@@ -520,6 +520,8 @@ app.controller('CardController', function($scope, DashboardService, FavoriteServ
     }
     else {
         $scope.cards = cardObject.businesses;
+        $scope.totalCards = $scope.cards.length-1;
+        $scope.numOfCardsLeft = $scope.totalCards;
         $scope.distances = distances;
         console.log("LOCATION: ", userLocation);
         for(i=0;i<$scope.distances.length;i++){
@@ -571,7 +573,8 @@ app.controller('CardController', function($scope, DashboardService, FavoriteServ
                     if(direction == 'right'){
                         $scope.addToFavorites(cardIndex);
                     }
-                    cardIndex++;
+                    // cardIndex++;
+                    $scope.countCards();
                     event.target.style.opacity = '0';
                     event.target.style.transition = '0.75s ease-out';
                     setTimeout(function(){event.target.style.display = 'none'}, 750);
@@ -594,7 +597,8 @@ app.controller('CardController', function($scope, DashboardService, FavoriteServ
         $scope.addToFavorites(cardIndex);
         setTimeout(function(){
             allCards[cardIndex].style.display = 'none'
-            cardIndex++;
+            // cardIndex++;
+            $scope.countCards();
         }, 750);
     }
 
@@ -606,7 +610,8 @@ app.controller('CardController', function($scope, DashboardService, FavoriteServ
         allCards[cardIndex].style.transition = '0.75s ease-out';
         setTimeout(function(){
             allCards[cardIndex].style.display = 'none'
-            cardIndex++;
+            // cardIndex++;
+            $scope.countCards();
             console.log("NEW INDEX", cardIndex);
         }, 750);
     }
@@ -623,6 +628,16 @@ app.controller('CardController', function($scope, DashboardService, FavoriteServ
             }
         });
 
+    }
+
+    $scope.countCards = function(){
+        if($scope.totalCards > 0){
+            cardIndex++;
+            $scope.totalCards--;
+            $scope.$apply(function() {
+                $scope.numOfCardsLeft = $scope.totalCards;
+            });
+        }
     }
 });
 
