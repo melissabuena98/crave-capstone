@@ -679,6 +679,7 @@ app.controller('UploadController', function($scope, UploadService, DashboardServ
     
     $scope.filter1 = function(){
         console.log("CLICK FILTER 1!")
+        document.getElementById('filter-loader').style.visibility = 'visible';
         Caman("#image-preview", function () {
             console.log("in caman")        
             this.revert();
@@ -686,12 +687,14 @@ app.controller('UploadController', function($scope, UploadService, DashboardServ
                 $scope.editedImg = this.toBase64();
                 var file = dataURLtoFile($scope.editedImg, $scope.postImage.name);
                 console.log(file);
+                document.getElementById('filter-loader').style.visibility = 'hidden';
                 $scope.postImage = file;
             });
         });
     }
     $scope.filter2 = function(){
         console.log("CLICK FILTER 2!")
+        document.getElementById('filter-loader').style.visibility = 'visible';
         Caman("#image-preview", function () {
             console.log("in caman")        
             this.revert();
@@ -699,6 +702,7 @@ app.controller('UploadController', function($scope, UploadService, DashboardServ
                 $scope.editedImg = this.toBase64();
                 var file = dataURLtoFile($scope.editedImg, $scope.postImage.name);
                 console.log(file);
+                document.getElementById('filter-loader').style.visibility = 'hidden';
                 $scope.postImage = file;
             });
         });
@@ -706,6 +710,7 @@ app.controller('UploadController', function($scope, UploadService, DashboardServ
 
     $scope.filter3 = function(){
         console.log("CLICK FILTER 3!")
+        document.getElementById('filter-loader').style.visibility = 'visible';
         Caman("#image-preview", function () {
             console.log("in caman")        
             this.revert();
@@ -713,6 +718,7 @@ app.controller('UploadController', function($scope, UploadService, DashboardServ
                 $scope.editedImg = this.toBase64();
                 var file = dataURLtoFile($scope.editedImg, $scope.postImage.name);
                 console.log(file);
+                document.getElementById('filter-loader').style.visibility = 'hidden';
                 $scope.postImage = file;
             });
         });
@@ -720,6 +726,7 @@ app.controller('UploadController', function($scope, UploadService, DashboardServ
 
     $scope.filter4 = function(){
         console.log("CLICK FILTER 3!")
+        document.getElementById('filter-loader').style.visibility = 'visible';
         Caman("#image-preview", function () {
             console.log("in caman")        
             this.revert();
@@ -727,6 +734,7 @@ app.controller('UploadController', function($scope, UploadService, DashboardServ
                 $scope.editedImg = this.toBase64();
                 var file = dataURLtoFile($scope.editedImg, $scope.postImage.name);
                 console.log(file);
+                document.getElementById('filter-loader').style.visibility = 'hidden';
                 $scope.postImage = file;
             });
         });
@@ -1350,31 +1358,6 @@ function deg2rad(deg) {
     return deg * (Math.PI/180)
 }
 
-// function callGoogle() {
-//     console.log("HELLO GOOGLE")
-//     var f = new google.maps.LatLng(40.7662269, -111.8908886);
-//     var t = new google.maps.LatLng(40.758989, -111.874474);
-//     var service = new google.maps.DistanceMatrixService();
-//     service.getDistanceMatrix(
-//         {
-//             origins: [f],
-//             destinations: [t],
-//             travelMode: 'DRIVING',
-//             unitSystem: google.maps.UnitSystem.IMPERIAL
-//         }, function(response, status){
-//             if (status == 'OK') {
-//                 console.log("RES:!", response.rows[0].elements[0].distance.text);
-//                 return response.rows[0].elements[0].distance.text;
-//             }
-//         });
-
-//     function callback(response, status) {
-//         if (status == 'OK') {
-//             console.log("RES:!", response.rows[0].elements[0].distance.text);
-//             return response.rows[0].elements[0].distance.text;
-//         }
-//     }
-// }
 
   
 
