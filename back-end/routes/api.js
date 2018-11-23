@@ -459,22 +459,42 @@ router.post('/like-post', (req, res) => {
                 res.status(401).send("Post does not exist");
             }
             else{
-                if(!post.likes.includes(postData.userID)){
-                    post.likes.push(postData.userID);
-                }
-                else{
-                    var index = post.likes.indexOf(postData.userID);
-                    post.likes.splice(index, 1);
-                }
-                post.save((error, updatedPost) => {
+                User.findOne({_id: postData.userID}, (error, user) => {
                     if(error){
-                        console.log(error);
+                        console.error(error);
                     }
                     else{
-                        console.log("POST LIKE UPDATED")
-                        res.status(200).send(updatedPost);
+                        if(!user){
+                            res.status(200).send("Invalid user token");
+                        }
+                        else{
+                            if(!post.likes.includes(postData.userID)){
+                                post.likes.push(postData.userID);
+                                post.notifications.push(postData.username);
+                                user.liked_posts.push(postData.postID);
+                                user.save();
+                            }
+                            else{
+                                var index = post.likes.indexOf(postData.userID);
+                                post.likes.splice(index, 1);
+                                post.notifications.splice(index, 1);
+                                var postIndex = user.liked_posts.indexOf(postData.postID);
+                                user.liked_posts.splice(postIndex, 1);
+                                user.save();
+                            }
+                            post.save((error, updatedPost) => {
+                                if(error){
+                                    console.log(error);
+                                }
+                                else{
+                                    console.log("POST LIKE UPDATED")
+                                    res.status(200).send(updatedPost)
+                                }
+                            });
+                        }
                     }
                 });
+               //
             }
         }
     });
@@ -566,5 +586,36 @@ router.post('/follow-user', (req, res) => {
     });
 });
 
+router.post('/get-liked-posts', (req, res) => {
+    let user = req.body;
+    let postsArray;
+    User.findOne({_id: user.id}, (error, user) => {
+        if(error){
+            console.error(error);
+        }
+        else{
+            if(!user){
+                res.status(401).send("Invalid user token");
+            }
+            else{
+                postsArray = user.liked_posts;
+                Post.find({'_id': {$in: postsArray}}, (error, posts) => {
+                    console.log("LIKES", posts);
+                    if(error){
+                        console.error(error);
+                    }
+                    else{
+                        if(!posts){
+                            res.status(401).send("No posts");
+                        }
+                        else{
+                            res.status(200).send(posts);
+                        }
+                    }
+                });
+            }
+        }
+    });
+});
 
 module.exports = router;

@@ -14,6 +14,7 @@ const userSchema = new Schema({
     bio: String,
     location: String,
     following: Array,
+    liked_posts: Array,
 })
 
 // module.exports = mongoose.model('user', userSchema, 'users');

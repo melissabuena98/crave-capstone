@@ -639,6 +639,16 @@ app.controller('CardController', function($scope, DashboardService, FavoriteServ
             });
         }
     }
+
+    $scope.viewControls = function(){
+        console.log("SHOW CONTROLS")
+        document.getElementById('controls-box').style.visibility='visible';
+    }
+
+    $scope.hideControls = function(){
+        console.log("HIDE CONTROLS")
+        document.getElementById('controls-box').style.visibility='hidden';
+    }
 });
 
 app.service('UploadService', function($http){
@@ -842,6 +852,7 @@ app.controller('FeedController', function ($scope, DashboardService, FeedService
     $scope.clickHeart = function(postID){
         likePostObject = {
             userID:$scope.id,
+            username: $scope.username,
             postID:postID,
         }
 
@@ -883,9 +894,14 @@ app.service('ProfileService', function($http) {
         return $http.post(this.deletePostPath, deletePostObj);
     }
 
+    this.getLikesPath='http://localhost:3000/api/get-liked-posts';
+    this.getUserLikes = function(){
+        return $http.post(this.getLikesPath, userID);
+    }
+
 });
 
-app.controller('ProfileController', function ($scope, DashboardService, ProfileService, $timeout){
+app.controller('ProfileController', function ($scope, DashboardService, ProfileService, $timeout, FeedService){
     DashboardService.getUser().then(function(response){
         console.log(response.data);
         $scope.username = response.data.username;
@@ -1005,6 +1021,7 @@ app.controller('ProfileController', function ($scope, DashboardService, ProfileS
         $scope.viewLocation = $scope.posts[postIndex].location;
         $scope.viewCaption = $scope.posts[postIndex].caption;
         $scope.viewLikes = $scope.posts[postIndex].likes.length;
+        $scope.notifs = $scope.posts[postIndex].notifications.slice().reverse();;
         modal = document.getElementById('myModal');
 
         // Get the button that opens the modal
@@ -1046,6 +1063,34 @@ app.controller('ProfileController', function ($scope, DashboardService, ProfileS
                     $scope.posts = response.data.slice().reverse();
                 });
             });
+        });
+    }
+
+    $scope.viewLikedPosts = function(){
+        ProfileService.getUserLikes().then(function(response){
+            console.log("VIEW LIKED POSTS", response.data)
+            $scope.likes = response.data;
+            document.getElementById('profile-grid-box').style.display='none';
+            document.getElementById('profile-likes-box').style.display='block';
+        });
+    }
+
+    $scope.viewProfilePosts = function(){
+        console.log("VIEW PROFILE POSTS")
+        document.getElementById('profile-likes-box').style.display='none';
+        document.getElementById('profile-grid-box').style.display='grid';
+    }
+
+    $scope.clickHeart = function(postID){
+        likePostObject = {
+            userID:$scope.id,
+            username: $scope.username,
+            postID:postID,
+        }
+
+        FeedService.likePost().then(function(response){
+            console.log("LIKED/UNLIKE POST", response.data);
+            $scope.viewLikedPosts();
         });
     }
 });
@@ -1135,6 +1180,7 @@ app.controller("ViewProfileController", function($scope, DashboardService, Profi
         $scope.viewLocation = $scope.posts[postIndex].location;
         $scope.viewCaption = $scope.posts[postIndex].caption;
         $scope.viewLikes = $scope.posts[postIndex].likes.length;
+        $scope.notifs = $scope.posts[postIndex].notifications.slice().reverse();;
         modal = document.getElementById('myModal');
 
         // Get the button that opens the modal

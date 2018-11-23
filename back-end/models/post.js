@@ -11,6 +11,7 @@ const postSchema = new Schema({
     // rating: Number,
     caption: String,
     likes: Array,
+    notifications: Array,
     image: String,
     username: String,
     userImage: String,

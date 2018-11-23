@@ -4,6 +4,10 @@ body{
     background:#ebebeb;
 }
 
+b{
+  font-family: 'K2D', sans-serif;
+}
+
 .textbox:focus{
   outline: none !important;
   box-shadow: 0 0 2px #ef8117;
@@ -947,7 +951,7 @@ section{
 
 /* PROFILE */
 .profile-viewport{
-  background: #fefefe;
+  background: #ebebeb;
   padding:0;
   overflow-y:auto;
 }
@@ -1095,7 +1099,24 @@ section{
 }
 
 .profile-gallery-box{
-  margin: 40px 0 40px 0;
+  margin: 10px 0 40px 0;
+}
+
+.profile-view{
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+}
+
+.pview{
+  margin:25px;
+  font-family:'K2D', sans-serif;
+  cursor:pointer;
+}
+
+#profile-likes-box{
+  display:none;
+  margin-top:20px;
 }
 
 .profile-grid{
@@ -1249,6 +1270,10 @@ section{
   overflow-y: scroll;
 }
 
+.notif{
+  margin:0;
+}
+
 .modal-post-details{
   height:140px;
   text-align:left;
@@ -1310,4 +1335,70 @@ section{
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+/* CARD CONTROLS */
+#view-controls{
+  color:white;
+  cursor:pointer;
+}
+
+#hide-controls{
+  color:#393d40;
+  cursor:pointer;
+  font-size: 30px;
+  position: absolute;
+  right: 5px;
+}
+
+.controls-box{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background: #ebebeb;
+  z-index: 100;
+  visibility: hidden;
+}
+
+#ctrl-header{
+  font-family: 'CraveFont', sans-serif;
+  padding-top: 10px;
+  color: #ef8117;
+  font-size:6vw;
+}
+
+.ctrl-details{
+  padding:15px;
+}
+
+#ctrl{
+  text-align: left;
+}
+
+#ctrl-yes{
+  color:#77D9B5;
+  font-size:21px;
+}
+
+#ctrl-no{
+  color:#DF6857;
+  font-size:21px;
+}
+
+#ctrl-back{
+  color:#EED673;
+  font-size:21px;
+}
+
+#ctrl-star{
+  color:#71A9E9;
+  font-size:21px;
+}
+
+ul{
+  padding-inline-start: 20px !important;
+}
+
+li{
+  margin-bottom:15px;
 }

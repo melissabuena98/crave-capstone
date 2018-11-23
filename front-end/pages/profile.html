@@ -42,20 +42,41 @@
                 </div>
             </div>
             <div class="profile-gallery-box">
-                <div class="profile-grid">
-                    <!-- <div class='gallery-img' style="background-image:url('/front-end/resources/images/food2.png')">
-                        <div class="gallery-img-hvr">
-                            <p class="img-hvr-likes"><i class='fa fa-heart hvr-heart'></i> 123 likes</p>
-                        </div>
-                    </div>   -->
-                    
+                <div class="profile-view">
+                    <p class='pview' ng-click='viewProfilePosts()'><i class="fa fa-th" aria-hidden="true"></i> POSTS</p>
+                    <p class='pview' ng-click='viewLikedPosts()'><i class="fa fa-heart" aria-hidden="true"></i> LIKES</p>
+                </div>
+                <div class="profile-grid" id='profile-grid-box'>
                     <div ng-repeat="post in posts" ng-click='viewPost($index)' class='gallery-img' style="background-image:url(http://localhost:3000/images/{{post.image}})">
                         <div class="gallery-img-hvr">
                             <p class="img-hvr-likes"><i class='fa fa-heart hvr-heart'></i> {{post.likes.length}} likes</p>
                         </div>
-                    </div>
+                    </div>                   
+                </div>
 
-                    
+
+                <!-- PROFILE LIKES -->
+                <div id='profile-likes-box'>
+                    <div ng-repeat="like in likes" class="feed-post-box">
+                        <div class="feed-user-info">
+                            <a class='user-link' href='#/profile/{{ like.user }}'>
+                                <img class='feed-user-pic' src='http://localhost:3000/images/{{like.userImage}}'>
+                            </a>
+                            <a class='user-link' href='#/profile/{{ like.user }}'>
+                                <h3 class='feed-user-name'>{{like.username}}</h3>
+                            </a>
+                        </div>
+                        <div class='feed-photo' style="background-image:url(http://localhost:3000/images/{{like.image}})"></div>
+                        <div class="feed-caption-box">
+                            <h4 class='feed-dish'>{{like.title}}</h4>
+                            <h6 class='feed-restaurant'><i class='fa fa-map-marker feed-map'></i><span>{{like.location}}</span></h6>
+                            <p class='feed-caption'>{{like.caption}}</p>
+                        </div>
+                        <div class='feed-interaction'>
+                            <i class='fa fa-heart feed-heart' ng-click="clickHeart(like._id)"></i>
+                            <h6 class='feed-likes'>{{like.likes.length}} likes</h6>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -71,18 +92,7 @@
                         </div>
                         <hr id='modal-hr'>
                         <div class="modal-notifs">
-                            <p>melissabuena liked this post</p>
-                            <p>melissabuena liked this post</p>
-                            <p>melissabuena liked this post</p>
-                            <p>melissabuena liked this post</p>
-                            <p>melissabuena liked this post</p>
-                            <p>melissabuena liked this post</p>
-                            <p>melissabuena liked this post</p>
-                            <p>melissabuena liked this post</p>
-                            <p>melissabuena liked this post</p>
-                            <p>melissabuena liked this post</p>
-                            <p>melissabuena liked this post</p>
-                            <p>melissabuena liked this post</p>
+                            <p class='notif' ng-repeat="notif in notifs"><b>{{notif}}</b> liked this post</p>
                         </div>
                         <hr id='modal-hr'>
                         <div class="modal-post-details">
