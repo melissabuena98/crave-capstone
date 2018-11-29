@@ -140,13 +140,20 @@ app.config(function($routeProvider){
 
 app.controller('HomeController', function ($scope, $anchorScroll, $location, $window) {
     $scope.load = function() {
-        console.log($location.path())
+        console.log("HOME")
+        sessionStorage.setItem("splashed", true);
         // checkHttps();
         if($location.path() == '/'){
             $location.hash('welcome');
             $anchorScroll();
         }
+        
+    }
 
+    $scope.init = function(){
+        if(sessionStorage.getItem("splashed") == 'true'){
+            document.getElementById('splash').style.display='none';
+        }
         setTimeout(function(){
             document.getElementById('splash').classList.add('fade');
             document.getElementById('splash-logo').classList.add('fade');
@@ -1407,6 +1414,11 @@ function directToUpload(){
 function directToProfile(){
     console.log("PROFILE")
     window.location.replace("#/profile");
+}
+
+function goHome(){
+    window.location.assign("#/");
+    window.location.reload();
 }
 
 function directToLogout(){

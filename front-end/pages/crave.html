@@ -1,7 +1,7 @@
 <div id="splash">
   <img id='splash-logo' class='animated pulse infinite' src='/front-end/resources/images/splashlogo.png'>
 </div>
-<div id='landing'>
+<div id='landing' ng-init="init()">
   <div class="topnav" id="myTopnav" ng-controller='ScrollCtrl'>
       <a data-scrollspy-listen="welcome" ng-click="load()"><img id='nav-icon' src='front-end/resources/images/crave-full.png'/></a>
       <a data-scrollspy-listen="swipe" ng-click="gotoElement('swipe')" class='nav-hvr'>SWIPE</a>
