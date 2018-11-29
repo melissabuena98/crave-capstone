@@ -21,6 +21,7 @@ app.use('/yelp', yelp);
 
 app.get('/', function(req, res) {
     // res.sendFile(__dirname + '/index.html');
+    res.redirect("/index.html")
 })
 
 app.listen(process.env.PORT, function() {
