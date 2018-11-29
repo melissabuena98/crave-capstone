@@ -141,7 +141,6 @@ app.config(function($routeProvider){
 app.controller('HomeController', function ($scope, $anchorScroll, $location, $window) {
     $scope.load = function() {
         console.log("HOME")
-        sessionStorage.setItem("splashed", true);
         // checkHttps();
         if($location.path() == '/'){
             $location.hash('welcome');
@@ -152,11 +151,13 @@ app.controller('HomeController', function ($scope, $anchorScroll, $location, $wi
 
     $scope.init = function(){
         if(sessionStorage.getItem("splashed") == 'true'){
+            console.log("IN HERE")
             document.getElementById('splash').style.display='none';
         }
         setTimeout(function(){
             document.getElementById('splash').classList.add('fade');
             document.getElementById('splash-logo').classList.add('fade');
+            sessionStorage.setItem("splashed", true);
         }, 2000)
     }
 });
