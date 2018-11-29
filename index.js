@@ -20,7 +20,7 @@ app.use('/api', api);
 app.use('/yelp', yelp);
 
 app.get('/', function(req, res) {
-    res.redirect(__dirname + '/index.html');
+    res.sendFile(__dirname + '/index.html');
 })
 
 app.listen(process.env.PORT, function() {
