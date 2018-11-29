@@ -13,6 +13,8 @@ const Post = require('../models/post');
 
 const mongoose = require('mongoose');
 const db = "mongodb://mbuena:cravepw1@ds125293.mlab.com:25293/cravedb";
+const sanitize = require('mongo-sanitize');
+
 
 mongoose.connect(db, { useNewUrlParser: true }, err => {
     if(err){
@@ -29,7 +31,7 @@ router.get('/', (req, res) => {
 
 router.post('/register', (req, res) => {
     console.error("IM IN REGISTER POST")
-    let userData = req.body;
+    let userData = sanitize(req.body);
     let user = new User(userData);
     //bcrypt 
     bcrypt.hash(user.password, null, null, function(err, hash){
@@ -66,7 +68,7 @@ router.post('/check-username', (req,res) => {
 })
 
 router.post('/login', (req, res) => {
-    let userData = req.body;
+    let userData = sanitize(req.body);
 
     User.findOne({username: userData.username}, (error, user) => {
         if(error){
@@ -124,19 +126,19 @@ router.post('/upload', upload.any(),(req,res) => {
                 if(err) throw err;
                 
                 var post = new Post({
-                    user: req.body.userID,
-                    username: req.body.username,
-                    userImage: req.body.userImage,
-                    caption: req.body.caption,
-                    location: req.body.location,
-                    title: req.body.title,
+                    user: sanitize(req.body.userID),
+                    username: sanitize(req.body.username),
+                    userImage: sanitize(req.body.userImage),
+                    caption: sanitize(req.body.caption),
+                    location: sanitize(req.body.location),
+                    title: sanitize(req.body.title),
                     image: filename,
                 });
                 post.save(function (err, result){
                     if(err){}
                     // res.status(200).json(result)
                     //PUT USER POST COUNT FIND HERE
-                    User.findOne({_id: req.body.userID}, (error, user) => {
+                    User.findOne({_id: sanitize(req.body.userID)}, (error, user) => {
                         if(error){
                             console.error(error);
                         }
@@ -263,7 +265,7 @@ router.post('/remove-favorite', (req, res) => {
 });
 
 router.post('/update-profile', (req, res) => {
-    let profile = req.body;
+    let profile = sanitize(req.body);
     User.findOne({_id: profile.id}, (error, user) => {
         if(error){console.error(error)}
         else{

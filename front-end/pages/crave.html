@@ -1,58 +1,65 @@
-<div class="topnav" id="myTopnav" ng-controller='ScrollCtrl'>
-    <a data-scrollspy-listen="welcome" ng-click="load()"><img id='nav-icon' src='front-end/resources/images/crave-full.png'/></a>
-    <a data-scrollspy-listen="swipe" ng-click="gotoElement('swipe')" class='nav-hvr'>SWIPE</a>
-    <a data-scrollspy-listen="eat" ng-click="gotoElement('eat')" class='nav-hvr'>EAT</a>
-    <a data-scrollspy-listen="share" ng-click="gotoElement('share')" class='nav-hvr'>SHARE</a>
-    <div class='login-nav'><div class='login-btn' ng-click="directToLogin()">LOGIN</div></div>
-    <a href="javascript:void(0);" class="icon" onclick="navHamburger()">
-        <i class="fa fa-bars"></i>
-    </a>
+<div id="splash">
+  <img id='splash-logo' class='animated pulse infinite' src='/front-end/resources/images/splashlogo.png'>
 </div>
-<div ng-controller='ScrollCtrl'>
-  <section id='welcome' class='landing-pic'>
-    <div class="w3-row-padding">
-      <div class="w3-col m12 spacer bg-white">
-        <h1 class='header w3-center'>Meet <span id='accent'>Crave.</span></h1>
-        <h3 class='sub-header w3-center'>Hungry? Stop wasting time and let your personal restaurant guru help you.</h3>
-        <div class='signup-btn' ng-click="directToRegister()">SIGN UP NOW</div>
+<div id='landing'>
+  <div class="topnav" id="myTopnav" ng-controller='ScrollCtrl'>
+      <a data-scrollspy-listen="welcome" ng-click="load()"><img id='nav-icon' src='front-end/resources/images/crave-full.png'/></a>
+      <a data-scrollspy-listen="swipe" ng-click="gotoElement('swipe')" class='nav-hvr'>SWIPE</a>
+      <a data-scrollspy-listen="eat" ng-click="gotoElement('eat')" class='nav-hvr'>EAT</a>
+      <a data-scrollspy-listen="share" ng-click="gotoElement('share')" class='nav-hvr'>SHARE</a>
+      <a ng-click="directToLogin()" class='nav-hvr login-responsive' id='showLogin'>LOGIN</a>
+      <div class='login-nav'><div class='login-btn' ng-click="directToLogin()">LOGIN</div></div>
+      <a href="javascript:void(0);" class="icon" onclick="navHamburger()">
+          <i class="fa fa-bars"></i>
+      </a>
+  </div>
+  <div ng-controller='ScrollCtrl'>
+    <section id='welcome' class='landing-pic'>
+      <div class="w3-row-padding landing-spacer">
+        <div class="w3-col m12 spacer bg-white">
+          <h1 class='header w3-center'>Meet <span id='accent'>Crave.</span></h1>
+          <h3 class='sub-header w3-center'>Hungry? Stop wasting time and let your personal restaurant guru help you.</h3>
+          <div class='signup-btn' ng-click="directToRegister()">SIGN UP NOW</div>
+        </div>
       </div>
-    </div>
-  </section>
-
-  <section id="swipe" data-scrollspy-broadcast data-expand>
-    <div class="w3-row-padding">
-      <div class="w3-col m5">
-        <h1 class='header title-margin'>Swipe</h1>
-        <p class='title-text'>Swipe to discover new restaurants near you! Fill out your preferences (or not) and we'll do the rest. Like or pass to match with restaurants!</p>
+    </section>
+  
+    <section id="swipe" data-scrollspy-broadcast data-expand>
+      <div class="w3-row-padding">
+        <div class="w3-col m5">
+          <h1 class='header title-margin'>Swipe</h1>
+          <p class='title-text'>Swipe to discover new restaurants near you! Fill out your preferences (or not) and we'll do the rest. Like or pass to match with restaurants!</p>
+        </div>
+        <div class="w3-col m7 w3-center">
+          <img id='phone-app' src='/front-end/resources/images/phone-demo.png'/>
+        </div>   
       </div>
-      <div class="w3-col m7">
-        <img id='phone-app' src='/front-end/resources/images/phone-demo.png'/>
-      </div>   
-    </div>
-  </section>
-
-  <section id="eat" data-scrollspy-broadcast data-expand>
-    <div class="w3-row">
-      <div class="w3-col m5">
-        <h1 class='header title-margin' id='accent'>Eat</h1>
-        <p class='title-text'>Powered by Yelp, Crave gives you access to thousands of restaurants nationwide to satisfy every craving and appetite.</p>
+    </section>
+  
+    <section id="eat" data-scrollspy-broadcast data-expand>
+      <div class="w3-row">
+        <div class="w3-col m5">
+          <h1 class='header title-margin' id='accent'>Eat</h1>
+          <p class='title-text'>Powered by Yelp, Crave gives you access to thousands of restaurants nationwide to satisfy every craving and appetite.</p>
+        </div>
+        <div class="w3-col m7">
+        </div>   
       </div>
-      <div class="w3-col m7">
-      </div>   
-    </div>
-  </section>
-
-  <section id="share" data-scrollspy-broadcast data-expand>
-    <div class="w3-row">
-      <div class="w3-col m5">
-        <h1 class='header title-margin'>Share</h1>
-        <p class='title-text'>Love your meal? Snap a photo and share your food pics to the ultimate and exclusive foodie social club!</p>
+    </section>
+  
+    <section id="share" data-scrollspy-broadcast data-expand>
+      <div class="w3-row">
+        <div class="w3-col m5">
+          <h1 class='header title-margin'>Share</h1>
+          <p class='title-text'>Love your meal? Snap a photo and share your food pics to the ultimate and exclusive foodie social club!</p>
+        </div>
+        <div class="w3-col m7" id='foodie-pic'>
+          <!-- <div id="foodie-pic">
+  
+          </div> -->
+        </div>   
       </div>
-      <div class="w3-col m7" id='foodie-pic'>
-        <!-- <div id="foodie-pic">
+    </section>
+  </div>
 
-        </div> -->
-      </div>   
-    </div>
-  </section>
 </div>

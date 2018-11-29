@@ -1,0 +1,51 @@
+.login-responsive{visibility: hidden;}
+@media screen and (max-width: 920px) {
+    .login-btn{
+        display: none;
+    }  
+    .login-responsive{
+        visibility: visible;
+    }
+    .landing-spacer{margin-top:100px;}
+    .sub-header{
+        font-size:4vw;
+    }
+}
+
+@media screen and (max-width:560px){
+    .landing-pic{height:400px}
+    .signup-btn{
+        margin-top:20% !important;
+    }
+}
+
+@media screen and (max-width:880px){
+    #phone-app{margin-left:0}
+    .title-text{font-size:3vw}
+}
+
+@media screen and (max-width:600px){
+    #phone-app{
+        height:550px;
+    }
+    .title-margin{
+        margin: 10% auto 5% 5%;
+        font-size:19vw;
+    }
+    #foodie-pic{
+        height:400px;
+    }
+}
+
+@media screen and (max-width:400px){
+    #phone-app{
+        height:450px;
+    }
+    .title-margin{
+        margin: 10% auto 5% 5%;
+        font-size:19vw;
+    }
+    .title-text{
+        font-size:5vw;
+    }
+}

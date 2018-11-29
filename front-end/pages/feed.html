@@ -40,7 +40,7 @@
                             <p class='feed-caption'>{{post.caption}}</p>
                         </div>
                         <div class='feed-interaction'>
-                            <i class='fa fa-heart feed-heart' ng-click="clickHeart(post._id)"></i>
+                            <i class='fa fa-heart feed-heart animated' id={{post._id}} ng-click="clickHeart(post._id, $event)"></i>
                             <h6 class='feed-likes'>{{post.likes.length}} likes</h6>
                         </div>
                     </div>

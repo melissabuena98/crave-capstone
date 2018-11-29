@@ -146,6 +146,11 @@ app.controller('HomeController', function ($scope, $anchorScroll, $location, $wi
             $location.hash('welcome');
             $anchorScroll();
         }
+
+        setTimeout(function(){
+            document.getElementById('splash').classList.add('fade');
+            document.getElementById('splash-logo').classList.add('fade');
+        }, 2000)
     }
 });
 
@@ -247,7 +252,8 @@ app.controller('LoginController', function ($scope, LoginService, $location, Reg
                         }
                         else{
                             localStorage.setItem("token", response.data.token);
-                            $location.path('/feed')
+                            // $location.path('/feed')
+                            $location.path('/discover')
                             console.log("OK LOG ME IN")
                         }
                     });
@@ -416,7 +422,7 @@ app.controller('DiscoverController', function($scope, DiscoverService, Dashboard
                                         directToSearch();
                                     }
                                     else{
-                                        // console.log("NOT DONE: ", distances.length)
+                                        console.log("NOT DONE: ", distances.length)
                                     }
                                 }
                             });
@@ -487,7 +493,7 @@ app.controller('FaveController', function($scope, DashboardService, FavoriteServ
         }
         FavoriteService.getFavorites().then(function(response){
             console.log("GETFAVESRESPONSE", response.data);
-            $scope.faves = response.data.slice().reverse();
+            $scope.faves = response.data;
         });
     });
 
@@ -776,9 +782,9 @@ app.controller('UploadController', function($scope, UploadService, DashboardServ
 
     $scope.upload = function(){
         console.log("UPLOAD CLICKED")
-        // console.log("CAPTION",$scope.postCaption);
-        // console.log("LOCATION",$scope.postLocation);
-        // console.log("IMAGE",$scope.postImage);
+        if($scope.postTitle == null){$scope.postTitle = ""}
+        if($scope.postLocation == null){$scope.postLocation = ""}
+        if($scope.postCaption == null){$scope.postCaption = ""}
         postData = new FormData();
         postData.append('userID', $scope.id)
         postData.append('userImage', $scope.profilePicUrl);
@@ -814,7 +820,7 @@ app.service('FeedService', function($http){
     }
 });
 
-app.controller('FeedController', function ($scope, DashboardService, FeedService){
+app.controller('FeedController', function ($scope, DashboardService, FeedService, ProfileService){
     DashboardService.getUser().then(function(response){
         console.log(response.data);
         $scope.username = response.data.username;
@@ -827,17 +833,29 @@ app.controller('FeedController', function ($scope, DashboardService, FeedService
         userID = {
             "id":response.data._id
         }
-    
-        // FeedService.getAllPosts().then(function(response){
-        //     $scope.posts = response.data.slice().reverse();
-        //     console.log("GET ALL POSTS", $scope.posts);
-        // })
 
+        $scope.refreshFeed();
+        
+    });
+
+    $scope.refreshFeed = function(){
         FeedService.getMyPosts().then(function(response){
             $scope.posts = response.data.slice().reverse();
             console.log("GET ALL POSTS", $scope.posts);
+            ProfileService.getUserLikes().then(function(response){
+                console.log("VIEW LIKED POSTS", response.data)
+                $scope.likes = response.data;
+                for(i=0;i<$scope.posts.length;i++){
+                   for(j=0; j<$scope.likes.length;j++){
+                        if($scope.posts[i]._id == $scope.likes[j]._id){
+                            document.getElementById($scope.posts[i]._id).classList.toggle('heart-liked');
+                            document.getElementById($scope.posts[i]._id).classList.toggle('tada');
+                        }
+                    }
+                }
+            });
         })
-    });
+    }
 
     var today = new Date()
     var curHr = today.getHours()
@@ -849,7 +867,8 @@ app.controller('FeedController', function ($scope, DashboardService, FeedService
         $scope.greeting = "Good evening"
     }
 
-    $scope.clickHeart = function(postID){
+    $scope.clickHeart = function(postID, $event){
+        console.log($event);
         likePostObject = {
             userID:$scope.id,
             username: $scope.username,
@@ -858,10 +877,7 @@ app.controller('FeedController', function ($scope, DashboardService, FeedService
 
         FeedService.likePost().then(function(response){
             console.log("LIKED/UNLIKE POST", response.data);
-            FeedService.getMyPosts().then(function(response){
-                $scope.posts = response.data.slice().reverse();
-                console.log("GET ALL POSTS", $scope.posts);
-            });
+            $scope.refreshFeed();
         });
     }
 });
@@ -1350,8 +1366,11 @@ function navHamburger() {
     var x = document.getElementById("myTopnav");
     if (x.className === "topnav") {
         x.className += " responsive";
+        console.log("HAMB")
+        document.getElementById("showLogin").style.display="block !important"
     } else {
         x.className = "topnav";
+        document.getElementById("showLogin").style.display="none !important"
     }
 }
 
