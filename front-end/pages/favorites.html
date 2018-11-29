@@ -1,24 +1,14 @@
 <div class='w3-row w3-center' ng-controller='FaveController'>
-        <div class="sidebar">
-            <div class='w3-row w3-center'>
-                <img id='profile-pic' src='http://localhost:3000/images/{{imagePreviewUrl}}' onclick="directToProfile()" onload='profilePicLoaded()'>
-                <h3 class='profile-stat' id='profile-name'>{{ username }}</h3>
-                <h6 class='profile-stat'>Posts: <span id='profile-posts'>{{post_count}}</span></h6>
-                <h6 class='profile-stat'>Followers: <span id='profile-followers'>{{follower_count}}</span></h6>
-                <hr id='sidebar-hr'>
-            </div>
-            <div class='w3-row w3-center'>
-                <h2 class='sidebar-btn' onclick="directToFeed()"><i class="fa fa-rss sidebar-icon" aria-hidden="true"></i>FEED</h2>
-                <h2 class='sidebar-btn' onclick="directToDashboard()"><i class="fa fa-search sidebar-icon" aria-hidden="true"></i>SEARCH</h2>
-                <h2 class='sidebar-btn' onclick="directToDiscover()"><i class="fa fa-compass sidebar-icon" aria-hidden="true"></i>DISCOVER</h2>
-                <h2 class='sidebar-btn  sidebar-active' onclick="directToFavorites()"><i class="fa fa-star sidebar-icon" aria-hidden="true"></i>FAVORITES</h2>
-                <h2 class='sidebar-btn' onclick="directToProfile()"><i class="fa fa-user sidebar-icon" aria-hidden="true"></i>PROFILE</h2>
-                <h2 class='sidebar-btn' onclick="directToUpload()"><i class="fa fa-upload sidebar-icon" aria-hidden="true"></i>UPLOAD</h2>
-                <br>
-                <h6 class='sidebar-btn' id='sidebar-logout' onclick='directToLogout()'><i class="fa fa-sign-out sidebar-icon" aria-hidden="true"></i>LOGOUT</h6>
-            </div>
+        <div class="topnav" id="myTopnav">
+            <a onclick='goHome()'><img id='nav-icon' src='front-end/resources/images/crave-full.png'/></a>
+            <a onclick='directToSearch()' class='nav-hvr'>SEARCH</a>
+            <a onclick='directToFavorites()' class='nav-hvr active'>MY FAVORITES</a>
+            <a onclick="directToLogout()" class='nav-hvr login-responsive' id='showLogin'>LOGOUT</a>
+            <div class='login-nav'><div class='login-btn' onclick="directToLogout()">LOGOUT</div></div>
+            <a href="javascript:void(0);" class="icon" onclick="navHamburger()">
+                <i class="fa fa-bars"></i>
+            </a>
         </div>
-    
         <div class='dash-area' id='fave-dash'>
             <h1 class='dash-header'>View your favorite restaurants!</h1>
             <div id='search-container'>

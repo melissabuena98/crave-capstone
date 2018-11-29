@@ -1,47 +1,50 @@
-<div class='w3-row w3-center' ng-controller='DiscoverController'>
-    <div class="sidebar">
-        <div class='w3-row w3-center'>
-            <img id='profile-pic' src='http://localhost:3000/images/{{imagePreviewUrl}}' onclick="directToProfile()" onload='profilePicLoaded()'>
-            <h3 class='profile-stat' id='profile-name'>{{ username }}</h3>
-            <h6 class='profile-stat'>Posts: <span id='profile-posts'>{{post_count}}</span></h6>
-            <h6 class='profile-stat'>Followers: <span id='profile-followers'>{{follower_count}}</span></h6>
-            <hr id='sidebar-hr'>
-        </div>
-        <div class='w3-row w3-center'>
-            <h2 class='sidebar-btn' onclick="directToFeed()"><i class="fa fa-rss sidebar-icon" aria-hidden="true"></i>FEED</h2>
-            <h2 class='sidebar-btn' onclick="directToDashboard()"><i class="fa fa-search sidebar-icon" aria-hidden="true"></i>SEARCH</h2>
-            <h2 class='sidebar-btn sidebar-active' onclick="directToDiscover()"><i class="fa fa-compass sidebar-icon" aria-hidden="true"></i>DISCOVER</h2>
-            <h2 class='sidebar-btn' onclick="directToFavorites()"><i class="fa fa-star sidebar-icon" aria-hidden="true"></i>FAVORITES</h2>
-            <h2 class='sidebar-btn' onclick="directToProfile()"><i class="fa fa-user sidebar-icon" aria-hidden="true"></i>PROFILE</h2>
-            <h2 class='sidebar-btn' onclick="directToUpload()"><i class="fa fa-upload sidebar-icon" aria-hidden="true"></i>UPLOAD</h2>
-            <br>
-            <h6 class='sidebar-btn' id='sidebar-logout' onclick='directToLogout()'><i class="fa fa-sign-out sidebar-icon" aria-hidden="true"></i>LOGOUT</h6>
-        </div>
-    </div>
+<div class='w3-row w3-center' ng-controller='CardController'>
 
-    <div class='dash-area discover'>
-        <div id='search-splash' class='discover-splash'>
-            <div class='splash-box'>
-                <img id='splash-logo' class='animated pulse infinite' src='/front-end/resources/images/splashlogo.png'>
-                <h2 class='splash-text'>Finding Restaurants</h2>
+    <div class='dash-area'>
+        <h1 class='dash-header' id='card-counter'>{{numOfCardsLeft}} Cards Left!</h1>
+        
+        <div class='card-viewport'>
+            <div class="card-container">
+                <div class="no-cards-box">
+                    <h1 id='no-cards'>No Cards Left!</h1>
+                    <input type='button' onclick='directToDiscover()' class='login-btn new-search' id='btn-shadow' value='New Search'>
+                </div>
+                <div ng-repeat="card in cards" class="card" id='card-box' ng-model='cardBox'>
+                    <div class="card-img" style="background-image:url('{{card.image_url}}')"></div>
+                    <h2 class='card-name' ng-bind-html='card.name'>{{card.name}}</h2>
+                    <p class='card-hours' ng-bind-html='card.miles'>{{card.miles}}</p>
+                    <h4 class='card-detail'>Category: <span class='card-value' ng-bind-html='card.categories[0].title'>{{card.categories[0].title}}</span></h4>
+                    <h4 class='card-detail'>Rating: <span class='card-value' ng-bind-html='card.rating'>{{card.rating}}</span> <i id='card-star' class="fa fa-star" aria-hidden="true"></i></h4>
+                    <h4 class='card-detail'>Price: <span class='card-value' ng-bind-html='card.price'>{{card.price}}</span></h4>
+                    <a id='address-link' target="_blank" href="http://maps.google.com/?q={{card.location.display_address[0]}} {{card.location.display_address[1]}}">
+                        <h4 class='card-detail locations' id='card-address'>Location: <span class='card-value address' ng-bind-html='card.location.display_address[0]'>{{card.location.display_address[0]}}</span> &nbsp;<span class='card-value address' ng-bind-html='card.location.display_address[1]'>{{card.location.display_address[1]}}</span></h4>
+                    </a>
+                    <h4 class='card-detail'>Phone: <span class='card-value' ng-bind-html='card.phone'>{{card.phone}}</span></h4>
+                </div>
+
+                <div class="controls-box" id='controls-box'>
+                    <i id='hide-controls' ng-click='hideControls()' class="fa fa-close"></i>
+                    <h1 id='ctrl-header'>Controls</h1>
+                    <div class="ctrl-details">
+                        <ul>
+                            <li id='ctrl'>Swipe <b>LEFT</b> or tap <i id='ctrl-no' class="fa fa-times" aria-hidden="true"></i> to pass on a card, and swipe <b>RIGHT</b> or tap <i id='ctrl-yes' class="fa fa-check" aria-hidden="true"></i> to add the restaurant to your favorites.</li>
+                            <li id='ctrl'>Tap the address to open restaurant on Google Maps.</li>
+                            <li id='ctrl'>Press down on the card to open the restaurant's Yelp Page.</li>
+                            <li id='ctrl'>Tap <i id='ctrl-back' class="fa fa-arrow-left" aria-hidden="true"></i> to go back to the search preferences.</li>
+                            <li id='ctrl'>Tap <i id='ctrl-star' class="fa fa-star" aria-hidden="true"></i> to view your favorited restaurants.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="card-options">
+                <div class='card-btn' id='back' onclick='directToSearch()'><i class="fa fa-arrow-left" aria-hidden="true"></i></div>
+                <div class='card-btn' id='no' ng-click='no()'><i class="fa fa-times" aria-hidden="true"></i></div>
+                <div class='card-btn' id='yes' ng-click='yes()'><i class="fa fa-check" aria-hidden="true"></i></div>
+                <div class='card-btn' id='star' onclick="directToFavorites()"><i class="fa fa-star" aria-hidden="true"></i></div>
             </div>
         </div>
-        <h1 class='dash-header2'>What are you <span class='crave'>craving</span>?</h1>
-        <form id='discoverForm' ng-submit='discover()'>
-            <h1 id='register'>Preferences</h1>
-            <input class='textbox' placeholder='Term e.g. Asian' name="term" ng-model="term" type="text" min=1 maxlength=30>
-            <p class='price-slider-val w3-center'>{{ priceVal }}</p>
-            <input ng-model='price' type="range" min="0" max="4" value='1' class="price-slider">
-            <input id='location' class='textbox' placeholder='Zip, State, City' name="location" ng-model="location" type="text" min=1 maxlength=60 required>
-            <p id='accent' ng-click='getGeoLocation()' class='use-location'><span><i class="fa fa-map-marker" aria-hidden="true"></i></span> Use your location instead</p>
-            <!-- <p id='accent' onclick='distance(40.7662269, -111.8908886, 40.758989, -111.874474)' class='use-location'><span><i class="fa fa-map-marker" aria-hidden="true"></i></span> Do Maths</p> -->
-            <!-- <p id='accent' onclick='callGoogle()' class='use-location'><span><i class="fa fa-map-marker" aria-hidden="true"></i></span> Distance Matrix</p> -->
-            <hr>
-            <input type='submit' class='login-btn' id='btn-shadow' value='Start'>
-            <span class='form-error' id='invalid-search'>No Search Results! Try again.</span>
-        </form>
+        <p id='view-controls' ng-click='viewControls()'><i class="fa fa-question-circle-o" aria-hidden="true"></i> View Controls</p>
     </div>
-    
-    </div>
-    
-    
+
+</div>
+

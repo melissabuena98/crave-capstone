@@ -1,54 +1,35 @@
-<div class='w3-row w3-center' ng-controller='SearchController'>
-    <div class="sidebar">
-        <div class='w3-row w3-center'>
-            <img id='profile-pic' src='http://localhost:3000/images/{{imagePreviewUrl}}' onclick="directToProfile()" onload='profilePicLoaded()'>
-            <h3 class='profile-stat' id='profile-name'>{{ username }}</h3>
-            <h6 class='profile-stat'>Posts: <span id='profile-posts'>{{post_count}}</span></h6>
-            <h6 class='profile-stat'>Followers: <span id='profile-followers'>{{follower_count}}</span></h6>
-            <hr id='sidebar-hr'>
-        </div>
-        <div class='w3-row w3-center'>
-            <h2 class='sidebar-btn' onclick="directToFeed()"><i class="fa fa-rss sidebar-icon" aria-hidden="true"></i>FEED</h2>
-            <h2 class='sidebar-btn sidebar-active' onclick="directToDashboard()"><i class="fa fa-search sidebar-icon" aria-hidden="true"></i>SEARCH</h2>
-            <h2 class='sidebar-btn' onclick="directToDiscover()"><i class="fa fa-compass sidebar-icon" aria-hidden="true"></i>DISCOVER</h2>
-            <h2 class='sidebar-btn' onclick="directToFavorites()"><i class="fa fa-star sidebar-icon" aria-hidden="true"></i>FAVORITES</h2>
-            <h2 class='sidebar-btn' onclick="directToProfile()"><i class="fa fa-user sidebar-icon" aria-hidden="true"></i>PROFILE</h2>
-            <h2 class='sidebar-btn' onclick="directToUpload()"><i class="fa fa-upload sidebar-icon" aria-hidden="true"></i>UPLOAD</h2>
-            <br>
-            <h6 class='sidebar-btn' id='sidebar-logout' onclick='directToLogout()'><i class="fa fa-sign-out sidebar-icon" aria-hidden="true"></i>LOGOUT</h6>
-        </div>
+<div class='w3-row w3-center' ng-controller='DiscoverController'>
+    <div class="topnav" id="myTopnav">
+        <a onclick='goHome()'><img id='nav-icon' src='front-end/resources/images/crave-full.png'/></a>
+        <a onclick='directToSearch()' class='nav-hvr active'>SEARCH</a>
+        <a onclick='directToFavorites()' class='nav-hvr'>MY FAVORITES</a>
+        <a onclick="directToLogout()" class='nav-hvr login-responsive' id='showLogin'>LOGOUT</a>
+        <div class='login-nav'><div class='login-btn' onclick="directToLogout()">LOGOUT</div></div>
+        <a href="javascript:void(0);" class="icon" onclick="navHamburger()">
+            <i class="fa fa-bars"></i>
+        </a>
     </div>
-
-    <div class='dash-area'>
-        <h1 class='dash-header'>Search and Follow other Users!</h1>
-        <div id='search-container'>
-            <i id='search-icon' class="fa fa-search" aria-hidden="true"></i>
-            <input id='search-box' type='text' placeholder="Search Users" ng-model='query.fullname'>
-        </div>
-        <div class="user-viewport">
-            <div class="user-container">
-                <div ng-repeat="user in users | filter:query" class="user-card">
-                    <a class='user-link' href='#/profile/{{ user._id }}'>
-                        <img class='user-img' src='http://localhost:3000/images/{{user.profile_pic}}'>
-                        <h4 class='user-fname'>{{user.fullname}}</h4>
-                        <h6 class='user-uname'>@{{user.username}}</h6>
-                        <hr id='user-hr'>
-                    </a>
-                        <div class="user-stats">
-                            <div class="stat-box">
-                                <p class='user-stat'>{{user.post_count}} POSTS</p>
-                            </div>
-                            <div class="stat-box" id='stat-box-alt'>
-                                <p class='user-stat'>{{user.follower_count}} FOLLOWERS</p>
-                            </div>
-                        </div>
-                        <input ng-click='followUser(user._id)' type='button' class='login-btn user-follow btn-shadow' id="{{$index}}" value={{user.status}}>
-                </div>
-                
-                
+    <div class='dash-area discover'>
+        <div id='search-splash' class='discover-splash'>
+            <div class='splash-box'>
+                <img id='splash-logo' class='animated pulse infinite' src='/front-end/resources/images/splashlogo.png'>
+                <h2 class='splash-text'>Finding Restaurants</h2>
             </div>
         </div>
+        <h1 class='dash-header2'>What are you <span class='crave'>craving</span>?</h1>
+        <form id='discoverForm' ng-submit='discover()'>
+            <h1 id='register'>Preferences</h1>
+            <input class='textbox' placeholder='Term e.g. Asian' name="term" ng-model="term" type="text" min=1 maxlength=30>
+            <p class='price-slider-val w3-center'>{{ priceVal }}</p>
+            <input ng-model='price' type="range" min="0" max="4" value='1' class="price-slider">
+            <input id='location' class='textbox' placeholder='Zip, State, City' name="location" ng-model="location" type="text" min=1 maxlength=60 required>
+            <p id='accent' ng-click='getGeoLocation()' class='use-location'><span><i class="fa fa-map-marker" aria-hidden="true"></i></span> Use your location instead</p>
+            <hr>
+            <input type='submit' class='login-btn' id='btn-shadow' value='Start'>
+            <span class='form-error' id='invalid-search'>No Search Results! Try again.</span>
+        </form>
     </div>
-
-</div>
-
+    
+    </div>
+    
+    
