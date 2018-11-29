@@ -24,7 +24,7 @@ var deletePostObj;
 
 var lat;
 var long;
-var distances = [];
+var distances;
 
 
 app.config(function($routeProvider){
@@ -404,10 +404,13 @@ app.controller('DiscoverController', function($scope, DiscoverService, Dashboard
                 document.getElementById('invalid-search').style.display='block';
             }
             else{
+                console.log("SHOW SPLASH")
+                document.getElementById('search-splash').style.display='flex';
                 cardObject = response.data;
                 userLocation = $scope.location;
                 DiscoverService.getLocationCoords(userLocation).then(function(response){
                     console.log("RESP: ", response.data.results[0].geometry.location);
+                    distances = [];
                     lat = response.data.results[0].geometry.location.lat;
                     lon = response.data.results[0].geometry.location.lng;
                     for(i=0;i<cardObject.businesses.length; i++){
@@ -442,6 +445,7 @@ app.controller('DiscoverController', function($scope, DiscoverService, Dashboard
     }
 
     $scope.getGeoLocation = function(){
+        document.getElementById('accent').style.cursor ='wait'
         console.log("GET GEOLOCATION")
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position){
@@ -454,6 +458,7 @@ app.controller('DiscoverController', function($scope, DiscoverService, Dashboard
                     DiscoverService.getUserLocation().then(function(response){
                         console.log(response.data)
                         $scope.location = response.data.results[0].formatted_address;
+                        document.getElementById('accent').style.cursor ='pointer'
                     });
                 });
             });
@@ -533,6 +538,7 @@ app.controller('CardController', function($scope, DashboardService, FavoriteServ
     }
     else {
         $scope.cards = cardObject.businesses;
+        shuffle($scope.cards);
         $scope.totalCards = $scope.cards.length-1;
         $scope.numOfCardsLeft = $scope.totalCards;
         $scope.distances = distances;
@@ -1483,6 +1489,21 @@ function deg2rad(deg) {
     return deg * (Math.PI/180)
 }
 
-
+function shuffle(array) {
+    var currentIndex = array.length, temporaryValue, randomIndex;
   
-
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+  
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+  
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+  
+    return array;
+}

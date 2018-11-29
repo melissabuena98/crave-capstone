@@ -427,6 +427,7 @@ section{
 /* DISCOVER */
 .discover{
   /* background-image: linear-gradient(to top right, #ffffff,#ebebeb ); */
+  padding-top:40px;
 }
 
 #discoverForm{
@@ -1438,5 +1439,56 @@ li{
   visibility: hidden !important;
 }
 
+.discover-splash{
+  /* width:auto; */
+  /* position:initial !important;
+  background:none !important; */
 
+  height: 100vh;
+  z-index:100;
+  opacity: 1;
+  transition: all 1s;
+  transition-delay: 1s;
+  visibility: visible;
+  text-align: center;
 
+  display:none;
+  align-items:center;
+  justify-content:center;
+}
+
+.splash-box{
+  padding-top: 25%;
+  height:100%;
+}
+
+.splash-text{
+  color: white;
+  font-family: 'CraveFont', sans-serif;
+}
+
+.splash-text:after {
+  content: ' .';
+  font-family: 'K2D', sans-serif;
+  animation: dots 1s steps(5, end) infinite;
+}
+
+@keyframes dots {
+  0%, 20% {
+    color: rgba(0,0,0,0);
+    text-shadow:
+      .25em 0 0 rgba(0,0,0,0),
+      .5em 0 0 rgba(0,0,0,0);}
+  40% {
+    color: white;
+    text-shadow:
+      .25em 0 0 rgba(0,0,0,0),
+      .5em 0 0 rgba(0,0,0,0);}
+  60% {
+    text-shadow:
+      .25em 0 0 white,
+      .5em 0 0 rgba(0,0,0,0);}
+  80%, 100% {
+    text-shadow:
+      .25em 0 0 white,
+      .5em 0 0 white;}}

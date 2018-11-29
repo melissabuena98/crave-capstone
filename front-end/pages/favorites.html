@@ -29,13 +29,15 @@
                 <div class="fave-container">
                     <div ng-repeat="fave in faves | filter:query" class="fave" id='fave-box' ng-model='faveBox'>
                         <i ng-click='removeFavorite($index)' class="fa fa-times delete-fave" aria-hidden="true"></i>
-                        <div class="fave-img" style="background-image:url('{{fave.image_url}}')"></div>
-                        <h4 class='fave-name' ng-bind-html='fave.name'>{{fave.name}}</h4>
-                        <p class='fave-detail'>Category: <span class='fave-value' ng-bind-html='fave.categories[0].title'>{{fave.categories[0].title}}</span></p>
-                        <p class='fave-detail'>Price: <span class='fave-value' ng-bind-html='fave.price'>{{fave.price}}</span></p>
-                        <p class='fave-detail'>Rating: <span class='fave-value' ng-bind-html='fave.rating'>{{fave.rating}}</span> <i id='card-star' class="fa fa-star" aria-hidden="true"></i></p>
-                        <p class='fave-detail'>Location: <span class='fave-value' ng-bind-html='fave.location.display_address[0]'>{{fave.location.display_address[0]}}</span> &nbsp;<span class='fave-value' ng-bind-html='fave.location.display_address[1]'>{{fave.location.display_address[1]}}</span></h4>
-                        <p class='fave-detail'>Phone: <span class='fave-value' ng-bind-html='fave.phone'>{{fave.phone}}</span></p>
+                        <a id='address-link' href={{fave.url}} target="_blank">
+                            <div class="fave-img" style="background-image:url('{{fave.image_url}}')"></div>
+                            <h4 class='fave-name' ng-bind-html='fave.name'>{{fave.name}}</h4>
+                            <p class='fave-detail'>Category: <span class='fave-value' ng-bind-html='fave.categories[0].title'>{{fave.categories[0].title}}</span></p>
+                            <p class='fave-detail'>Price: <span class='fave-value' ng-bind-html='fave.price'>{{fave.price}}</span></p>
+                            <p class='fave-detail'>Rating: <span class='fave-value' ng-bind-html='fave.rating'>{{fave.rating}}</span> <i id='card-star' class="fa fa-star" aria-hidden="true"></i></p>
+                            <p class='fave-detail'>Location: <span class='fave-value' ng-bind-html='fave.location.display_address[0]'>{{fave.location.display_address[0]}}</span> &nbsp;<span class='fave-value' ng-bind-html='fave.location.display_address[1]'>{{fave.location.display_address[1]}}</span></h4>
+                            <p class='fave-detail'>Phone: <span class='fave-value' ng-bind-html='fave.phone'>{{fave.phone}}</span></p>
+                        </a>
                     </div>
                 </div>
             </div>
