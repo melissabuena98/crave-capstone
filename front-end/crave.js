@@ -37,14 +37,14 @@ app.config(function($routeProvider){
                     }
                 }
             },
-            templateUrl: 'front-end/pages/crave.html'
+            templateUrl: '/pages/crave.html'
         })
         .when('/register', {
-            templateUrl: 'front-end/pages/register.html',
+            templateUrl: '/pages/register.html',
             controller: 'RegisterController'
         })
         .when('/login', {
-            templateUrl: 'front-end/pages/login.html',
+            templateUrl: '/pages/login.html',
             controller: 'LoginController'
         })
         .when('/search', {
@@ -55,7 +55,7 @@ app.config(function($routeProvider){
                     }
                 }
             },
-            templateUrl: 'front-end/pages/search.html',
+            templateUrl: '/pages/search.html',
         })
         .when('/discover', {
             resolve:{
@@ -65,7 +65,7 @@ app.config(function($routeProvider){
                     }
                 }
             },
-            templateUrl: 'front-end/pages/discover.html',
+            templateUrl: '/pages/discover.html',
         })
 
         .when('/favorites', {
@@ -76,7 +76,7 @@ app.config(function($routeProvider){
                     }
                 }
             },
-            templateUrl: 'front-end/pages/favorites.html',
+            templateUrl: '/pages/favorites.html',
         })
 });
 

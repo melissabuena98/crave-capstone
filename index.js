@@ -11,8 +11,8 @@ const app = express();
 app.use(cors())
 
 app.use(bodyParser.json())
-app.use(express.static(path.join(__dirname + '/public')));
-
+app.use(express.static(path.join(__dirname + '/front-end')));
+app.engine('html', require('ejs').renderFile);
 
 
 app.use('/api', api);
@@ -20,10 +20,10 @@ app.use('/api', api);
 app.use('/yelp', yelp);
 
 app.get('/', function(req, res) {
-    // res.sendFile(__dirname + '/index.html');
-    res.render(__dirname + "/index.html")
+    res.sendFile(__dirname + '/index.html');
+    // res.render(__dirname + "/index.html")
 })
 
-app.listen(process.env.PORT, function() {
+app.listen(process.env.PORT || PORT, function() {
     console.log("server running on localhost: ");
 })

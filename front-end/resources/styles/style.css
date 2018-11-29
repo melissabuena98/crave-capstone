@@ -202,7 +202,7 @@ section{
 
   #eat{
     /* The image used */
-    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("/front-end/resources/images/eat.jpg");
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("/resources/images/eat.jpg");
 
     /* Full height */
     /* height: 100vh;  */
@@ -219,7 +219,7 @@ section{
   }
 
   #foodie-pic{
-    background-image:url('/front-end/resources/images/craving.jpg');
+    background-image:url('/resources/images/craving.jpg');
     background-size:cover;
     height:100vh;
     background-position:center top;
