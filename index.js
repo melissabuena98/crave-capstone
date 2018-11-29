@@ -4,8 +4,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors')
 
 const PORT = 3000;
-const api = require('./back-end/routes/api');
-const yelp = require('./back-end/routes/yelp');
+const api = require('./front-end/back-end/routes/api');
+const yelp = require('./front-end/back-end/routes/yelp');
 
 const app = express();
 app.use(cors())
