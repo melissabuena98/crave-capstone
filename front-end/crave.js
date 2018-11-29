@@ -172,7 +172,8 @@ app.controller('RegisterController', function ($scope, RegisterService, $locatio
 
 app.service("LoginService", function($http){
     console.log("IN LOGIN SERVICE")
-    this.path='http://localhost:3000/api/login';
+    // this.path='http://localhost:3000/api/login';
+    this.path='https://crave-capstone.herokuapp.com/#/api/login';
     this.loginUser = function (){
         console.log("LOGIN RUNNING")
         return $http.post(this.path, loginUserData);
